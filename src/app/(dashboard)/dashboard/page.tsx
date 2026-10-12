@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { format } from "date-fns";
+import { getDepartemenName } from '@/lib/utils'
 import { id as localeId } from "date-fns/locale";
 import { ArrowUpRight, CheckCircle2, Circle } from "lucide-react";
 
@@ -44,7 +45,7 @@ export default async function DashboardPage() {
 
         <div className="md:text-right">
           <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-1.5">Departemen</p>
-          <p className="font-serif italic text-base md:text-lg">{(profile?.departemen as any)?.nama || "Belum diatur"}</p>
+          <p className="font-serif italic text-base md:text-lg">{getDepartemenName(profile?.departemen) === "—" ? "Belum diatur" : getDepartemenName(profile?.departemen)}</p>
         </div>
       </div>
 
