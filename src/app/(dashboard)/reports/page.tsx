@@ -20,6 +20,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
     redirect("/dashboard");
   }
 
+  // Query reports
   let query = supabase
     .from("reports")
     .select(
@@ -27,10 +28,6 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
       id,
       tanggal,
       user_id,
-      profiles:user_id (
-        nama,
-        departemen:departemen_id (nama)
-      ),
       report_activities (id)
     `,
     )
@@ -41,8 +38,38 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
   if (params.to) query = query.lte("tanggal", params.to);
   if (params.user) query = query.eq("user_id", params.user);
 
-  const { data: reports } = await query;
+  const { data: reportsRaw } = await query;
 
+  // Fetch semua profiles untuk lookup
+  const { data: profiles } = await supabase.from("profiles").select("id, nama, departemen_id");
+
+  // Fetch semua departemen untuk lookup
+  const { data: departemenList } = await supabase.from("departemen").select("id, nama");
+
+  // Bikin map
+  const profileMap = new Map<string, { nama: string; departemen_id: string | null }>();
+  profiles?.forEach((p) => {
+    profileMap.set(p.id, { nama: p.nama, departemen_id: p.departemen_id });
+  });
+
+  const departemenMap = new Map<string, string>();
+  departemenList?.forEach((d) => {
+    departemenMap.set(d.id, d.nama);
+  });
+
+  // Gabungin manual
+  const reports = (reportsRaw || []).map((r) => {
+    const profile = profileMap.get(r.user_id);
+    const departemenNama = profile?.departemen_id ? departemenMap.get(profile.departemen_id) || "—" : "—";
+
+    return {
+      ...r,
+      user_nama: profile?.nama || "—",
+      departemen_nama: departemenNama,
+    };
+  });
+
+  // List user untuk filter dropdown
   const { data: users } = await supabase.from("profiles").select("id, nama").order("nama");
 
   return (
@@ -52,7 +79,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Admin</span>
           <div className="h-px w-8 bg-brand-primary" />
-          <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">{String(reports?.length || 0).padStart(3, "0")} Entri</span>
+          <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">{String(reports.length).padStart(3, "0")} Entri</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-light tracking-tight">
           Semua <span className="font-serif italic text-brand-primary">Logbook</span>
@@ -94,7 +121,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
       </form>
 
       {/* TABLE / CARDS */}
-      {reports?.length ? (
+      {reports.length ? (
         <>
           {/* Desktop */}
           <div className="hidden md:block border border-ink/15 bg-white/40">
@@ -121,10 +148,10 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                   </Link>
                 </div>
                 <div className="col-span-3">
-                  <p className="text-sm truncate">{r.profiles?.nama || "-"}</p>
+                  <p className="text-sm truncate">{r.user_nama}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{r.profiles?.departemen?.[0]?.nama || "-"}</p>
+                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{r.departemen_nama}</p>
                 </div>
                 <div className="col-span-1">
                   <span className="mono text-[10px] text-ink-muted">{String(r.report_activities?.length || 0).padStart(2, "0")}</span>
@@ -171,11 +198,11 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                   <div className="mt-3 pt-3 border-t border-ink/10 grid grid-cols-2 gap-x-3 gap-y-2">
                     <div>
                       <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mb-0.5">Nama</p>
-                      <p className="text-xs truncate">{r.profiles?.nama || "-"}</p>
+                      <p className="text-xs truncate">{r.user_nama}</p>
                     </div>
                     <div>
                       <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mb-0.5">Departemen</p>
-                      <p className="text-xs truncate">{r.profiles?.departemen?.[0]?.nama || "-"}</p>
+                      <p className="text-xs truncate">{r.departemen_nama}</p>
                     </div>
                     <div>
                       <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mb-0.5">Aktivitas</p>
@@ -184,7 +211,6 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                   </div>
                 </Link>
 
-                {/* Action bar */}
                 <div className="flex border-t border-ink/10 divide-x divide-ink/10">
                   <Link href={`/report/${r.id}`} className="flex-1 flex items-center justify-center gap-1.5 py-3 text-brand-primary active:bg-brand-primary/10 transition-colors">
                     <Eye size={13} />

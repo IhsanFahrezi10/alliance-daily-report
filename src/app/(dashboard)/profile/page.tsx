@@ -13,20 +13,35 @@ export default async function ProfilePage() {
   if (!user) redirect("/login");
 
   // Query profile base dulu
-  const { data: profileBase } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profileBase, error: profileError } = await supabase.from("profiles").select("*").eq("id", user.id).single();
 
-  // Query departemen terpisah (kalau ada departemen_id)
+  // 🔍 DEBUG — bakal muncul di terminal
+  console.log("=== DEBUG PROFILE ===");
+  console.log("Profile error:", profileError);
+  console.log("Profile base:", profileBase);
+  console.log("Departemen ID:", profileBase?.departemen_id);
+
+  // Query departemen terpisah
   let departemen: { id: string; nama: string } | null = null;
   if (profileBase?.departemen_id) {
-    const { data: deptData } = await supabase.from("departemen").select("id, nama").eq("id", profileBase.departemen_id).single();
+    const { data: deptData, error: deptError } = await supabase.from("departemen").select("id, nama").eq("id", profileBase.departemen_id).single();
+
+    console.log("Dept error:", deptError);
+    console.log("Dept data:", deptData);
+
     departemen = deptData;
   }
+
+  // Query semua departemen
+  const { data: departemenList, error: listError } = await supabase.from("departemen").select("id, nama").order("nama");
+
+  console.log("Dept list error:", listError);
+  console.log("Dept list:", departemenList);
+  console.log("=== END DEBUG ===");
 
   const profile = profileBase as any;
   const departemenName = departemen?.nama || "—";
   const departemenId = departemen?.id || "";
-
-  const { data: departemenList } = await supabase.from("departemen").select("id, nama").order("nama");
 
   return (
     <div className="max-w-3xl space-y-6 md:space-y-8">
@@ -44,7 +59,6 @@ export default async function ProfilePage() {
 
       {/* IDENTITY CARD */}
       <div className="border border-ink/15 bg-white/40">
-        {/* Desktop */}
         <div className="hidden md:grid md:grid-cols-12">
           <div className="col-span-4 p-6 border-r border-ink/15 flex flex-col items-center justify-center">
             <AvatarUpload userId={user.id} currentAvatarUrl={profile?.avatar_url || null} userName={profile?.nama || "User"} />
@@ -80,7 +94,6 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        {/* Mobile */}
         <div className="md:hidden">
           <div className="p-5 flex flex-col items-center border-b border-ink/15">
             <AvatarUpload userId={user.id} currentAvatarUrl={profile?.avatar_url || null} userName={profile?.nama || "User"} />
@@ -120,7 +133,6 @@ export default async function ProfilePage() {
         </div>
       </div>
 
-      {/* FORM */}
       <ProfileForm
         profile={{
           nama: profile?.nama || "",
