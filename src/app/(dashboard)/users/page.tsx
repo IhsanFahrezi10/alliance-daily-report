@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import UserRoleSelect from "./user-role-select";
-import { getDepartemenName } from "@/lib/utils";
 
 export default async function UsersPage() {
   const supabase = await createClient();
@@ -18,9 +17,23 @@ export default async function UsersPage() {
     redirect("/dashboard");
   }
 
-  const { data: usersRaw } = await supabase.from("profiles").select("*, departemen:departemen_id (nama)").order("created_at", { ascending: false });
+  // Query users dulu
+  const { data: usersRaw } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
 
-  const users = (usersRaw || []) as any[];
+  // Query departemen terpisah
+  const { data: departemenList } = await supabase.from("departemen").select("id, nama");
+
+  // Bikin map buat lookup cepat
+  const departemenMap = new Map<string, string>();
+  departemenList?.forEach((d) => {
+    departemenMap.set(d.id, d.nama);
+  });
+
+  // Gabungin manual
+  const users = (usersRaw || []).map((u) => ({
+    ...u,
+    departemen_nama: u.departemen_id ? departemenMap.get(u.departemen_id) || "—" : "—",
+  }));
 
   return (
     <div className="space-y-6 md:space-y-8">
@@ -67,7 +80,7 @@ export default async function UsersPage() {
                   </div>
                 </div>
                 <div className="col-span-3">
-                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{getDepartemenName(u.departemen)}</p>
+                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{u.departemen_nama}</p>
                 </div>
                 <div className="col-span-2">
                   <UserRoleSelect userId={u.id} currentRole={u.role} disabled={u.id === user.id} />
@@ -100,7 +113,7 @@ export default async function UsersPage() {
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">{u.nama}</p>
-                      <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-0.5 truncate">{getDepartemenName(u.departemen)}</p>
+                      <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-0.5 truncate">{u.departemen_nama}</p>
                     </div>
                     <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 shrink-0 mt-1">
                       {format(new Date(u.created_at), "dd.MM.yy", {

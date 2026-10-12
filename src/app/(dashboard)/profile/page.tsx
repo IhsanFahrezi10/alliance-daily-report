@@ -12,7 +12,19 @@ export default async function ProfilePage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase.from("profiles").select("*, departemen:departemen_id (id, nama)").eq("id", user.id).single();
+  // Query profile base dulu
+  const { data: profileBase } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+
+  // Query departemen terpisah (kalau ada departemen_id)
+  let departemen: { id: string; nama: string } | null = null;
+  if (profileBase?.departemen_id) {
+    const { data: deptData } = await supabase.from("departemen").select("id, nama").eq("id", profileBase.departemen_id).single();
+    departemen = deptData;
+  }
+
+  const profile = profileBase as any;
+  const departemenName = departemen?.nama || "—";
+  const departemenId = departemen?.id || "";
 
   const { data: departemenList } = await supabase.from("departemen").select("id, nama").order("nama");
 
@@ -56,7 +68,7 @@ export default async function ProfilePage() {
             </div>
             <div className="p-6 border-r border-ink/15">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Departemen</p>
-              <p className="font-serif italic text-lg">{profile?.departemen?.[0]?.nama || "—"}</p>
+              <p className="font-serif italic text-lg">{departemenName}</p>
             </div>
             <div className="p-6">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Status</p>
@@ -83,7 +95,7 @@ export default async function ProfilePage() {
             </div>
             <div className="p-4">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-1.5">Departemen</p>
-              <p className="font-serif italic text-base">{profile?.departemen?.[0]?.nama || "—"}</p>
+              <p className="font-serif italic text-base">{departemenName}</p>
             </div>
             <div className="p-4 grid grid-cols-2 gap-3">
               <div>
@@ -112,7 +124,7 @@ export default async function ProfilePage() {
       <ProfileForm
         profile={{
           nama: profile?.nama || "",
-          departemen_id: profile?.departemen?.id || "",
+          departemen_id: departemenId,
           mentor_nama: profile?.mentor_nama || "",
         }}
         departemenList={departemenList || []}
