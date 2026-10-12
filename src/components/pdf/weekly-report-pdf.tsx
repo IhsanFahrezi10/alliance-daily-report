@@ -186,7 +186,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
       tanggal: r.tanggal,
       attendance: r.attendance || "Present",
       lesson: r.lesson_learned || "-",
-      challenges: r.kendala || "-",   
+      challenges: r.kendala || "-",
       activityId: a.id,
       deskripsi: a.deskripsi,
     }));
@@ -220,7 +220,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Dept.</Text>
-            <Text style={styles.infoValue}>: {first.profiles?.departemen?.nama || "-"}</Text>
+            <Text style={styles.infoValue}>: {first.profiles?.departemen?.[0]?.nama || "-"}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Position</Text>

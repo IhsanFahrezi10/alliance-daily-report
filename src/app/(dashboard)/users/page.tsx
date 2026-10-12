@@ -57,7 +57,7 @@ export default async function UsersPage() {
                   </div>
                 </div>
                 <div className="col-span-3">
-                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{u.departemen?.nama || "-"}</p>
+                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{u.departemen?.[0]?.nama || "-"}</p>
                 </div>
                 <div className="col-span-2">
                   <UserRoleSelect userId={u.id} currentRole={u.role} disabled={u.id === user.id} />
@@ -84,7 +84,7 @@ export default async function UsersPage() {
                     <div className="w-10 h-10 bg-brand-primary text-white flex items-center justify-center text-sm font-medium shrink-0">{u.nama?.charAt(0)?.toUpperCase() || "U"}</div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">{u.nama}</p>
-                      <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-0.5 truncate">{u.departemen?.nama || "Belum ada dept"}</p>
+                      <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-0.5 truncate">{u.departemen?.[0]?.nama || "Belum ada dept"}</p>
                     </div>
                     <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 shrink-0 mt-1">
                       {format(new Date(u.created_at), "dd.MM.yy", {

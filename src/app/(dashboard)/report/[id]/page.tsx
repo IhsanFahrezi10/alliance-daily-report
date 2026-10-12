@@ -91,7 +91,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
             </div>
             <div className="p-5 md:p-6">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Departemen</p>
-              <p className="text-base md:text-lg font-serif italic">{report.profiles?.departemen?.nama || "-"}</p>
+              <p className="text-base md:text-lg font-serif italic">{report.profiles?.departemen?.[0]?.nama || "-"}</p>
             </div>
             <div className="p-5 md:p-6">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Tanggal</p>

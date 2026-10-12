@@ -18,7 +18,7 @@ export default async function DashboardPage() {
 
   const { data: recent } = await supabase.from("reports").select("id, tanggal, report_activities(id)").eq("user_id", user!.id).is("deleted_at", null).order("tanggal", { ascending: false }).limit(5);
 
-  const { data: profile } = await supabase.from("profiles").select("nama, departemen:departemen_id (nama)").eq("id", user!.id).single();
+  const { data: profile } = (await supabase.from("profiles").select("nama, departemen:departemen_id (nama)").eq("id", user!.id).single()) as { data: any };
 
   const tanggalHariIni = format(new Date(), "EEEE, d MMMM yyyy", {
     locale: localeId,
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
 
         <div className="md:text-right">
           <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-1.5">Departemen</p>
-          <p className="font-serif italic text-base md:text-lg">{profile?.departemen?.nama || "Belum diatur"}</p>
+          <p className="font-serif italic text-base md:text-lg">{(profile?.departemen as any)?.nama || "Belum diatur"}</p>
         </div>
       </div>
 

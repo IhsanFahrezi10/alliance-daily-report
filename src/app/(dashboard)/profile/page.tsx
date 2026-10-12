@@ -56,7 +56,7 @@ export default async function ProfilePage() {
             </div>
             <div className="p-6 border-r border-ink/15">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Departemen</p>
-              <p className="font-serif italic text-lg">{profile?.departemen?.nama || "—"}</p>
+              <p className="font-serif italic text-lg">{profile?.departemen?.[0]?.nama || "—"}</p>
             </div>
             <div className="p-6">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Status</p>
@@ -83,7 +83,7 @@ export default async function ProfilePage() {
             </div>
             <div className="p-4">
               <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-1.5">Departemen</p>
-              <p className="font-serif italic text-base">{profile?.departemen?.nama || "—"}</p>
+              <p className="font-serif italic text-base">{profile?.departemen?.[0]?.nama || "—"}</p>
             </div>
             <div className="p-4 grid grid-cols-2 gap-3">
               <div>

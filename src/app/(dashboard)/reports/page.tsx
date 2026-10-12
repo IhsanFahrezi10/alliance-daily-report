@@ -124,7 +124,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                   <p className="text-sm truncate">{r.profiles?.nama || "-"}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{r.profiles?.departemen?.nama || "-"}</p>
+                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{r.profiles?.departemen?.[0]?.nama || "-"}</p>
                 </div>
                 <div className="col-span-1">
                   <span className="mono text-[10px] text-ink-muted">{String(r.report_activities?.length || 0).padStart(2, "0")}</span>
@@ -175,7 +175,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                     </div>
                     <div>
                       <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mb-0.5">Departemen</p>
-                      <p className="text-xs truncate">{r.profiles?.departemen?.nama || "-"}</p>
+                      <p className="text-xs truncate">{r.profiles?.departemen?.[0]?.nama || "-"}</p>
                     </div>
                     <div>
                       <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mb-0.5">Aktivitas</p>
