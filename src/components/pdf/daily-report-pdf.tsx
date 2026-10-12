@@ -206,7 +206,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Dept.</Text>
-            <Text style={styles.infoValue}>: {report.profiles?.departemen?.[0]?.nama || "-"}</Text>
+            <Text style={styles.infoValue}>: {(report.profiles?.departemen as any)?.nama || "-"}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Position</Text>
