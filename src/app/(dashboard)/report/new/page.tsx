@@ -24,7 +24,7 @@ export default function NewReportPage() {
     defaultValues: {
       tanggal: format(new Date(), "yyyy-MM-dd"),
       attendance: "Present",
-      activities: [{ waktu: "", deskripsi: "", status: "selesai" }],
+      activities: [{ deskripsi: "", status: "selesai" }],
     },
   });
 
@@ -67,7 +67,6 @@ export default function NewReportPage() {
 
     const activities = data.activities.map((a, i) => ({
       report_id: report.id,
-      waktu: a.waktu,
       deskripsi: a.deskripsi,
       status: a.status,
       urutan: i,
@@ -127,14 +126,14 @@ export default function NewReportPage() {
           </div>
         </div>
 
-        {/* SECTION 02 — AKTIVITAS */}
+        {/* SECTION 02 */}
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
             <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">02 — Aktivitas</span>
             <div className="flex-1 h-px bg-ink/15" />
             <button
               type="button"
-              onClick={() => append({ waktu: "", deskripsi: "", status: "selesai" })}
+              onClick={() => append({ deskripsi: "", status: "selesai" })}
               className="flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.2em] bg-brand-primary text-white hover:bg-brand-hover px-3 py-2 transition-colors shrink-0"
             >
               <Plus size={12} />
@@ -148,7 +147,6 @@ export default function NewReportPage() {
           <div className="space-y-3">
             {fields.map((field, idx) => (
               <div key={field.id} className="border border-ink/15 bg-white/40">
-                {/* Card header */}
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-ink/10 bg-ink/[0.02]">
                   <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/50">Kegiatan {String(idx + 1).padStart(2, "0")}</span>
                   {fields.length > 1 && (
@@ -158,28 +156,19 @@ export default function NewReportPage() {
                   )}
                 </div>
 
-                {/* Card body */}
                 <div className="p-4 md:p-5 space-y-4">
-                  {/* Row: Waktu + Status */}
-                  <div className="grid grid-cols-2 gap-3 md:gap-4">
-                    <div>
-                      <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-1.5">Waktu</label>
-                      <input type="time" {...register(`activities.${idx}.waktu`)} className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-2 text-sm font-mono transition-colors" />
-                    </div>
-                    <div>
-                      <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-1.5">Status</label>
-                      <select
-                        {...register(`activities.${idx}.status`)}
-                        className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-2 text-xs mono uppercase tracking-[0.1em] transition-colors cursor-pointer"
-                      >
-                        <option value="selesai">Selesai</option>
-                        <option value="on_progress">Progress</option>
-                        <option value="pending">Pending</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-1.5">Status</label>
+                    <select
+                      {...register(`activities.${idx}.status`)}
+                      className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-2 text-xs mono uppercase tracking-[0.1em] transition-colors cursor-pointer"
+                    >
+                      <option value="selesai">Selesai</option>
+                      <option value="on_progress">Progress</option>
+                      <option value="pending">Pending</option>
+                    </select>
                   </div>
 
-                  {/* Deskripsi — textarea besar */}
                   <div>
                     <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-1.5">Deskripsi Kegiatan</label>
                     <textarea

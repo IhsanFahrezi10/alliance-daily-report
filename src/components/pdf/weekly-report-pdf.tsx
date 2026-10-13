@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     color: INK,
     lineHeight: 1.45,
   },
+
   logoRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
   logoLeft: { width: 110, height: "auto" },
   logoCenter: { width: 95, height: "auto" },
   logoRight: { width: 95, height: "auto" },
+
   titleBlock: {
     alignItems: "center",
     marginBottom: 12,
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     letterSpacing: 0.5,
   },
+
   infoRow: {
     flexDirection: "row",
     gap: 14,
@@ -80,6 +83,7 @@ const styles = StyleSheet.create({
     color: INK,
     flex: 1,
   },
+
   table: {
     borderTopWidth: 0.5,
     borderTopColor: BORDER,
@@ -111,6 +115,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER,
   },
+
   thText: {
     fontSize: 7.5,
     fontFamily: "Helvetica-Bold",
@@ -130,12 +135,15 @@ const styles = StyleSheet.create({
     color: MUTED,
     fontStyle: "italic",
   },
-  colDate: { width: "11%", paddingRight: 5 },
-  colAttendance: { width: "10%", paddingRight: 5 },
-  colActivity: { width: "30%", paddingRight: 5 },
-  colLesson: { width: "22%", paddingRight: 5 },
-  colChallenges: { width: "17%", paddingRight: 5 },
-  colSignature: { width: "10%" },
+
+  // Column widths — TANPA WAKTU
+  colDate: { width: "12%", paddingRight: 5 },
+  colAttendance: { width: "11%", paddingRight: 5 },
+  colActivity: { width: "38%", paddingRight: 5 },
+  colLesson: { width: "20%", paddingRight: 5 },
+  colChallenges: { width: "13%", paddingRight: 5 },
+  colSignature: { width: "6%", textAlign: "center" },
+
   footer: {
     position: "absolute",
     bottom: 20,
@@ -166,7 +174,6 @@ export type WeeklyReportData = {
   };
   report_activities: Array<{
     id: string;
-    waktu: string;
     deskripsi: string;
     status: string;
     urutan: number;
@@ -201,18 +208,21 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
   return (
     <Document title={`Weekly Report - ${first.profiles?.nama} - ${periodLabel}`} author="Maganghub × Kemnaker × Alliance" subject="Weekly Report Intern Maganghub Batch 2">
       <Page size="A4" orientation="landscape" style={styles.page}>
+        {/* HEADER */}
         <View style={styles.logoRow} fixed>
           <Image src="/logo-alliance.png" style={styles.logoLeft} />
           <Image src="/logo-maganghub.png" style={styles.logoCenter} />
           <Image src="/logo-kemnaker.png" style={styles.logoRight} />
         </View>
 
+        {/* TITLE */}
         <View style={styles.titleBlock} fixed>
           <Text style={styles.title}>Daily Report Intern Maganghub Batch 2</Text>
           <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
           <Text style={styles.periodText}>Periode: {periodLabel}</Text>
         </View>
 
+        {/* INFO — 4 KOLOM */}
         <View style={styles.infoRow} fixed>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Name</Text>
@@ -220,7 +230,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Dept.</Text>
-            <Text style={styles.infoValue}>: {(first.profiles?.departemen as any)?.nama || "-"}</Text>
+            <Text style={styles.infoValue}>: {first.profiles?.departemen?.nama || "-"}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Position</Text>
@@ -232,6 +242,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
           </View>
         </View>
 
+        {/* TABLE — TANPA WAKTU */}
         <View style={styles.table}>
           <View style={styles.tableHeader} fixed>
             <Text style={[styles.colDate, styles.thText]}>Date</Text>
@@ -239,7 +250,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
             <Text style={[styles.colActivity, styles.thText]}>Activity Description</Text>
             <Text style={[styles.colLesson, styles.thText]}>Lesson Learned</Text>
             <Text style={[styles.colChallenges, styles.thText]}>Challenges</Text>
-            <Text style={[styles.colSignature, styles.thText]}>Signature</Text>
+            <Text style={[styles.colSignature, styles.thText]}>Sign</Text>
           </View>
 
           {flatRows.length ? (
@@ -265,6 +276,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
           )}
         </View>
 
+        {/* FOOTER */}
         <View style={styles.footer} fixed>
           <Text>Dicetak: {tanggalCetak} WIB</Text>
           <Text>Maganghub × Kemnaker × Alliance</Text>

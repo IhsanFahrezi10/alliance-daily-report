@@ -11,7 +11,6 @@ export const reportSchema = z.object({
   activities: z
     .array(
       z.object({
-        waktu: z.string().min(1, "Waktu wajib diisi"),
         deskripsi: z.string().min(1, "Deskripsi wajib diisi"),
         status: z.enum(["selesai", "on_progress", "pending"]),
       }),

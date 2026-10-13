@@ -123,12 +123,13 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 
-  colDate: { width: "11%", paddingRight: 5 },
-  colAttendance: { width: "10%", paddingRight: 5 },
-  colActivity: { width: "30%", paddingRight: 5 },
-  colLesson: { width: "22%", paddingRight: 5 },
-  colChallenges: { width: "17%", paddingRight: 5 },
-  colSignature: { width: "10%" },
+  // Column widths (total 100%) — TANPA WAKTU
+  colDate: { width: "12%", paddingRight: 5 },
+  colAttendance: { width: "11%", paddingRight: 5 },
+  colActivity: { width: "38%", paddingRight: 5 },
+  colLesson: { width: "20%", paddingRight: 5 },
+  colChallenges: { width: "13%", paddingRight: 5 },
+  colSignature: { width: "6%", textAlign: "center" },
 
   footer: {
     position: "absolute",
@@ -162,11 +163,16 @@ export type ReportPdfData = {
   };
   report_activities: Array<{
     id: string;
-    waktu: string;
     deskripsi: string;
     status: string;
     urutan: number;
   }>;
+};
+
+const roleToPosition: Record<string, string> = {
+  user: "Intern",
+  admin: "Admin",
+  super_admin: "Super Admin",
 };
 
 export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
@@ -206,7 +212,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Dept.</Text>
-            <Text style={styles.infoValue}>: {(report.profiles?.departemen as any)?.nama || "-"}</Text>
+            <Text style={styles.infoValue}>: {report.profiles?.departemen?.nama || "-"}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Position</Text>
@@ -218,7 +224,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
           </View>
         </View>
 
-        {/* TABLE */}
+        {/* TABLE — TANPA WAKTU */}
         <View style={styles.table}>
           <View style={styles.tableHeader}>
             <Text style={[styles.colDate, styles.thText]}>Date</Text>
@@ -226,7 +232,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
             <Text style={[styles.colActivity, styles.thText]}>Activity Description</Text>
             <Text style={[styles.colLesson, styles.thText]}>Lesson Learned</Text>
             <Text style={[styles.colChallenges, styles.thText]}>Challenges</Text>
-            <Text style={[styles.colSignature, styles.thText]}>Signature</Text>
+            <Text style={[styles.colSignature, styles.thText]}>Sign</Text>
           </View>
 
           {activities.length ? (
@@ -237,7 +243,6 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
                 <Text style={[styles.colActivity, styles.tdText]}>{a.deskripsi || "-"}</Text>
                 <Text style={[styles.colLesson, styles.tdText]}>{report.lesson_learned || "-"}</Text>
                 <Text style={[styles.colChallenges, styles.tdText]}>{report.kendala || "-"}</Text>
-                {/* Signature — sengaja kosong untuk ttd mentor */}
                 <View style={styles.colSignature} />
               </View>
             ))
