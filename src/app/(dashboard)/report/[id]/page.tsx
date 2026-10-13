@@ -101,14 +101,14 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
 
           {/* Action bar */}
           <div className="flex border-t border-ink/15 divide-x divide-ink/10">
-            <Link href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
+            <a href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
               <Pencil size={14} />
               <span className="mono text-[10px] uppercase tracking-[0.15em]">Edit</span>
-            </Link>
-            <Link href={`/report/${report.id}/print`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 bg-brand-primary text-white hover:bg-brand-hover active:bg-brand-hover transition-colors">
+            </a>
+            <a href={`/report/${report.id}/print`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 bg-brand-primary text-white hover:bg-brand-hover active:bg-brand-hover transition-colors">
               <Printer size={14} />
               <span className="mono text-[10px] uppercase tracking-[0.15em]">Print PDF</span>
-            </Link>
+            </a>
           </div>
         </div>
       </div>
