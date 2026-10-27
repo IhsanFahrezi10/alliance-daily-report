@@ -62,26 +62,26 @@ const styles = StyleSheet.create({
 
   infoRow: {
     flexDirection: "row",
-    gap: 14,
+    gap: 12,
     marginBottom: 12,
+    alignItems: "flex-start",
   },
   infoItem: {
-    flexDirection: "row",
-    alignItems: "baseline",
     flex: 1,
   },
   infoLabel: {
-    fontSize: 9,
+    fontSize: 8,
     color: MUTED,
-    width: 60,
     fontFamily: "Helvetica",
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
+    marginBottom: 3,
+    textTransform: "uppercase",
   },
   infoValue: {
     fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: INK,
-    flex: 1,
+    lineHeight: 1.3,
   },
 
   table: {
@@ -223,23 +223,30 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
           <Text style={styles.periodText}>Periode: {periodLabel}</Text>
         </View>
 
-        {/* INFO — 4 KOLOM */}
         <View style={styles.infoRow} fixed>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Name</Text>
-            <Text style={styles.infoValue}>: {first.profiles?.nama || "-"}</Text>
+            <Text style={styles.infoValue} numberOfLines={2}>
+              {first.profiles?.nama || "-"}
+            </Text>
           </View>
           <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Dept.</Text>
-            <Text style={styles.infoValue}>: {first.profiles?.departemen?.nama || "-"}</Text>
+            <Text style={styles.infoLabel}>Department</Text>
+            <Text style={styles.infoValue} numberOfLines={2}>
+              {first.profiles?.departemen?.nama || "-"}
+            </Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Position</Text>
-            <Text style={styles.infoValue}>: {position}</Text>
+            <Text style={styles.infoValue} numberOfLines={2}>
+              {position}
+            </Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Mentor</Text>
-            <Text style={styles.infoValue}>: {first.profiles?.mentor_nama || "-"}</Text>
+            <Text style={styles.infoValue} numberOfLines={2}>
+              {first.profiles?.mentor_nama || "-"}
+            </Text>
           </View>
         </View>
 
