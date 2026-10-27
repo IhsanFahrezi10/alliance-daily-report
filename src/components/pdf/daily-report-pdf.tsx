@@ -159,6 +159,7 @@ export type ReportPdfData = {
     nama: string;
     role?: string;
     mentor_nama?: string | null;
+    batch?: number | null;
     departemen?: { nama: string } | null;
   };
   report_activities: Array<{
@@ -200,7 +201,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
 
         {/* TITLE */}
         <View style={styles.titleBlock}>
-          <Text style={styles.title}>Daily Report Intern Maganghub Batch 2</Text>
+          <Text style={styles.title}>Daily Report Intern Maganghub Batch {report.profiles?.batch || 1}</Text>
           <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
         </View>
 

@@ -170,6 +170,7 @@ export type WeeklyReportData = {
     nama: string;
     role?: string;
     mentor_nama?: string | null;
+    batch?: number | null;
     departemen?: { nama: string } | null;
   };
   report_activities: Array<{
@@ -217,7 +218,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
 
         {/* TITLE */}
         <View style={styles.titleBlock} fixed>
-          <Text style={styles.title}>Daily Report Intern Maganghub Batch 2</Text>
+          <Text style={styles.title}>Daily Report Intern Maganghub Batch {first.profiles?.batch || 1}</Text>
           <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
           <Text style={styles.periodText}>Periode: {periodLabel}</Text>
         </View>

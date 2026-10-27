@@ -38,7 +38,7 @@ export default function RecapPage() {
         `
         *,
         profiles:user_id (
-          nama, role, mentor_nama,
+          nama, role, mentor_nama, batch,
           departemen:departemen_id (nama)
         ),
         report_activities (*)
