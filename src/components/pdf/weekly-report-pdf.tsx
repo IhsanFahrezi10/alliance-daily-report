@@ -226,27 +226,19 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
         <View style={styles.infoRow} fixed>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Name</Text>
-            <Text style={styles.infoValue} numberOfLines={2}>
-              {first.profiles?.nama || "-"}
-            </Text>
+            <Text style={styles.infoValue}>{first.profiles?.nama || "-"}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Department</Text>
-            <Text style={styles.infoValue} numberOfLines={2}>
-              {first.profiles?.departemen?.nama || "-"}
-            </Text>
+            <Text style={styles.infoValue}>{first.profiles?.departemen?.nama || "-"}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Position</Text>
-            <Text style={styles.infoValue} numberOfLines={2}>
-              {position}
-            </Text>
+            <Text style={styles.infoValue}>{position}</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Mentor</Text>
-            <Text style={styles.infoValue} numberOfLines={2}>
-              {first.profiles?.mentor_nama || "-"}
-            </Text>
+            <Text style={styles.infoValue}>{first.profiles?.mentor_nama || "-"}</Text>
           </View>
         </View>
 
