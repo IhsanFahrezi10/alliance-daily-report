@@ -25,13 +25,24 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         mentor_nama,
         departemen:departemen_id (nama)
       ),
-      report_activities (*)
+      report_activities (*),
+      report_reviews (
+        id,
+        reviewed_at,
+        notes,
+        profiles:reviewed_by (nama)
+      )
     `,
     )
     .eq("id", id)
     .single();
 
   if (!report) notFound();
+
+  // Ambil review (handle array/object)
+  const review = Array.isArray((report as any).report_reviews) ? (report as any).report_reviews[0] : (report as any).report_reviews;
+
+  const reviewerName = review ? (Array.isArray(review.profiles) ? review.profiles[0]?.nama : review.profiles?.nama) : null;
 
   const activities = (report.report_activities || []).sort((a: any, b: any) => a.urutan - b.urutan);
 
@@ -55,6 +66,10 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
 
   const tanggalFormatted = format(new Date(report.tanggal), "EEEE, d MMMM yyyy", { locale: localeId });
 
+  // Ambil nama departemen (handle array/object)
+  const prof = report.profiles as any;
+  const departemenName = Array.isArray(prof?.departemen) ? prof.departemen[0]?.nama || "-" : prof?.departemen?.nama || "-";
+
   return (
     <div className="max-w-4xl space-y-6 md:space-y-8">
       {/* HEADER */}
@@ -66,7 +81,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Detail Logbook</span>
             <div className="h-px w-6 md:w-8 bg-brand-primary" />
-            <span className="mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/60 truncate">#{report.id.slice(0, 8)}</span>
+            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/60 truncate">#{report.id.slice(0, 8)}</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-light tracking-tight">
             {format(new Date(report.tanggal), "d MMMM yyyy", {
@@ -87,17 +102,40 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink/15">
             <div className="p-5 md:p-6">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Nama</p>
-              <p className="text-base md:text-lg font-medium">{report.profiles?.nama || "-"}</p>
+              <p className="text-base md:text-lg font-medium">{prof?.nama || "-"}</p>
             </div>
             <div className="p-5 md:p-6">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Departemen</p>
-              <p className="text-base md:text-lg font-serif italic">{report.profiles?.departemen?.[0]?.nama || "-"}</p>
+              <p className="text-base md:text-lg font-serif italic">{departemenName}</p>
             </div>
             <div className="p-5 md:p-6">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Tanggal</p>
               <p className="text-base md:text-lg font-serif italic">{tanggalFormatted}</p>
             </div>
           </div>
+
+          {/* REVIEW STATUS BANNER */}
+          {review ? (
+            <div className="border-t border-ink/15 bg-green-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
+              <CheckCircle2 size={14} className="text-green-700 shrink-0" />
+              <span className="mono text-[10px] uppercase tracking-[0.15em] text-green-800 font-medium">Sudah ditinjau</span>
+              <span className="mono text-[10px] text-ink/30">·</span>
+              <span className="mono text-[10px] text-green-800/80">oleh {reviewerName || "HR Approver"}</span>
+              <span className="mono text-[10px] text-ink/30">·</span>
+              <span className="mono text-[10px] text-green-800/80">
+                {format(new Date(review.reviewed_at), "d MMM yyyy, HH:mm", {
+                  locale: localeId,
+                })}
+              </span>
+            </div>
+          ) : (
+            <div className="border-t border-ink/15 bg-orange-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
+              <Clock size={14} className="text-orange-600 shrink-0" />
+              <span className="mono text-[10px] uppercase tracking-[0.15em] text-orange-800 font-medium">Belum ditinjau</span>
+              <span className="mono text-[10px] text-ink/30">·</span>
+              <span className="mono text-[10px] text-orange-800/80">Menunggu review dari HR Approver</span>
+            </div>
+          )}
 
           {/* Action bar */}
           <div className="flex border-t border-ink/15 divide-x divide-ink/10">
