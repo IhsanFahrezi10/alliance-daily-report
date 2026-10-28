@@ -35,13 +35,17 @@ export default async function ReviewsPage() {
     .order("tanggal", { ascending: false });
 
   // Lookup data
-  const { data: profiles } = await supabase.from("profiles").select("id, nama, departemen_id");
+  const { data: profiles } = await supabase.from("profiles").select("id, nama, departemen_id, batch");
 
   const { data: departemenList } = await supabase.from("departemen").select("id, nama");
 
-  const profileMap = new Map<string, { nama: string; departemen_id: string | null }>();
+  const profileMap = new Map<string, { nama: string; departemen_id: string | null; batch: number }>();
   profiles?.forEach((p) => {
-    profileMap.set(p.id, { nama: p.nama, departemen_id: p.departemen_id });
+    profileMap.set(p.id, {
+      nama: p.nama,
+      departemen_id: p.departemen_id,
+      batch: p.batch || 1,
+    });
   });
 
   const departemenMap = new Map<string, string>();
@@ -61,6 +65,7 @@ export default async function ReviewsPage() {
       attendance: r.attendance,
       user_nama: profile?.nama || "—",
       departemen_nama: departemenNama,
+      batch: profile?.batch || 1,
       activity_count: r.report_activities?.length || 0,
       review: review
         ? {
@@ -73,5 +78,10 @@ export default async function ReviewsPage() {
     };
   });
 
-  return <ReviewsListClient reports={reports} />;
+  // Ambil daftar unik departemen & nama dari reports (buat filter)
+  const uniqueDepartemen = [...new Set(reports.map((r) => r.departemen_nama))].filter((d) => d !== "—");
+
+  const uniqueNames = [...new Set(reports.map((r) => r.user_nama))].filter((n) => n !== "—");
+
+  return <ReviewsListClient reports={reports} departemenList={uniqueDepartemen} namesList={uniqueNames} />;
 }
