@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderBottomColor: BORDER,
     minHeight: 56,
     justifyContent: "center",
-    alignItems: "center",
+    // ⚠️ HAPUS flexDirection: 'row' — biar default column
   },
   avatarBox: {
     position: "absolute",
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     top: 0,
     width: 56,
     height: 56,
+    zIndex: 2,
   },
   avatarImg: {
     width: 56,
@@ -65,9 +66,10 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   titleTextBlock: {
-    alignItems: "center",
+    width: "100%",
     paddingLeft: 70,
     paddingRight: 70,
+    // ⚠️ HAPUS alignItems: 'center' — biar textAlign di Text yang atur
   },
   title: {
     fontSize: 13,

@@ -29,18 +29,23 @@ const styles = StyleSheet.create({
   logoCenter: { width: 95, height: "auto" },
   logoRight: { width: 95, height: "auto" },
 
+  // ============ TITLE + AVATAR BLOCK (CENTERED) ============
   titleWithAvatar: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
+    position: "relative",
     marginBottom: 12,
     paddingBottom: 10,
     borderBottomWidth: 0.75,
     borderBottomColor: BORDER,
+    minHeight: 56,
+    justifyContent: "center",
   },
   avatarBox: {
+    position: "absolute",
+    left: 0,
+    top: 0,
     width: 56,
     height: 56,
+    zIndex: 2,
   },
   avatarImg: {
     width: 56,
@@ -60,13 +65,16 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   titleTextBlock: {
-    flex: 1,
+    width: "100%",
+    paddingLeft: 70,
+    paddingRight: 70,
   },
   title: {
     fontSize: 13,
     fontFamily: "Helvetica-Bold",
     color: INK,
     letterSpacing: 0.8,
+    textAlign: "center",
     textTransform: "uppercase",
   },
   subtitle: {
@@ -74,6 +82,7 @@ const styles = StyleSheet.create({
     color: MUTED,
     letterSpacing: 0.6,
     marginTop: 3,
+    textAlign: "center",
     textTransform: "uppercase",
   },
   periodText: {
