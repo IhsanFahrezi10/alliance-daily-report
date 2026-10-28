@@ -63,13 +63,13 @@ export default function ProfileForm({ profile, departemenList }: Props) {
   return (
     <div>
       <div className="flex items-center gap-3 mb-5">
-        <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">Edit Profil</span>
+        <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">Edit Profil</span>
         <div className="flex-1 h-px bg-ink/15" />
       </div>
 
       <form onSubmit={handleSubmit} className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
         <div className="p-6">
-          <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Nama Lengkap</label>
+          <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Nama Lengkap</label>
           <input
             type="text"
             value={nama}
@@ -80,7 +80,7 @@ export default function ProfileForm({ profile, departemenList }: Props) {
         </div>
 
         <div className="p-6">
-          <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Departemen</label>
+          <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Departemen</label>
           <select
             value={departemenId}
             onChange={(e) => setDepartemenId(e.target.value)}
@@ -96,7 +96,7 @@ export default function ProfileForm({ profile, departemenList }: Props) {
         </div>
 
         <div className="p-6">
-          <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Nama Mentor</label>
+          <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Nama Mentor</label>
           <input
             type="text"
             value={mentorNama}
@@ -104,7 +104,7 @@ export default function ProfileForm({ profile, departemenList }: Props) {
             placeholder="Nama mentor yang membimbing kamu"
             className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-3 text-base transition-colors placeholder:text-ink/30"
           />
-          <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-2">Nama ini akan muncul di header laporan PDF</p>
+          <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mt-2">Nama ini akan muncul di header laporan PDF</p>
         </div>
 
         <div className="p-6">

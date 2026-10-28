@@ -92,9 +92,9 @@ export default function RecapPage() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
         <div>
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
-            <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Rekap</span>
+            <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Rekap</span>
             <div className="h-px w-6 md:w-8 bg-brand-primary" />
-            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">{String(reports.length).padStart(2, "0")} Hari</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">{String(reports.length).padStart(2, "0")} Hari</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-light tracking-tight">
             Rekap <span className="font-serif italic text-brand-primary">Mingguan</span>
@@ -102,25 +102,25 @@ export default function RecapPage() {
           <p className="text-xs sm:text-sm text-ink-muted mt-2">Gabungkan logbook 1 minggu jadi satu PDF siap print</p>
         </div>
 
-        <Link href="/dashboard" className="flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.2em] text-ink/50 hover:text-brand-primary transition-colors shrink-0">
+        <Link href="/dashboard" className="flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.2em] text-ink/70 hover:text-brand-primary transition-colors shrink-0">
           <ArrowLeft size={12} /> Kembali
         </Link>
       </div>
 
       <div className="border border-ink/15 bg-white/40 p-4 md:p-5 space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/50 shrink-0">Cepat:</span>
-          <button type="button" onClick={setThisWeek} className="mono text-[10px] uppercase tracking-[0.15em] border border-ink/20 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 shrink-0">Cepat:</span>
+          <button type="button" onClick={setThisWeek} className="mono text-[11px] uppercase tracking-[0.15em] border border-ink/20 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
             Minggu Ini
           </button>
-          <button type="button" onClick={setLastWeek} className="mono text-[10px] uppercase tracking-[0.15em] border border-ink/20 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
+          <button type="button" onClick={setLastWeek} className="mono text-[11px] uppercase tracking-[0.15em] border border-ink/20 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
             Minggu Lalu
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="mono text-[10px] uppercase tracking-[0.2em] text-ink/60 block mb-1.5">Dari</label>
+            <label className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 block mb-1.5">Dari</label>
             <input
               type="date"
               value={from}
@@ -129,26 +129,26 @@ export default function RecapPage() {
             />
           </div>
           <div>
-            <label className="mono text-[10px] uppercase tracking-[0.2em] text-ink/60 block mb-1.5">Sampai</label>
+            <label className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 block mb-1.5">Sampai</label>
             <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-2.5 text-sm font-mono transition-colors" />
           </div>
         </div>
 
         <div className="flex items-center gap-2 pt-2 border-t border-ink/10">
           <Calendar size={13} className="text-brand-primary shrink-0" />
-          <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">Periode: {periodLabel}</p>
-          <span className="mono text-[10px] text-ink/30">·</span>
-          <p className="mono text-[10px] uppercase tracking-[0.15em] text-brand-primary font-medium">{reports.length} hari terisi</p>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Periode: {periodLabel}</p>
+          <span className="mono text-[11px] text-ink/30">·</span>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">{reports.length} hari terisi</p>
         </div>
       </div>
 
       {loading ? (
         <div className="border border-ink/15 bg-white/40 p-12 text-center">
-          <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40">Memuat...</p>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Memuat...</p>
         </div>
       ) : reports.length === 0 ? (
         <div className="border border-dashed border-ink/25 p-12 text-center">
-          <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-2">Tidak ada logbook</p>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-2">Tidak ada logbook</p>
           <p className="text-xs text-ink-muted">Belum ada logbook di periode ini. Coba ubah rentang tanggal atau isi logbook dulu.</p>
         </div>
       ) : (
@@ -156,7 +156,7 @@ export default function RecapPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2 flex-wrap">
               {reports.map((r) => (
-                <span key={r.id} className="mono text-[9px] uppercase tracking-[0.15em] border border-ink/20 px-2 py-1 text-ink/60">
+                <span key={r.id} className="mono text-[10px] uppercase tracking-[0.15em] border border-ink/20 px-2 py-1 text-ink/60">
                   {format(new Date(r.tanggal), "EEE, d MMM", {
                     locale: localeId,
                   })}
@@ -167,7 +167,7 @@ export default function RecapPage() {
             <PDFDownloadLink
               document={<WeeklyReportPDF reports={reports} periodLabel={periodLabel} />}
               fileName={filename}
-              className="flex items-center justify-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[10px] uppercase tracking-[0.2em] shrink-0"
+              className="flex items-center justify-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[11px] uppercase tracking-[0.2em] shrink-0"
             >
               {({ loading }) =>
                 loading ? (
@@ -182,7 +182,7 @@ export default function RecapPage() {
           </div>
 
           <div className="border border-ink/15 bg-white">
-            <div className="px-4 md:px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-ink/50 overflow-hidden">
+            <div className="px-4 md:px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/70 overflow-hidden">
               <FileText size={12} className="shrink-0" />
               <span className="truncate">Preview — {filename}</span>
             </div>

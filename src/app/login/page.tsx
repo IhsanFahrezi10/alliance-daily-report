@@ -46,12 +46,12 @@ export default function LoginPage() {
         {/* Top — logo Maganghub */}
         <motion.header initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10 flex items-start justify-between">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={180} height={48} className="h-auto" priority />
-          <span className="text-[10px] uppercase tracking-[0.25em] text-ink/50 mt-1">Logbook Magang</span>
+          <span className="text-[10px] uppercase tracking-[0.15em] text-ink/70 mt-1">Logbook Magang</span>
         </motion.header>
 
         {/* Center — Heading */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }} className="relative z-10 max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-brand-primary mb-8">Program Magang Nasional</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-brand-primary mb-8">Program Magang Nasional</p>
 
           <h1 className="text-[clamp(3rem,7vw,5.5rem)] leading-[0.95] font-light tracking-tight">
             Catat
@@ -69,7 +69,7 @@ export default function LoginPage() {
         {/* Bottom — partner logos */}
         <motion.footer initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }} className="relative z-10 flex items-end justify-between border-t border-ink/15 pt-6">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-ink/50 mb-3">Diselenggarakan oleh</p>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-ink/70 mb-3">Diselenggarakan oleh</p>
             <div className="flex items-center gap-6">
               <Image src="/logo-kemnaker.png" alt="Kemnaker" width={140} height={36} className="h-8 w-auto" />
               <div className="w-px h-8 bg-ink/15" />
@@ -77,7 +77,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <p className="text-[10px] uppercase tracking-[0.25em] text-ink/40">Est. 2026</p>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-ink/60">Est. 2026</p>
         </motion.footer>
       </div>
 
@@ -86,13 +86,13 @@ export default function LoginPage() {
         {/* Mobile brand */}
         <div className="lg:hidden flex items-center justify-between mb-10">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={140} height={38} className="h-8 w-auto" priority />
-          <span className="text-[10px] uppercase tracking-[0.25em] text-ink/50">Logbook</span>
+          <span className="text-[10px] uppercase tracking-[0.15em] text-ink/70">Logbook</span>
         </div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex-1 flex flex-col justify-center max-w-md w-full mx-auto">
           {/* Section label */}
           <div className="flex items-center gap-3 mb-8">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-brand-primary font-medium">01 — Sign in</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-brand-primary font-medium">01 — Sign in</span>
             <div className="flex-1 h-px bg-ink/15" />
           </div>
 
@@ -142,7 +142,7 @@ export default function LoginPage() {
 
           {/* Info box */}
           <div className="mt-10 pt-6 border-t border-ink/15">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-ink/40 mb-2">Tentang</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Tentang</p>
             <p className="text-xs text-ink-muted leading-relaxed">
               Web ini dibuat untuk mempermudah peserta magang dalam mengisi aktivitas harian selama masa magang. Seluruh catatan otomatis tersusun dalam satu template tabel dan dapat diunduh dalam format{" "}
               <span className="font-medium text-ink">PDF A4</span> yang siap dicetak.
@@ -150,7 +150,7 @@ export default function LoginPage() {
           </div>
         </motion.div>
 
-        <div className="text-[10px] uppercase tracking-[0.2em] text-ink/40 mt-10 lg:mt-0 text-center lg:text-left">© {new Date().getFullYear()} Maganghub × Kemnaker</div>
+        <div className="text-[10px] uppercase tracking-[0.2em] text-ink/60 mt-10 lg:mt-0 text-center lg:text-left">© {new Date().getFullYear()} Maganghub × Kemnaker</div>
       </div>
     </div>
   );

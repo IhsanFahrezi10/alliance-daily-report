@@ -50,7 +50,7 @@ export default function PrintReportPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40">Memuat data...</p>
+        <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Memuat data...</p>
       </div>
     );
   }
@@ -58,7 +58,7 @@ export default function PrintReportPage() {
   if (error || !report) {
     return (
       <div className="space-y-4">
-        <Link href="/dashboard" className="inline-flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.2em] text-brand-primary">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.2em] text-brand-primary">
           <ArrowLeft size={12} /> Kembali
         </Link>
         <div className="border border-red-300 bg-red-50 text-red-700 p-4 text-sm">Gagal memuat logbook: {error || "Data tidak ditemukan"}</div>
@@ -78,9 +78,9 @@ export default function PrintReportPage() {
           </Link>
           <div>
             <div className="flex items-center gap-3 mb-1.5">
-              <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Export PDF</span>
+              <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Export PDF</span>
               <div className="h-px w-8 bg-brand-primary" />
-              <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">A4</span>
+              <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">A4</span>
             </div>
             <h1 className="text-2xl font-light tracking-tight">Preview Logbook</h1>
           </div>
@@ -89,7 +89,7 @@ export default function PrintReportPage() {
         <PDFDownloadLink
           document={<DailyReportPDF report={report} />}
           fileName={filename}
-          className="flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[10px] uppercase tracking-[0.2em]"
+          className="flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[11px] uppercase tracking-[0.2em]"
         >
           {({ loading }) =>
             loading ? (
@@ -105,7 +105,7 @@ export default function PrintReportPage() {
 
       {/* PREVIEW */}
       <div className="border border-ink/15 bg-white">
-        <div className="px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[10px] uppercase tracking-[0.2em] text-ink/50">
+        <div className="px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[11px] uppercase tracking-[0.2em] text-ink/70">
           <FileText size={12} />
           Preview — {filename}
         </div>

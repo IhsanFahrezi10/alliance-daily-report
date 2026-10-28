@@ -111,7 +111,7 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName }: Pro
           </button>
         </div>
 
-        <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 mono text-[10px] uppercase tracking-[0.15em] text-brand-primary hover:text-brand-hover transition-colors">
+        <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 mono text-[11px] uppercase tracking-[0.15em] text-brand-primary hover:text-brand-hover transition-colors">
           <Upload size={12} />
           {currentAvatarUrl ? "Ganti Foto" : "Upload Foto"}
         </button>
@@ -127,7 +127,7 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName }: Pro
             <div className="flex items-center justify-between px-5 py-4 border-b border-ink/15">
               <div>
                 <p className="text-sm font-medium">Atur Foto Profil</p>
-                <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 mt-0.5">Geser & zoom untuk atur</p>
+                <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/70 mt-0.5">Geser & zoom untuk atur</p>
               </div>
               <button type="button" onClick={handleClose} disabled={uploading} className="p-1.5 hover:bg-ink/[0.05] transition-colors disabled:opacity-50">
                 <X size={16} />
@@ -141,20 +141,20 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName }: Pro
 
             {/* Zoom slider */}
             <div className="px-5 py-4 border-t border-ink/15">
-              <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-2">Zoom</label>
+              <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/70 block mb-2">Zoom</label>
               <input type="range" min={1} max={3} step={0.1} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-full" />
             </div>
 
             {/* Actions */}
             <div className="flex border-t border-ink/15 divide-x divide-ink/10">
-              <button type="button" onClick={handleClose} disabled={uploading} className="flex-1 py-3.5 mono text-[10px] uppercase tracking-[0.15em] text-ink/60 hover:bg-ink/[0.03] transition-colors disabled:opacity-50">
+              <button type="button" onClick={handleClose} disabled={uploading} className="flex-1 py-3.5 mono text-[11px] uppercase tracking-[0.15em] text-ink/60 hover:bg-ink/[0.03] transition-colors disabled:opacity-50">
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleUpload}
                 disabled={uploading}
-                className="flex-1 py-3.5 mono text-[10px] uppercase tracking-[0.15em] bg-brand-primary text-white hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3.5 mono text-[11px] uppercase tracking-[0.15em] bg-brand-primary text-white hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {uploading ? (
                   <>

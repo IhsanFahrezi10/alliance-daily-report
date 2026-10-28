@@ -116,7 +116,7 @@ export default function EditReportPage() {
   if (loadingData) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40">Memuat data...</p>
+        <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Memuat data...</p>
       </div>
     );
   }
@@ -129,9 +129,9 @@ export default function EditReportPage() {
         </Link>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
-            <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Edit Entry</span>
+            <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Edit Entry</span>
             <div className="h-px w-6 md:w-8 bg-brand-primary" />
-            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40 truncate">#{String(params.id).slice(0, 8)}</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 truncate">#{String(params.id).slice(0, 8)}</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-light tracking-tight">Edit Logbook</h1>
         </div>
@@ -140,19 +140,19 @@ export default function EditReportPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 md:space-y-8">
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
-            <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">01 — Info Hari</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">01 — Info Hari</span>
             <div className="flex-1 h-px bg-ink/15" />
           </div>
 
           <div className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
             <div className="p-5 md:p-6">
-              <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Tanggal</label>
+              <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Tanggal</label>
               <input type="date" {...register("tanggal")} className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-3 text-base transition-colors font-mono" />
               {errors.tanggal && <p className="text-red-600 text-xs mt-2">{errors.tanggal.message}</p>}
             </div>
 
             <div className="p-5 md:p-6">
-              <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Attendance</label>
+              <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Attendance</label>
               <select {...register("attendance")} className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-3 text-base transition-colors cursor-pointer">
                 <option value="Present">Present</option>
                 <option value="Excused">Excused</option>
@@ -165,12 +165,12 @@ export default function EditReportPage() {
 
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
-            <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">02 — Aktivitas</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">02 — Aktivitas</span>
             <div className="flex-1 h-px bg-ink/15" />
             <button
               type="button"
               onClick={() => append({ deskripsi: "", status: "selesai" })}
-              className="flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.2em] bg-brand-primary text-white hover:bg-brand-hover px-3 py-2 transition-colors shrink-0"
+              className="flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.2em] bg-brand-primary text-white hover:bg-brand-hover px-3 py-2 transition-colors shrink-0"
             >
               <Plus size={12} />
               <span className="hidden sm:inline">Tambah Kegiatan</span>
@@ -184,9 +184,9 @@ export default function EditReportPage() {
             {fields.map((field, idx) => (
               <div key={field.id} className="border border-ink/15 bg-white/40">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-ink/10 bg-ink/[0.02]">
-                  <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/50">Kegiatan {String(idx + 1).padStart(2, "0")}</span>
+                  <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70">Kegiatan {String(idx + 1).padStart(2, "0")}</span>
                   {fields.length > 1 && (
-                    <button type="button" onClick={() => remove(idx)} className="flex items-center gap-1 mono text-[9px] uppercase tracking-[0.15em] text-ink/40 hover:text-red-600 transition-colors">
+                    <button type="button" onClick={() => remove(idx)} className="flex items-center gap-1 mono text-[10px] uppercase tracking-[0.15em] text-ink/60 hover:text-red-600 transition-colors">
                       <Trash2 size={12} /> Hapus
                     </button>
                   )}
@@ -194,7 +194,7 @@ export default function EditReportPage() {
 
                 <div className="p-4 md:p-5 space-y-4">
                   <div>
-                    <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-1.5">Status</label>
+                    <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/70 block mb-1.5">Status</label>
                     <select
                       {...register(`activities.${idx}.status`)}
                       className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-2 text-xs mono uppercase tracking-[0.1em] transition-colors cursor-pointer"
@@ -206,7 +206,7 @@ export default function EditReportPage() {
                   </div>
 
                   <div>
-                    <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/50 block mb-1.5">Deskripsi Kegiatan</label>
+                    <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/70 block mb-1.5">Deskripsi Kegiatan</label>
                     <textarea
                       {...register(`activities.${idx}.deskripsi`)}
                       rows={4}
@@ -222,13 +222,13 @@ export default function EditReportPage() {
 
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
-            <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">03 — Catatan Refleksi</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">03 — Catatan Refleksi</span>
             <div className="flex-1 h-px bg-ink/15" />
           </div>
 
           <div className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
             <div className="p-5 md:p-6">
-              <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Lesson Learned</label>
+              <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Lesson Learned</label>
               <textarea
                 {...register("lesson_learned")}
                 rows={3}
@@ -238,7 +238,7 @@ export default function EditReportPage() {
             </div>
 
             <div className="p-5 md:p-6">
-              <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Challenges</label>
+              <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Challenges</label>
               <textarea
                 {...register("challenges")}
                 rows={3}
@@ -248,7 +248,7 @@ export default function EditReportPage() {
             </div>
 
             <div className="p-5 md:p-6">
-              <label className="block mono text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Catatan Lain (opsional)</label>
+              <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Catatan Lain (opsional)</label>
               <textarea
                 {...register("catatan")}
                 rows={2}

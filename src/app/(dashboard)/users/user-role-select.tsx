@@ -34,7 +34,7 @@ export default function UserRoleSelect({ userId, currentRole, disabled }: Props)
   };
 
   if (disabled) {
-    return <span className="inline-flex mono text-[10px] uppercase tracking-[0.15em] bg-ink/[0.06] text-ink/60 px-2.5 py-1.5">{role.replace("_", " ")} — kamu</span>;
+    return <span className="inline-flex mono text-[11px] uppercase tracking-[0.15em] bg-ink/[0.06] text-ink/60 px-2.5 py-1.5">{role.replace("_", " ")} — kamu</span>;
   }
 
   return (

@@ -50,7 +50,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   const statusColor: Record<string, string> = {
     selesai: "text-green-700",
     on_progress: "text-yellow-700",
-    pending: "text-ink/40",
+    pending: "text-ink/60",
   };
 
   const tanggalFormatted = format(new Date(report.tanggal), "EEEE, d MMMM yyyy", { locale: localeId });
@@ -64,9 +64,9 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         </Link>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
-            <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Detail Logbook</span>
+            <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Detail Logbook</span>
             <div className="h-px w-6 md:w-8 bg-brand-primary" />
-            <span className="mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-ink/40 truncate">#{report.id.slice(0, 8)}</span>
+            <span className="mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/60 truncate">#{report.id.slice(0, 8)}</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-light tracking-tight">
             {format(new Date(report.tanggal), "d MMMM yyyy", {
@@ -79,22 +79,22 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
       {/* INFO */}
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
-          <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">01 — Informasi</span>
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">01 — Informasi</span>
           <div className="flex-1 h-px bg-ink/15" />
         </div>
 
         <div className="border border-ink/15 bg-white/40">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink/15">
             <div className="p-5 md:p-6">
-              <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Nama</p>
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Nama</p>
               <p className="text-base md:text-lg font-medium">{report.profiles?.nama || "-"}</p>
             </div>
             <div className="p-5 md:p-6">
-              <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Departemen</p>
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Departemen</p>
               <p className="text-base md:text-lg font-serif italic">{report.profiles?.departemen?.[0]?.nama || "-"}</p>
             </div>
             <div className="p-5 md:p-6">
-              <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40 mb-2">Tanggal</p>
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Tanggal</p>
               <p className="text-base md:text-lg font-serif italic">{tanggalFormatted}</p>
             </div>
           </div>
@@ -103,11 +103,11 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           <div className="flex border-t border-ink/15 divide-x divide-ink/10">
             <a href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
               <Pencil size={14} />
-              <span className="mono text-[10px] uppercase tracking-[0.15em]">Edit</span>
+              <span className="mono text-[11px] uppercase tracking-[0.15em]">Edit</span>
             </a>
             <a href={`/report/${report.id}/print`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 bg-brand-primary text-white hover:bg-brand-hover active:bg-brand-hover transition-colors">
               <Printer size={14} />
-              <span className="mono text-[10px] uppercase tracking-[0.15em]">Print PDF</span>
+              <span className="mono text-[11px] uppercase tracking-[0.15em]">Print PDF</span>
             </a>
           </div>
         </div>
@@ -116,14 +116,14 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
       {/* AKTIVITAS */}
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
-          <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">02 — Aktivitas</span>
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">02 — Aktivitas</span>
           <div className="flex-1 h-px bg-ink/15" />
-          <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40 shrink-0">{String(activities.length).padStart(2, "0")} entri</span>
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 shrink-0">{String(activities.length).padStart(2, "0")} entri</span>
         </div>
 
         <div className="border border-ink/15 bg-white/40">
           {/* Desktop header */}
-          <div className="hidden md:grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[9px] uppercase tracking-[0.2em] text-ink/40">
+          <div className="hidden md:grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
             <div className="col-span-1">#</div>
             <div className="col-span-2">Waktu</div>
             <div className="col-span-7">Deskripsi</div>
@@ -138,8 +138,8 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
                   {/* Mobile */}
                   <div className="md:hidden space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="mono text-[10px] text-ink/40">#{String(idx + 1).padStart(2, "0")}</span>
-                      <span className={`flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.15em] ${statusColor[a.status]}`}>
+                      <span className="mono text-[11px] text-ink/60">#{String(idx + 1).padStart(2, "0")}</span>
+                      <span className={`flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.15em] ${statusColor[a.status]}`}>
                         <Icon size={12} strokeWidth={2} />
                         {statusLabel[a.status]}
                       </span>
@@ -153,11 +153,11 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
 
                   {/* Desktop */}
                   <div className="hidden md:contents">
-                    <div className="col-span-1 mono text-[10px] text-ink/40">{String(idx + 1).padStart(2, "0")}</div>
+                    <div className="col-span-1 mono text-[11px] text-ink/60">{String(idx + 1).padStart(2, "0")}</div>
                     <div className="col-span-2 mono text-sm">{a.waktu?.slice(0, 5)}</div>
                     <div className="col-span-7 text-sm whitespace-pre-wrap">{a.deskripsi}</div>
                     <div className="col-span-2 flex justify-end">
-                      <span className={`flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.15em] ${statusColor[a.status]}`}>
+                      <span className={`flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.15em] ${statusColor[a.status]}`}>
                         <Icon size={12} strokeWidth={2} />
                         {statusLabel[a.status]}
                       </span>
@@ -167,7 +167,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
               );
             })
           ) : (
-            <div className="p-8 text-center mono text-[10px] uppercase tracking-[0.25em] text-ink/40">Tidak ada aktivitas</div>
+            <div className="p-8 text-center mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Tidak ada aktivitas</div>
           )}
         </div>
       </div>
@@ -176,26 +176,26 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
       {(report.kendala || report.lesson_learned || report.catatan) && (
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
-            <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">03 — Catatan</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">03 — Catatan</span>
             <div className="flex-1 h-px bg-ink/15" />
           </div>
 
           <div className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
             {report.lesson_learned && (
               <div className="p-5 md:p-6">
-                <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-2">Lesson Learned</p>
+                <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-2">Lesson Learned</p>
                 <p className="text-sm whitespace-pre-wrap">{report.lesson_learned}</p>
               </div>
             )}
             {report.kendala && (
               <div className="p-5 md:p-6">
-                <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-2">Challenges</p>
+                <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-2">Challenges</p>
                 <p className="text-sm whitespace-pre-wrap">{report.kendala}</p>
               </div>
             )}
             {report.catatan && (
               <div className="p-5 md:p-6">
-                <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-2">Catatan Lain</p>
+                <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-2">Catatan Lain</p>
                 <p className="text-sm whitespace-pre-wrap">{report.catatan}</p>
               </div>
             )}

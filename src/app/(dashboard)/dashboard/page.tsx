@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { format } from "date-fns";
-import { getDepartemenName } from '@/lib/utils'
+import { getDepartemenName } from "@/lib/utils";
 import { id as localeId } from "date-fns/locale";
 import { ArrowUpRight, CheckCircle2, Circle } from "lucide-react";
 
@@ -33,9 +33,9 @@ export default async function DashboardPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
         <div>
           <div className="flex items-center gap-3 mb-3 flex-wrap">
-            <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Dashboard</span>
+            <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Dashboard</span>
             <div className="h-px w-8 bg-brand-primary" />
-            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">{todayString}</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">{todayString}</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight leading-[1.05]">
             Hai, <span className="font-serif italic text-brand-primary">{profile?.nama?.split(" ")[0] || "Kamu"}</span>.
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
         </div>
 
         <div className="md:text-right">
-          <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-1.5">Departemen</p>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-1.5">Departemen</p>
           <p className="font-serif italic text-base md:text-lg">{getDepartemenName(profile?.departemen) === "—" ? "Belum diatur" : getDepartemenName(profile?.departemen)}</p>
         </div>
       </div>
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
       {/* STATUS */}
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
-          <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">01 — Status Hari Ini</span>
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">01 — Status Hari Ini</span>
           <div className="flex-1 h-px bg-ink/15" />
         </div>
 
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
               <div className="flex-1 min-w-0">
                 <p className="text-sm md:text-base font-medium mb-1">Logbook sudah diisi</p>
                 <p className="text-xs md:text-sm text-ink-muted leading-relaxed">Terima kasih sudah mengisi aktivitas hari ini.</p>
-                <Link href={`/report/${todayReport.id}`} className="inline-flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.2em] text-brand-primary mt-3 md:mt-4 hover:gap-2.5 transition-all">
+                <Link href={`/report/${todayReport.id}`} className="inline-flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.2em] text-brand-primary mt-3 md:mt-4 hover:gap-2.5 transition-all">
                   Lihat detail <ArrowUpRight size={12} />
                 </Link>
               </div>
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
               <div className="flex-1 min-w-0">
                 <p className="text-sm md:text-base font-medium mb-1">Belum isi logbook</p>
                 <p className="text-xs md:text-sm text-ink-muted leading-relaxed">Yuk catat aktivitas hari ini biar nggak lupa.</p>
-                <Link href="/report/new" className="inline-flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.2em] text-brand-primary mt-3 md:mt-4 hover:gap-2.5 transition-all">
+                <Link href="/report/new" className="inline-flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.2em] text-brand-primary mt-3 md:mt-4 hover:gap-2.5 transition-all">
                   Isi sekarang <ArrowUpRight size={12} />
                 </Link>
               </div>
@@ -84,10 +84,10 @@ export default async function DashboardPage() {
           )}
 
           <div className="border border-ink/15 bg-white/40 p-5 md:p-6">
-            <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/50 mb-2 md:mb-3">Total Entri</p>
+            <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/70 mb-2 md:mb-3">Total Entri</p>
             <p className="mono text-4xl md:text-5xl font-light tracking-tight text-brand-primary">{String(totalReports ?? 0).padStart(3, "0")}</p>
             <div className="mt-2 md:mt-3 h-px bg-ink/15" />
-            <p className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40 mt-2 md:mt-3">logbook tercatat</p>
+            <p className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mt-2 md:mt-3">logbook tercatat</p>
           </div>
         </div>
       </div>
@@ -95,9 +95,9 @@ export default async function DashboardPage() {
       {/* RECENT */}
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
-          <span className="mono text-[10px] uppercase tracking-[0.3em] text-ink/50 font-medium">02 — Logbook Terakhir</span>
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">02 — Logbook Terakhir</span>
           <div className="flex-1 h-px bg-ink/15" />
-          <Link href="/report" className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary hover:underline shrink-0">
+          <Link href="/report" className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary hover:underline shrink-0">
             Lihat semua →
           </Link>
         </div>
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
           <>
             {/* Desktop */}
             <div className="hidden md:block border border-ink/15 bg-white/40">
-              <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[9px] uppercase tracking-[0.2em] text-ink/40">
+              <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
                 <div className="col-span-1">#</div>
                 <div className="col-span-6">Tanggal</div>
                 <div className="col-span-3">Aktivitas</div>
@@ -115,17 +115,17 @@ export default async function DashboardPage() {
 
               {recent.map((r: any, idx: number) => (
                 <Link key={r.id} href={`/report/${r.id}`} className="group grid grid-cols-12 items-center px-5 py-4 border-b last:border-0 border-ink/10 hover:bg-brand-primary/[0.03] transition-colors">
-                  <div className="col-span-1 mono text-[10px] text-ink/40">{String(idx + 1).padStart(2, "0")}</div>
+                  <div className="col-span-1 mono text-[11px] text-ink/60">{String(idx + 1).padStart(2, "0")}</div>
                   <div className="col-span-6">
                     <p className="font-serif italic text-lg leading-none">
                       {format(new Date(r.tanggal), "d MMMM yyyy", {
                         locale: localeId,
                       })}
                     </p>
-                    <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-1">{format(new Date(r.tanggal), "EEEE", { locale: localeId })}</p>
+                    <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mt-1">{format(new Date(r.tanggal), "EEEE", { locale: localeId })}</p>
                   </div>
                   <div className="col-span-3">
-                    <span className="mono text-[10px] text-ink-muted">{String(r.report_activities?.length || 0).padStart(2, "0")} entri</span>
+                    <span className="mono text-[11px] text-ink-muted">{String(r.report_activities?.length || 0).padStart(2, "0")} entri</span>
                   </div>
                   <div className="col-span-2 flex justify-end">
                     <ArrowUpRight size={14} className="text-ink/30 group-hover:text-brand-primary group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
               {recent.map((r: any, idx: number) => (
                 <Link key={r.id} href={`/report/${r.id}`} className="flex items-center justify-between p-4 active:bg-brand-primary/[0.05] transition-colors">
                   <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <span className="mono text-[10px] text-ink/40 w-6 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
+                    <span className="mono text-[11px] text-ink/60 w-6 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
                     <div className="min-w-0 flex-1">
                       <p className="font-serif italic text-base leading-tight truncate">
                         {format(new Date(r.tanggal), "d MMMM yyyy", {
@@ -147,13 +147,13 @@ export default async function DashboardPage() {
                         })}
                       </p>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40">
+                        <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">
                           {format(new Date(r.tanggal), "EEEE", {
                             locale: localeId,
                           })}
                         </span>
-                        <span className="mono text-[9px] text-ink/30">·</span>
-                        <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40">{String(r.report_activities?.length || 0).padStart(2, "0")} entri</span>
+                        <span className="mono text-[10px] text-ink/30">·</span>
+                        <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">{String(r.report_activities?.length || 0).padStart(2, "0")} entri</span>
                       </div>
                     </div>
                   </div>
@@ -164,8 +164,8 @@ export default async function DashboardPage() {
           </>
         ) : (
           <div className="border border-dashed border-ink/25 p-8 md:p-12 text-center">
-            <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-4">Belum ada logbook</p>
-            <Link href="/report/new" className="inline-flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[10px] uppercase tracking-[0.2em]">
+            <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-4">Belum ada logbook</p>
+            <Link href="/report/new" className="inline-flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[11px] uppercase tracking-[0.2em]">
               Buat logbook pertama
               <ArrowUpRight size={13} />
             </Link>

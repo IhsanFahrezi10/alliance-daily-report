@@ -29,20 +29,25 @@ export default async function UsersPage() {
     departemenMap.set(d.id, d.nama);
   });
 
-  // Gabungin manual
-  const users = (usersRaw || []).map((u) => ({
-    ...u,
-    departemen_nama: u.departemen_id ? departemenMap.get(u.departemen_id) || "—" : "—",
-  }));
+  const users = (usersRaw || []).map((u) => {
+    // HR Approver selalu tampil sebagai "HR Alliance"
+    if (u.role === "hr_approver") {
+      return { ...u, departemen_nama: "HR Alliance" };
+    }
+    return {
+      ...u,
+      departemen_nama: u.departemen_id ? departemenMap.get(u.departemen_id) || "—" : "—",
+    };
+  });
 
   return (
     <div className="space-y-6 md:space-y-8">
       {/* HEADER */}
       <div className="pb-5 md:pb-6 border-b border-ink/15">
         <div className="flex items-center gap-3 mb-3 flex-wrap">
-          <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Super Admin</span>
+          <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Super Admin</span>
           <div className="h-px w-8 bg-brand-primary" />
-          <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">{String(users.length).padStart(2, "0")} User</span>
+          <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">{String(users.length).padStart(2, "0")} User</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-light tracking-tight">
           Kelola <span className="font-serif italic text-brand-primary">User</span>
@@ -55,7 +60,7 @@ export default async function UsersPage() {
         <>
           {/* Desktop */}
           <div className="hidden md:block border border-ink/15 bg-white/40">
-            <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[9px] uppercase tracking-[0.2em] text-ink/40">
+            <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
               <div className="col-span-1">#</div>
               <div className="col-span-4">Nama</div>
               <div className="col-span-3">Departemen</div>
@@ -65,7 +70,7 @@ export default async function UsersPage() {
 
             {users.map((u, idx) => (
               <div key={u.id} className="grid grid-cols-12 px-5 py-4 border-b last:border-0 border-ink/10 items-center hover:bg-brand-primary/[0.03] transition-colors">
-                <div className="col-span-1 mono text-[10px] text-ink/40">{String(idx + 1).padStart(2, "0")}</div>
+                <div className="col-span-1 mono text-[11px] text-ink/60">{String(idx + 1).padStart(2, "0")}</div>
                 <div className="col-span-4">
                   <div className="flex items-center gap-3">
                     {u.avatar_url ? (
@@ -80,13 +85,13 @@ export default async function UsersPage() {
                   </div>
                 </div>
                 <div className="col-span-3">
-                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink-muted truncate">{u.departemen_nama}</p>
+                  <p className="mono text-[11px] uppercase tracking-[0.1em] text-ink-muted truncate">{u.departemen_nama}</p>
                 </div>
                 <div className="col-span-2">
                   <UserRoleSelect userId={u.id} currentRole={u.role} disabled={u.id === user.id} />
                 </div>
                 <div className="col-span-2">
-                  <p className="mono text-[10px] uppercase tracking-[0.1em] text-ink/50">
+                  <p className="mono text-[11px] uppercase tracking-[0.1em] text-ink/70">
                     {format(new Date(u.created_at), "dd.MM.yy", {
                       locale: localeId,
                     })}
@@ -102,7 +107,7 @@ export default async function UsersPage() {
               <div key={u.id} className="border border-ink/15 bg-white/40">
                 <div className="p-4">
                   <div className="flex items-start gap-3">
-                    <span className="mono text-[10px] text-ink/40 mt-1.5 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
+                    <span className="mono text-[11px] text-ink/60 mt-1.5 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
                     {u.avatar_url ? (
                       <div className="w-10 h-10 shrink-0 overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -113,9 +118,9 @@ export default async function UsersPage() {
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">{u.nama}</p>
-                      <p className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 mt-0.5 truncate">{u.departemen_nama}</p>
+                      <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mt-0.5 truncate">{u.departemen_nama}</p>
                     </div>
-                    <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 shrink-0 mt-1">
+                    <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 shrink-0 mt-1">
                       {format(new Date(u.created_at), "dd.MM.yy", {
                         locale: localeId,
                       })}
@@ -124,7 +129,7 @@ export default async function UsersPage() {
                 </div>
 
                 <div className="border-t border-ink/10 px-4 py-3">
-                  <label className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40 block mb-2">Role</label>
+                  <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 block mb-2">Role</label>
                   <UserRoleSelect userId={u.id} currentRole={u.role} disabled={u.id === user.id} />
                 </div>
               </div>
@@ -133,11 +138,11 @@ export default async function UsersPage() {
         </>
       ) : (
         <div className="border border-dashed border-ink/25 p-8 md:p-12 text-center">
-          <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40">Belum ada user</p>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Belum ada user</p>
         </div>
       )}
 
-      <p className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">⚠ Role diri sendiri tidak bisa diubah</p>
+      <p className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">⚠ Role diri sendiri tidak bisa diubah</p>
     </div>
   );
 }

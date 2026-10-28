@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2 } from "lucide-react";
+import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck } from "lucide-react";
 
 function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -19,25 +19,32 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
     router.refresh();
   };
 
-  const menu = [
-    { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
-    { href: "/report", label: "Logbook Saya", num: "02", icon: FileText },
-    { href: "/recap", label: "Rekap Mingguan", num: "03", icon: Calendar },
-    ...(profile?.role === "admin" || profile?.role === "super_admin" ? [{ href: "/reports", label: "Semua Logbook", num: "04", icon: Users }] : []),
-    ...(profile?.role === "super_admin" ? [{ href: "/users", label: "Kelola User", num: "05", icon: Settings }] : []),
-    {
-      href: "/trash",
-      label: "Sampah",
-      num: profile?.role === "super_admin" ? "06" : "04",
-      icon: Trash2,
-    },
-    {
-      href: "/profile",
-      label: "Profil",
-      num: profile?.role === "super_admin" ? "07" : "05",
-      icon: User,
-    },
-  ];
+  const isHrApprover = profile?.role === "hr_approver";
+
+  const menu = isHrApprover
+    ? [
+        { href: "/reviews", label: "Review Logbook", num: "01", icon: CheckCheck },
+        { href: "/profile", label: "Profil", num: "02", icon: User },
+      ]
+    : [
+        { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
+        { href: "/report", label: "Logbook Saya", num: "02", icon: FileText },
+        { href: "/recap", label: "Rekap Mingguan", num: "03", icon: Calendar },
+        ...(profile?.role === "admin" || profile?.role === "super_admin" ? [{ href: "/reports", label: "Semua Logbook", num: "04", icon: Users }] : []),
+        ...(profile?.role === "super_admin" ? [{ href: "/users", label: "Kelola User", num: "05", icon: Settings }] : []),
+        {
+          href: "/trash",
+          label: "Sampah",
+          num: profile?.role === "super_admin" ? "06" : "04",
+          icon: Trash2,
+        },
+        {
+          href: "/profile",
+          label: "Profil",
+          num: profile?.role === "super_admin" ? "07" : "05",
+          icon: User,
+        },
+      ];
 
   const initial = profile?.nama?.charAt(0)?.toUpperCase() || "U";
 
@@ -47,7 +54,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
       <div className="px-6 pt-6 pb-5 border-b border-ink/15 shrink-0">
         <div className="flex items-center justify-between mb-4">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={130} height={36} className="h-7 w-auto" />
-          <span className="mono text-[9px] tracking-[0.15em] text-ink/40 uppercase">v1.0</span>
+          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.0</span>
         </div>
 
         <div className="flex items-center gap-3 pt-3 border-t border-ink/10">
@@ -69,7 +76,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
           )}
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium truncate leading-tight">{profile?.nama || "-"}</p>
-            <p className="mono text-[9px] uppercase tracking-[0.15em] text-brand-accent mt-0.5">{profile?.role?.replace("_", " ")}</p>
+            <p className="mono text-[10px] uppercase tracking-[0.15em] text-brand-accent mt-0.5">{profile?.role?.replace("_", " ")}</p>
           </div>
         </div>
       </div>
@@ -77,7 +84,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
       {/* NAV */}
       <nav className="flex-1 overflow-y-auto">
         <div className="px-6 pt-5 pb-3">
-          <p className="mono text-[9px] uppercase tracking-[0.25em] text-ink/40">— Menu</p>
+          <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">— Menu</p>
         </div>
 
         <div className="flex flex-col">
@@ -91,7 +98,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
                   transition={{ duration: 0.15 }}
                   className={`relative flex items-center gap-4 px-6 py-3 border-l-2 border-b border-b-ink/10 transition-colors ${active ? "border-l-brand-primary bg-brand-primary/[0.04]" : "border-l-transparent hover:border-l-ink/20"}`}
                 >
-                  <span className={`mono text-[10px] tracking-[0.1em] w-5 ${active ? "text-brand-primary font-semibold" : "text-ink/40"}`}>{item.num}</span>
+                  <span className={`mono text-[11px] tracking-[0.1em] w-5 ${active ? "text-brand-primary font-semibold" : "text-ink/60"}`}>{item.num}</span>
                   <Icon size={15} className={active ? "text-brand-primary" : "text-ink/60"} strokeWidth={1.75} />
                   <span className={`text-sm flex-1 ${active ? "font-medium text-ink" : "text-ink/70 group-hover:text-ink"}`}>{item.label}</span>
                   {active && <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />}
@@ -113,7 +120,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
         </button>
 
         <div className="px-6 py-3">
-          <p className="mono text-[9px] uppercase tracking-[0.2em] text-ink/35 leading-relaxed">
+          <p className="mono text-[10px] uppercase tracking-[0.2em] text-ink/35 leading-relaxed">
             © 2026 Maganghub
             <br />× Kemnaker × Alliance
           </p>

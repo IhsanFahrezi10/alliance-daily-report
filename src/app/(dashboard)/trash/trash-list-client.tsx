@@ -60,15 +60,15 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
         <div>
           <div className="flex items-center gap-3 mb-3 flex-wrap">
-            <span className="mono text-[10px] uppercase tracking-[0.25em] text-brand-primary font-medium">Arsip</span>
+            <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Arsip</span>
             <div className="h-px w-8 bg-brand-primary" />
-            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/40">{String(reports.length).padStart(3, "0")} Item</span>
+            <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">{String(reports.length).padStart(3, "0")} Item</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-light tracking-tight">Sampah</h1>
           <p className="text-xs sm:text-sm text-ink-muted mt-2">Logbook yang dihapus bisa dipulihkan dari sini</p>
         </div>
 
-        <Link href="/report" className="flex items-center gap-1.5 border border-ink/20 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[10px] uppercase tracking-[0.2em] shrink-0">
+        <Link href="/report" className="flex items-center gap-1.5 border border-ink/20 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[11px] uppercase tracking-[0.2em] shrink-0">
           <ArrowLeft size={12} /> Kembali
         </Link>
       </div>
@@ -99,15 +99,15 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
                     })}
                   </p>
                   <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                    <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40">
+                    <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">
                       {format(new Date(r.tanggal), "EEEE", {
                         locale: localeId,
                       })}
                     </span>
-                    <span className="mono text-[9px] text-ink/30">·</span>
-                    <span className="mono text-[9px] uppercase tracking-[0.15em] text-ink/40">{String(r.report_activities?.length || 0).padStart(2, "0")} entri</span>
+                    <span className="mono text-[10px] text-ink/30">·</span>
+                    <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">{String(r.report_activities?.length || 0).padStart(2, "0")} entri</span>
                   </div>
-                  <p className="mono text-[9px] uppercase tracking-[0.15em] text-red-500/70 mt-2">
+                  <p className="mono text-[10px] uppercase tracking-[0.15em] text-red-500/70 mt-2">
                     Dihapus:{" "}
                     {format(new Date(r.deleted_at), "d MMM yyyy, HH:mm", {
                       locale: localeId,
@@ -124,7 +124,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
                   className="flex-1 flex items-center justify-center gap-1.5 py-3 text-brand-primary hover:bg-brand-primary/10 active:bg-brand-primary/10 transition-colors disabled:opacity-50"
                 >
                   <RotateCcw size={13} />
-                  <span className="mono text-[10px] uppercase tracking-[0.15em]">{processing === r.id ? "..." : "Pulihkan"}</span>
+                  <span className="mono text-[11px] uppercase tracking-[0.15em]">{processing === r.id ? "..." : "Pulihkan"}</span>
                 </button>
                 <button
                   type="button"
@@ -133,7 +133,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
                   className="flex-1 flex items-center justify-center gap-1.5 py-3 text-red-600 hover:bg-red-50 active:bg-red-50 transition-colors disabled:opacity-50"
                 >
                   <Trash2 size={13} />
-                  <span className="mono text-[10px] uppercase tracking-[0.15em]">Hapus Permanen</span>
+                  <span className="mono text-[11px] uppercase tracking-[0.15em]">Hapus Permanen</span>
                 </button>
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
       ) : (
         <div className="border border-dashed border-ink/25 p-12 text-center">
           <Trash2 size={32} className="mx-auto text-ink/20 mb-4" />
-          <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-2">Sampah kosong</p>
+          <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-2">Sampah kosong</p>
           <p className="text-xs text-ink-muted">Logbook yang lo hapus bakal muncul di sini</p>
         </div>
       )}
