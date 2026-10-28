@@ -13,27 +13,8 @@ type ReportItem = {
   tanggal: string;
   created_at: string;
   report_activities: { id: string; status: string }[];
-  report_reviews?:
-    | {
-        id: string;
-        reviewed_at: string;
-        profiles: { nama: string } | { nama: string }[] | null;
-      }[]
-    | null;
+  review: { id: string; reviewed_at: string } | null;
 };
-
-// Helper untuk ambil nama reviewer (Supabase kadang return array, kadang object)
-function getReviewerName(profiles: any): string {
-  if (!profiles) return "—";
-  if (Array.isArray(profiles)) return profiles[0]?.nama || "—";
-  return profiles.nama || "—";
-}
-
-// Helper: cek apakah report punya review
-function getReview(report: ReportItem) {
-  if (!report.report_reviews || report.report_reviews.length === 0) return null;
-  return report.report_reviews[0];
-}
 
 export default function ReportListClient({ reports: initialReports }: { reports: ReportItem[] }) {
   const supabase = createClient();
@@ -43,7 +24,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
   const allSelected = reports.length > 0 && selected.size === reports.length;
   const someSelected = selected.size > 0;
 
-  const reviewedCount = reports.filter((r) => getReview(r)).length;
+  const reviewedCount = reports.filter((r) => !!r.review).length;
   const pendingCount = reports.length - reviewedCount;
 
   const toggleOne = (id: string) => {
@@ -115,7 +96,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
         </div>
       </div>
 
-      {/* STATS BAR (baru — info reviewed) */}
+      {/* STATS BAR */}
       {reports.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           <div className="border border-green-200 bg-green-50/50 p-3 flex items-center gap-3">
@@ -176,9 +157,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
 
             {reports.map((r, idx) => {
               const isChecked = selected.has(r.id);
-              const review = getReview(r);
-              const isReviewed = !!review;
-              const reviewerName = review ? getReviewerName(review.profiles) : "";
+              const isReviewed = !!r.review;
 
               return (
                 <div key={r.id} className={`grid grid-cols-12 px-5 py-4 border-b last:border-0 border-ink/10 items-center transition-colors group ${isChecked ? "bg-brand-primary/[0.06]" : "hover:bg-brand-primary/[0.03]"}`}>
@@ -207,10 +186,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
                   </div>
                   <div className="col-span-1">
                     {isReviewed ? (
-                      <span
-                        title={`Ditinjau oleh ${reviewerName} · ${format(new Date(review!.reviewed_at), "d MMM yyyy", { locale: localeId })}`}
-                        className="inline-flex items-center gap-1 mono text-[9px] uppercase tracking-[0.1em] text-green-700"
-                      >
+                      <span title={r.review ? format(new Date(r.review.reviewed_at), "d MMM yyyy HH:mm", { locale: localeId }) : ""} className="inline-flex items-center gap-1 mono text-[9px] uppercase tracking-[0.1em] text-green-700">
                         <CheckCircle2 size={12} /> Ya
                       </span>
                     ) : (
@@ -242,9 +218,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
           <div className="md:hidden space-y-3">
             {reports.map((r) => {
               const isChecked = selected.has(r.id);
-              const review = getReview(r);
-              const isReviewed = !!review;
-              const reviewerName = review ? getReviewerName(review.profiles) : "";
+              const isReviewed = !!r.review;
 
               return (
                 <div key={r.id} className={`border bg-white/40 transition-colors ${isChecked ? "border-brand-primary bg-brand-primary/[0.06]" : "border-ink/15"}`}>
@@ -267,7 +241,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
                               })}
                             </p>
                             {isReviewed ? (
-                              <span title={`Ditinjau oleh ${reviewerName}`} className="inline-flex items-center gap-1 mono text-[9px] uppercase tracking-[0.1em] text-green-700 px-1.5 py-0.5 bg-green-50 border border-green-200">
+                              <span className="inline-flex items-center gap-1 mono text-[9px] uppercase tracking-[0.1em] text-green-700 px-1.5 py-0.5 bg-green-50 border border-green-200">
                                 <CheckCircle2 size={10} /> Ditinjau
                               </span>
                             ) : (
