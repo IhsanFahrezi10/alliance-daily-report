@@ -14,7 +14,8 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: report } = await supabase
+  // Query report tanpa nested join dulu
+  const { data: reportRaw } = await supabase
     .from("reports")
     .select(
       `
@@ -25,26 +26,28 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         mentor_nama,
         departemen:departemen_id (nama)
       ),
-      report_activities (*),
-      report_reviews (
-        id,
-        reviewed_at,
-        notes,
-        profiles:reviewed_by (nama)
-      )
+      report_activities (*)
     `,
     )
     .eq("id", id)
     .single();
 
-  if (!report) notFound();
+  if (!reportRaw) notFound();
 
-  // Ambil review (handle array/object)
-  const review = Array.isArray((report as any).report_reviews) ? (report as any).report_reviews[0] : (report as any).report_reviews;
+  const report = reportRaw as any;
 
-  const reviewerName = review ? (Array.isArray(review.profiles) ? review.profiles[0]?.nama : review.profiles?.nama) : null;
+  // Query review terpisah (defensive)
+  const { data: reviewRow } = await supabase.from("report_reviews").select("id, reviewed_at, reviewed_by, notes").eq("report_id", id).maybeSingle();
 
-  const activities = (report.report_activities || []).sort((a: any, b: any) => a.urutan - b.urutan);
+  // Ambil nama reviewer terpisah (defensive)
+  let reviewerName: string | null = null;
+  if (reviewRow?.reviewed_by) {
+    const { data: reviewerProfile } = await supabase.from("profiles").select("nama").eq("id", reviewRow.reviewed_by).single();
+    reviewerName = reviewerProfile?.nama || null;
+  }
+
+  // Defensive: pastiin activities selalu array
+  const activities = Array.isArray(report.report_activities) ? [...report.report_activities].sort((a: any, b: any) => (a.urutan || 0) - (b.urutan || 0)) : [];
 
   const statusLabel: Record<string, string> = {
     selesai: "Selesai",
@@ -67,8 +70,18 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   const tanggalFormatted = format(new Date(report.tanggal), "EEEE, d MMMM yyyy", { locale: localeId });
 
   // Ambil nama departemen (handle array/object)
-  const prof = report.profiles as any;
+  const prof = report.profiles;
   const departemenName = Array.isArray(prof?.departemen) ? prof.departemen[0]?.nama || "-" : prof?.departemen?.nama || "-";
+
+  // Format tanggal review (defensive)
+  let reviewedAtFormatted = "";
+  if (reviewRow?.reviewed_at) {
+    try {
+      reviewedAtFormatted = format(new Date(reviewRow.reviewed_at), "d MMM yyyy, HH:mm", { locale: localeId });
+    } catch {
+      reviewedAtFormatted = "-";
+    }
+  }
 
   return (
     <div className="max-w-4xl space-y-6 md:space-y-8">
@@ -81,7 +94,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Detail Logbook</span>
             <div className="h-px w-6 md:w-8 bg-brand-primary" />
-            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/60 truncate">#{report.id.slice(0, 8)}</span>
+            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/60 truncate">#{report.id?.slice(0, 8) || "—"}</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-light tracking-tight">
             {format(new Date(report.tanggal), "d MMMM yyyy", {
@@ -115,18 +128,18 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           </div>
 
           {/* REVIEW STATUS BANNER */}
-          {review ? (
+          {reviewRow ? (
             <div className="border-t border-ink/15 bg-green-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
               <CheckCircle2 size={14} className="text-green-700 shrink-0" />
               <span className="mono text-[10px] uppercase tracking-[0.15em] text-green-800 font-medium">Sudah ditinjau</span>
               <span className="mono text-[10px] text-ink/30">·</span>
               <span className="mono text-[10px] text-green-800/80">oleh {reviewerName || "HR Approver"}</span>
-              <span className="mono text-[10px] text-ink/30">·</span>
-              <span className="mono text-[10px] text-green-800/80">
-                {format(new Date(review.reviewed_at), "d MMM yyyy, HH:mm", {
-                  locale: localeId,
-                })}
-              </span>
+              {reviewedAtFormatted && (
+                <>
+                  <span className="mono text-[10px] text-ink/30">·</span>
+                  <span className="mono text-[10px] text-green-800/80">{reviewedAtFormatted}</span>
+                </>
+              )}
             </div>
           ) : (
             <div className="border-t border-ink/15 bg-orange-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
@@ -183,7 +196,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
                       </span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="mono text-sm shrink-0 mt-0.5">{a.waktu?.slice(0, 5)}</span>
+                      <span className="mono text-sm shrink-0 mt-0.5">{a.waktu?.slice(0, 5) || "—"}</span>
                       <div className="h-4 w-px bg-ink/20 mt-0.5 shrink-0" />
                       <span className="text-sm flex-1 whitespace-pre-wrap">{a.deskripsi}</span>
                     </div>
@@ -192,7 +205,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
                   {/* Desktop */}
                   <div className="hidden md:contents">
                     <div className="col-span-1 mono text-[11px] text-ink/60">{String(idx + 1).padStart(2, "0")}</div>
-                    <div className="col-span-2 mono text-sm">{a.waktu?.slice(0, 5)}</div>
+                    <div className="col-span-2 mono text-sm">{a.waktu?.slice(0, 5) || "—"}</div>
                     <div className="col-span-7 text-sm whitespace-pre-wrap">{a.deskripsi}</div>
                     <div className="col-span-2 flex justify-end">
                       <span className={`flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.15em] ${statusColor[a.status]}`}>
