@@ -33,7 +33,7 @@ function BulkPrintContent() {
           `
           *,
           profiles:user_id (
-            nama, role, mentor_nama, batch,
+            nama, role, mentor_nama, batch, avatar_url,
             departemen:departemen_id (nama)
           ),
           report_activities (*)

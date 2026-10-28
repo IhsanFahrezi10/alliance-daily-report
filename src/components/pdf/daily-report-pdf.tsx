@@ -5,6 +5,7 @@ import { id as localeId } from "date-fns/locale";
 const INK = "#1A1A1A";
 const MUTED = "#666666";
 const BORDER = "#CCCCCC";
+const BRAND = "#1B4F8A";
 
 const styles = StyleSheet.create({
   page: {
@@ -28,12 +29,45 @@ const styles = StyleSheet.create({
   logoCenter: { width: 95, height: "auto" },
   logoRight: { width: 95, height: "auto" },
 
-  titleBlock: {
-    alignItems: "center",
+  // ============ TITLE + AVATAR BLOCK (CENTERED) ============
+  titleWithAvatar: {
+    position: "relative",
     marginBottom: 14,
     paddingBottom: 12,
     borderBottomWidth: 0.75,
     borderBottomColor: BORDER,
+    minHeight: 56,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarBox: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    width: 56,
+    height: 56,
+  },
+  avatarImg: {
+    width: 56,
+    height: 56,
+    objectFit: "cover",
+  },
+  avatarFallback: {
+    width: 56,
+    height: 56,
+    backgroundColor: BRAND,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarInitial: {
+    fontSize: 24,
+    fontFamily: "Helvetica-Bold",
+    color: "#FFFFFF",
+  },
+  titleTextBlock: {
+    alignItems: "center",
+    paddingLeft: 70,
+    paddingRight: 70,
   },
   title: {
     fontSize: 13,
@@ -47,11 +81,12 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: MUTED,
     letterSpacing: 0.6,
+    marginTop: 4,
     textAlign: "center",
-    marginTop: 3,
     textTransform: "uppercase",
   },
 
+  // ============ INFO ROW ============
   infoRow: {
     flexDirection: "row",
     gap: 12,
@@ -76,6 +111,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.3,
   },
 
+  // ============ TABLE ============
   table: {
     borderTopWidth: 0.5,
     borderTopColor: BORDER,
@@ -102,7 +138,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER,
   },
-
   thText: {
     fontSize: 7.5,
     fontFamily: "Helvetica-Bold",
@@ -123,7 +158,6 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 
-  // Column widths (total 100%) — TANPA WAKTU
   colDate: { width: "12%", paddingRight: 5 },
   colAttendance: { width: "11%", paddingRight: 5 },
   colActivity: { width: "38%", paddingRight: 5 },
@@ -159,6 +193,7 @@ export type ReportPdfData = {
     nama: string;
     role?: string;
     mentor_nama?: string | null;
+    avatar_url?: string | null;
     batch?: number | null;
     departemen?: { nama: string } | null;
   };
@@ -168,12 +203,6 @@ export type ReportPdfData = {
     status: string;
     urutan: number;
   }>;
-};
-
-const roleToPosition: Record<string, string> = {
-  user: "Intern",
-  admin: "Admin",
-  super_admin: "Super Admin",
 };
 
 export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
@@ -188,23 +217,37 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
   });
 
   const position = "Intern";
+  const avatarUrl = report.profiles?.avatar_url;
+  const initial = report.profiles?.nama?.charAt(0)?.toUpperCase() || "?";
 
   return (
-    <Document title={`Daily Report - ${report.profiles?.nama} - ${report.tanggal}`} author="Maganghub × Kemnaker × Alliance" subject="Daily Report Intern Maganghub Batch 2">
+    <Document title={`Daily Report - ${report.profiles?.nama} - ${report.tanggal}`} author="Maganghub × Kemnaker × Alliance" subject="Daily Report Intern Maganghub">
       <Page size="A4" orientation="landscape" style={styles.page}>
-        {/* HEADER */}
+        {/* LOGOS */}
         <View style={styles.logoRow} fixed>
           <Image src="/logo-alliance.png" style={styles.logoLeft} />
           <Image src="/logo-maganghub.png" style={styles.logoCenter} />
           <Image src="/logo-kemnaker.png" style={styles.logoRight} />
         </View>
 
-        {/* TITLE */}
-        <View style={styles.titleBlock}>
-          <Text style={styles.title}>Daily Report Intern Maganghub Batch {report.profiles?.batch || 1}</Text>
-          <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
+        {/* TITLE + AVATAR */}
+        <View style={styles.titleWithAvatar}>
+          <View style={styles.avatarBox}>
+            {avatarUrl ? (
+              <Image src={avatarUrl} style={styles.avatarImg} />
+            ) : (
+              <View style={styles.avatarFallback}>
+                <Text style={styles.avatarInitial}>{initial}</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.titleTextBlock}>
+            <Text style={styles.title}>Daily Report Intern Maganghub Batch {report.profiles?.batch || 1}</Text>
+            <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
+          </View>
         </View>
 
+        {/* INFO — 4 KOLOM */}
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Name</Text>
@@ -224,7 +267,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
           </View>
         </View>
 
-        {/* TABLE — TANPA WAKTU */}
+        {/* TABLE */}
         <View style={styles.table}>
           <View style={styles.tableHeader}>
             <Text style={[styles.colDate, styles.thText]}>Date</Text>

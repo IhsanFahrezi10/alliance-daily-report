@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import ProfileForm from "./profile-form";
 import AvatarUpload from "@/components/profile/avatar-upload";
+import ThemePicker from "./theme-picker";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -15,7 +16,7 @@ export default async function ProfilePage() {
   // Query profile base
   const { data: profileBase } = await supabase.from("profiles").select("*").eq("id", user.id).single();
 
-  // Query departemen terpisah (buat profile user)
+  // Query departemen (buat profile user)
   let departemen: { id: string; nama: string } | null = null;
   if (profileBase?.departemen_id) {
     const { data: deptData } = await supabase.from("departemen").select("id, nama").eq("id", profileBase.departemen_id).single();
@@ -26,7 +27,6 @@ export default async function ProfilePage() {
   // Query semua departemen (buat dropdown)
   const { data: departemenListRaw } = await supabase.from("departemen").select("id, nama").order("nama");
 
-  // Filter HR Alliance dari dropdown untuk role selain hr_approver
   const departemenList = profileBase?.role === "hr_approver" ? departemenListRaw || [] : (departemenListRaw || []).filter((d) => d.nama !== "HR Alliance");
 
   const profile = profileBase as any;
@@ -123,6 +123,7 @@ export default async function ProfilePage() {
         </div>
       </div>
 
+      {/* FORM PROFIL */}
       <ProfileForm
         profile={{
           nama: profile?.nama || "",
@@ -132,6 +133,9 @@ export default async function ProfilePage() {
         }}
         departemenList={departemenList || []}
       />
+
+      {/* THEME PICKER */}
+      <ThemePicker current={profile?.theme_accent || "blue"} />
     </div>
   );
 }

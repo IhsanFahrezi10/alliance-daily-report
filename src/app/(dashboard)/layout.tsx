@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DesktopSidebar, MobileNav } from "@/components/layout/sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -12,20 +13,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const { data: profile } = await supabase.from("profiles").select("*, departemen:departemen_id (nama)").eq("id", user.id).single();
 
+  const themeAccent = (profile as any)?.theme_accent || "blue";
+
   return (
-    <div className="min-h-screen bg-paper text-ink flex">
-      {/* Desktop sidebar — sticky */}
+    <ThemeProvider initialTheme={themeAccent}>
       <DesktopSidebar profile={profile} />
-
-      {/* Main content — scrollable */}
       <div className="flex-1 min-w-0 flex flex-col">
-        {/* Mobile header */}
         <MobileNav profile={profile} />
-
         <main className="flex-1">
           <div className="max-w-6xl mx-auto p-4 sm:p-6 md:p-10">{children}</div>
         </main>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }

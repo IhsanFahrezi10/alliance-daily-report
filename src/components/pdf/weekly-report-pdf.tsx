@@ -5,6 +5,7 @@ import { id as localeId } from "date-fns/locale";
 const INK = "#1A1A1A";
 const MUTED = "#666666";
 const BORDER = "#CCCCCC";
+const BRAND = "#1B4F8A";
 
 const styles = StyleSheet.create({
   page: {
@@ -28,26 +29,50 @@ const styles = StyleSheet.create({
   logoCenter: { width: 95, height: "auto" },
   logoRight: { width: 95, height: "auto" },
 
-  titleBlock: {
+  titleWithAvatar: {
+    flexDirection: "row",
     alignItems: "center",
+    gap: 14,
     marginBottom: 12,
     paddingBottom: 10,
     borderBottomWidth: 0.75,
     borderBottomColor: BORDER,
+  },
+  avatarBox: {
+    width: 56,
+    height: 56,
+  },
+  avatarImg: {
+    width: 56,
+    height: 56,
+    objectFit: "cover",
+  },
+  avatarFallback: {
+    width: 56,
+    height: 56,
+    backgroundColor: BRAND,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarInitial: {
+    fontSize: 24,
+    fontFamily: "Helvetica-Bold",
+    color: "#FFFFFF",
+  },
+  titleTextBlock: {
+    flex: 1,
   },
   title: {
     fontSize: 13,
     fontFamily: "Helvetica-Bold",
     color: INK,
     letterSpacing: 0.8,
-    textAlign: "center",
     textTransform: "uppercase",
   },
   subtitle: {
     fontSize: 8,
     color: MUTED,
     letterSpacing: 0.6,
-    textAlign: "center",
     marginTop: 3,
     textTransform: "uppercase",
   },
@@ -55,9 +80,9 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: INK,
-    textAlign: "center",
     marginTop: 4,
     letterSpacing: 0.5,
+    textAlign: "center",
   },
 
   infoRow: {
@@ -115,7 +140,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER,
   },
-
   thText: {
     fontSize: 7.5,
     fontFamily: "Helvetica-Bold",
@@ -136,7 +160,6 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 
-  // Column widths — TANPA WAKTU
   colDate: { width: "12%", paddingRight: 5 },
   colAttendance: { width: "11%", paddingRight: 5 },
   colActivity: { width: "38%", paddingRight: 5 },
@@ -170,6 +193,7 @@ export type WeeklyReportData = {
     nama: string;
     role?: string;
     mentor_nama?: string | null;
+    avatar_url?: string | null;
     batch?: number | null;
     departemen?: { nama: string } | null;
   };
@@ -186,6 +210,8 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
 
   const first = reports[0];
   const position = "Intern";
+  const avatarUrl = first.profiles?.avatar_url;
+  const initial = first.profiles?.nama?.charAt(0)?.toUpperCase() || "?";
 
   const flatRows = reports.flatMap((r) => {
     const activities = [...(r.report_activities || [])].sort((a, b) => a.urutan - b.urutan);
@@ -207,22 +233,34 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
   });
 
   return (
-    <Document title={`Weekly Report - ${first.profiles?.nama} - ${periodLabel}`} author="Maganghub × Kemnaker × Alliance" subject="Weekly Report Intern Maganghub Batch 2">
+    <Document title={`Weekly Report - ${first.profiles?.nama} - ${periodLabel}`} author="Maganghub × Kemnaker × Alliance" subject="Weekly Report Intern Maganghub">
       <Page size="A4" orientation="landscape" style={styles.page}>
-        {/* HEADER */}
+        {/* LOGOS */}
         <View style={styles.logoRow} fixed>
           <Image src="/logo-alliance.png" style={styles.logoLeft} />
           <Image src="/logo-maganghub.png" style={styles.logoCenter} />
           <Image src="/logo-kemnaker.png" style={styles.logoRight} />
         </View>
 
-        {/* TITLE */}
-        <View style={styles.titleBlock} fixed>
-          <Text style={styles.title}>Daily Report Intern Maganghub Batch {first.profiles?.batch || 1}</Text>
-          <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
-          <Text style={styles.periodText}>Periode: {periodLabel}</Text>
+        {/* TITLE + AVATAR */}
+        <View style={styles.titleWithAvatar} fixed>
+          <View style={styles.avatarBox}>
+            {avatarUrl ? (
+              <Image src={avatarUrl} style={styles.avatarImg} />
+            ) : (
+              <View style={styles.avatarFallback}>
+                <Text style={styles.avatarInitial}>{initial}</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.titleTextBlock}>
+            <Text style={styles.title}>Daily Report Intern Maganghub Batch {first.profiles?.batch || 1}</Text>
+            <Text style={styles.subtitle}>PT Alliance Consumer Product × Kemnaker</Text>
+            <Text style={styles.periodText}>Periode: {periodLabel}</Text>
+          </View>
         </View>
 
+        {/* INFO — 4 KOLOM */}
         <View style={styles.infoRow} fixed>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Name</Text>
@@ -242,7 +280,7 @@ export default function WeeklyReportPDF({ reports, periodLabel }: { reports: Wee
           </View>
         </View>
 
-        {/* TABLE — TANPA WAKTU */}
+        {/* TABLE */}
         <View style={styles.table}>
           <View style={styles.tableHeader} fixed>
             <Text style={[styles.colDate, styles.thText]}>Date</Text>

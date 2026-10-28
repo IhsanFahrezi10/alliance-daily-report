@@ -28,6 +28,7 @@ export default function PrintReportPage() {
     role,
     mentor_nama,
     batch,
+    avatar_url,
     departemen:departemen_id (nama)
   ),
   report_activities (*)
