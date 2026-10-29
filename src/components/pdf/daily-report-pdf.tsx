@@ -9,81 +9,80 @@ const BRAND = "#1B4F8A";
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 30,
-    paddingBottom: 40,
-    paddingHorizontal: 36,
+    paddingTop: 20,
+    paddingBottom: 32,
+    paddingHorizontal: 32,
     fontSize: 9,
     fontFamily: "Times-Roman",
     color: INK,
-    lineHeight: 1.45,
+    lineHeight: 1.35,
   },
 
+  // ============ LOGO ROW ============
   logoRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 14,
-    paddingBottom: 12,
+    marginBottom: 8,
+    paddingBottom: 6,
   },
-  logoLeft: { width: 110, height: "auto" },
-  logoCenter: { width: 95, height: "auto" },
-  logoRight: { width: 95, height: "auto" },
+  logoLeft: { width: 80, height: "auto" },
+  logoCenter: { width: 70, height: "auto" },
+  logoRight: { width: 70, height: "auto" },
 
-  // ============ TITLE + AVATAR BLOCK (CENTERED) ============
+  // ============ TITLE + AVATAR ============
   titleWithAvatar: {
     position: "relative",
-    marginBottom: 14,
-    paddingBottom: 12,
+    marginBottom: 8,
+    paddingBottom: 8,
     borderBottomWidth: 0.75,
     borderBottomColor: BORDER,
-    minHeight: 56,
+    minHeight: 40,
     justifyContent: "center",
-    // ⚠️ HAPUS flexDirection: 'row' — biar default column
   },
   avatarBox: {
     position: "absolute",
     left: 0,
     top: 0,
-    width: 56,
-    height: 56,
+    width: 40,
+    height: 40,
     zIndex: 2,
   },
   avatarImg: {
-    width: 56,
-    height: 56,
+    width: 40,
+    height: 40,
     objectFit: "cover",
   },
   avatarFallback: {
-    width: 56,
-    height: 56,
+    width: 40,
+    height: 40,
     backgroundColor: BRAND,
     alignItems: "center",
     justifyContent: "center",
   },
   avatarInitial: {
-    fontSize: 24,
+    fontSize: 18,
     fontFamily: "Helvetica-Bold",
     color: "#FFFFFF",
   },
   titleTextBlock: {
     width: "100%",
-    paddingLeft: 70,
-    paddingRight: 70,
-    // ⚠️ HAPUS alignItems: 'center' — biar textAlign di Text yang atur
+    paddingLeft: 48,
+    paddingRight: 48,
   },
   title: {
-    fontSize: 13,
+    fontSize: 11,
     fontFamily: "Helvetica-Bold",
     color: INK,
-    letterSpacing: 0.8,
+    letterSpacing: 0.5,
     textAlign: "center",
     textTransform: "uppercase",
   },
   subtitle: {
-    fontSize: 8,
+    fontSize: 7,
     color: MUTED,
-    letterSpacing: 0.6,
-    marginTop: 4,
+    letterSpacing: 0.4,
+    marginTop: 2,
     textAlign: "center",
     textTransform: "uppercase",
   },
@@ -91,26 +90,26 @@ const styles = StyleSheet.create({
   // ============ INFO ROW ============
   infoRow: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 14,
+    gap: 10,
+    marginBottom: 8,
     alignItems: "flex-start",
   },
   infoItem: {
     flex: 1,
   },
   infoLabel: {
-    fontSize: 8,
+    fontSize: 7,
     color: MUTED,
     fontFamily: "Helvetica",
-    letterSpacing: 0.5,
-    marginBottom: 3,
+    letterSpacing: 0.3,
+    marginBottom: 1,
     textTransform: "uppercase",
   },
   infoValue: {
-    fontSize: 10,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: INK,
-    lineHeight: 1.3,
+    lineHeight: 1.2,
   },
 
   // ============ TABLE ============
@@ -120,65 +119,67 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     flexDirection: "row",
-    paddingVertical: 8,
+    paddingVertical: 4,
     paddingHorizontal: 4,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER,
   },
   tableRow: {
     flexDirection: "row",
-    paddingVertical: 8,
+    paddingVertical: 3,
     paddingHorizontal: 4,
     borderBottomWidth: 0.25,
     borderBottomColor: BORDER,
-    minHeight: 32,
+    minHeight: 18,
     alignItems: "flex-start",
   },
   tableEmpty: {
-    paddingVertical: 24,
+    paddingVertical: 16,
     alignItems: "center",
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER,
   },
   thText: {
-    fontSize: 7.5,
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
     color: INK,
-    letterSpacing: 0.6,
+    letterSpacing: 0.4,
     textTransform: "uppercase",
   },
   tdText: {
-    fontSize: 8.5,
+    fontSize: 8,
     fontFamily: "Times-Roman",
     color: INK,
-    lineHeight: 1.4,
+    lineHeight: 1.3,
   },
   tdTextMuted: {
-    fontSize: 8,
+    fontSize: 7.5,
     fontFamily: "Times-Roman",
     color: MUTED,
     fontStyle: "italic",
   },
 
-  colDate: { width: "12%", paddingRight: 5 },
-  colAttendance: { width: "11%", paddingRight: 5 },
-  colActivity: { width: "38%", paddingRight: 5 },
-  colLesson: { width: "20%", paddingRight: 5 },
-  colChallenges: { width: "13%", paddingRight: 5 },
+  // Column widths
+  colDate: { width: "12%", paddingRight: 4 },
+  colAttendance: { width: "11%", paddingRight: 4 },
+  colActivity: { width: "38%", paddingRight: 4 },
+  colLesson: { width: "20%", paddingRight: 4 },
+  colChallenges: { width: "13%", paddingRight: 4 },
   colSignature: { width: "6%", textAlign: "center" },
 
+  // ============ FOOTER ============
   footer: {
     position: "absolute",
-    bottom: 20,
-    left: 36,
-    right: 36,
+    bottom: 16,
+    left: 32,
+    right: 32,
     flexDirection: "row",
     justifyContent: "space-between",
-    fontSize: 7,
+    fontSize: 6.5,
     color: MUTED,
     fontFamily: "Helvetica",
-    letterSpacing: 0.4,
-    paddingTop: 5,
+    letterSpacing: 0.3,
+    paddingTop: 4,
     textTransform: "uppercase",
   },
 });
@@ -271,7 +272,7 @@ export default function DailyReportPDF({ report }: { report: ReportPdfData }) {
 
         {/* TABLE */}
         <View style={styles.table}>
-          <View style={styles.tableHeader}>
+          <View style={styles.tableHeader} fixed>
             <Text style={[styles.colDate, styles.thText]}>Date</Text>
             <Text style={[styles.colAttendance, styles.thText]}>Attendance</Text>
             <Text style={[styles.colActivity, styles.thText]}>Activity Description</Text>
