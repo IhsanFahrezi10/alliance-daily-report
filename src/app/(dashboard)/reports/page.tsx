@@ -75,7 +75,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
   return (
     <div className="space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="pb-5 md:pb-6 border-b border-ink/15">
+      <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Admin</span>
           <div className="h-px w-8 bg-brand-primary" />
@@ -88,7 +88,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
       </div>
 
       {/* FILTER */}
-      <form className="border border-ink/15 bg-white/40">
+      <form className="border border-brand-primary/25 bg-white/40">
         <div className="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           <div>
             <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Dari Tanggal</label>
@@ -114,7 +114,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
           <button type="submit" className="bg-brand-primary text-white hover:bg-brand-hover transition-colors px-4 py-3 mono text-[11px] uppercase tracking-[0.2em]">
             Filter
           </button>
-          <Link href="/reports" className="text-center border border-ink/20 hover:bg-ink/[0.03] transition-colors px-4 py-3 mono text-[11px] uppercase tracking-[0.2em]">
+          <Link href="/reports" className="text-center border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-4 py-3 mono text-[11px] uppercase tracking-[0.2em]">
             Reset
           </Link>
         </div>
@@ -124,8 +124,8 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
       {reports.length ? (
         <>
           {/* Desktop */}
-          <div className="hidden md:block border border-ink/15 bg-white/40">
-            <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
+          <div className="hidden md:block border border-brand-primary/25 bg-white/40">
+            <div className="grid grid-cols-12 px-5 py-3 border-b border-brand-primary/25 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
               <div className="col-span-1">#</div>
               <div className="col-span-3">Tanggal</div>
               <div className="col-span-3">Nama</div>
@@ -174,7 +174,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
           {/* Mobile */}
           <div className="md:hidden space-y-3">
             {reports.map((r: any, idx: number) => (
-              <div key={r.id} className="border border-ink/15 bg-white/40">
+              <div key={r.id} className="border border-brand-primary/25 bg-white/40">
                 <Link href={`/report/${r.id}`} className="block p-4 active:bg-brand-primary/[0.05]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -195,7 +195,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                     <ArrowUpRight size={14} className="text-ink/30 shrink-0 mt-1" />
                   </div>
 
-                  <div className="mt-3 pt-3 border-t border-ink/10 grid grid-cols-2 gap-x-3 gap-y-2">
+                  <div className="mt-3 pt-3 border-t border-brand-primary/20 grid grid-cols-2 gap-x-3 gap-y-2">
                     <div>
                       <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-0.5">Nama</p>
                       <p className="text-xs truncate">{r.user_nama}</p>
@@ -211,7 +211,7 @@ export default async function AllReportsPage({ searchParams }: { searchParams: P
                   </div>
                 </Link>
 
-                <div className="flex border-t border-ink/10 divide-x divide-ink/10">
+                <div className="flex border-t border-brand-primary/20 divide-x divide-ink/10">
                   <Link href={`/report/${r.id}`} className="flex-1 flex items-center justify-center gap-1.5 py-3 text-brand-primary active:bg-brand-primary/10 transition-colors">
                     <Eye size={13} />
                     <span className="mono text-[10px] uppercase tracking-[0.15em]">Lihat</span>

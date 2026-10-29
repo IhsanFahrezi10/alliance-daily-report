@@ -86,7 +86,7 @@ export default function NewReportPage() {
   return (
     <div className="max-w-4xl space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <Link href="/dashboard" className="p-2 hover:bg-ink/[0.05] transition-colors shrink-0">
           <ArrowLeft size={18} />
         </Link>
@@ -104,10 +104,10 @@ export default function NewReportPage() {
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
             <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">01 — Info Hari</span>
-            <div className="flex-1 h-px bg-ink/15" />
+            <div className="flex-1 h-px bg-brand-primary/30" />
           </div>
 
-          <div className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
+          <div className="border border-brand-primary/25 bg-white/40 divide-y divide-ink/10">
             <div className="p-5 md:p-6">
               <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Tanggal</label>
               <input type="date" {...register("tanggal")} className="w-full bg-transparent border-0 border-b border-ink/25 focus:border-brand-primary focus:outline-none py-3 text-base transition-colors font-mono" />
@@ -130,7 +130,7 @@ export default function NewReportPage() {
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
             <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">02 — Aktivitas</span>
-            <div className="flex-1 h-px bg-ink/15" />
+            <div className="flex-1 h-px bg-brand-primary/30" />
             <button
               type="button"
               onClick={() => append({ deskripsi: "", status: "selesai" })}
@@ -146,7 +146,7 @@ export default function NewReportPage() {
 
           <div className="space-y-3">
             {fields.map((field, idx) => (
-              <div key={field.id} className="border border-ink/15 bg-white/40">
+              <div key={field.id} className="border border-brand-primary/25 bg-white/40">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-ink/10 bg-ink/[0.02]">
                   <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70">Kegiatan {String(idx + 1).padStart(2, "0")}</span>
                   {fields.length > 1 && (
@@ -175,7 +175,7 @@ export default function NewReportPage() {
                       {...register(`activities.${idx}.deskripsi`)}
                       rows={4}
                       placeholder="Ceritakan detail kegiatan kamu di sini... (bisa multi-baris)"
-                      className="w-full border border-ink/20 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm transition-colors resize-y leading-relaxed placeholder:text-ink/30"
+                      className="w-full border border-brand-primary/30 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm transition-colors resize-y leading-relaxed placeholder:text-ink/30"
                     />
                   </div>
                 </div>
@@ -188,17 +188,17 @@ export default function NewReportPage() {
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
             <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">03 — Catatan Refleksi</span>
-            <div className="flex-1 h-px bg-ink/15" />
+            <div className="flex-1 h-px bg-brand-primary/30" />
           </div>
 
-          <div className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
+          <div className="border border-brand-primary/25 bg-white/40 divide-y divide-ink/10">
             <div className="p-5 md:p-6">
               <label className="block mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mb-2">Lesson Learned</label>
               <textarea
                 {...register("lesson_learned")}
                 rows={3}
                 placeholder="Apa yang kamu pelajari hari ini?"
-                className="w-full border border-ink/20 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm resize-y transition-colors placeholder:text-ink/30"
+                className="w-full border border-brand-primary/30 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm resize-y transition-colors placeholder:text-ink/30"
               />
             </div>
 
@@ -208,7 +208,7 @@ export default function NewReportPage() {
                 {...register("challenges")}
                 rows={3}
                 placeholder="Ada kendala atau tantangan hari ini?"
-                className="w-full border border-ink/20 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm resize-y transition-colors placeholder:text-ink/30"
+                className="w-full border border-brand-primary/30 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm resize-y transition-colors placeholder:text-ink/30"
               />
             </div>
 
@@ -218,14 +218,14 @@ export default function NewReportPage() {
                 {...register("catatan")}
                 rows={2}
                 placeholder="Hal lain yang perlu dicatat..."
-                className="w-full border border-ink/20 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm resize-y transition-colors placeholder:text-ink/30"
+                className="w-full border border-brand-primary/30 bg-white focus:border-brand-primary focus:outline-none p-3 text-sm resize-y transition-colors placeholder:text-ink/30"
               />
             </div>
           </div>
         </div>
 
         {/* BUTTONS */}
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 border-t border-ink/15">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 border-t border-brand-primary/25">
           <button
             type="submit"
             disabled={isSubmitting}
@@ -234,7 +234,7 @@ export default function NewReportPage() {
             <Save size={13} />
             {isSubmitting ? "Menyimpan..." : "Simpan Logbook"}
           </button>
-          <button type="button" onClick={() => router.back()} className="border border-ink/20 hover:bg-ink/[0.03] transition-colors px-6 py-3.5 mono text-[11px] uppercase tracking-[0.2em]">
+          <button type="button" onClick={() => router.back()} className="border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-6 py-3.5 mono text-[11px] uppercase tracking-[0.2em]">
             Batal
           </button>
         </div>

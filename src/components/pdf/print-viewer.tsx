@@ -27,8 +27,8 @@ export default function PrintViewer({ report, filename }: { report: ReportPdfDat
       </div>
 
       {/* PREVIEW */}
-      <div className="border border-ink/15 bg-white">
-        <div className="px-4 md:px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-ink/50 overflow-hidden">
+      <div className="border border-brand-primary/25 bg-white">
+        <div className="px-4 md:px-5 py-3 border-b border-brand-primary/25 flex items-center gap-2 mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-ink/50 overflow-hidden">
           <FileText size={12} className="shrink-0" />
           <span className="truncate">Preview — {filename}</span>
         </div>

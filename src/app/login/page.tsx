@@ -33,7 +33,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-paper text-ink grid lg:grid-cols-12">
       {/* LEFT — Editorial Panel */}
-      <div className="hidden lg:flex lg:col-span-7 flex-col justify-between border-r border-ink/15 p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:col-span-7 flex-col justify-between border-r border-brand-primary/25 p-12 relative overflow-hidden">
         {/* Grid pattern */}
         <div
           className="absolute inset-0 opacity-[0.05] pointer-events-none"
@@ -67,7 +67,7 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Bottom — partner logos */}
-        <motion.footer initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }} className="relative z-10 flex items-end justify-between border-t border-ink/15 pt-6">
+        <motion.footer initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }} className="relative z-10 flex items-end justify-between border-t border-brand-primary/25 pt-6">
           <div>
             <p className="text-[10px] uppercase tracking-[0.15em] text-ink/70 mb-3">Diselenggarakan oleh</p>
             <div className="flex items-center gap-6">
@@ -93,7 +93,7 @@ export default function LoginPage() {
           {/* Section label */}
           <div className="flex items-center gap-3 mb-8">
             <span className="text-[10px] uppercase tracking-[0.2em] text-brand-primary font-medium">01 — Sign in</span>
-            <div className="flex-1 h-px bg-ink/15" />
+            <div className="flex-1 h-px bg-brand-primary/30" />
           </div>
 
           <h2 className="text-3xl font-light tracking-tight mb-2">Masuk ke akun</h2>
@@ -141,7 +141,7 @@ export default function LoginPage() {
           </form>
 
           {/* Info box */}
-          <div className="mt-10 pt-6 border-t border-ink/15">
+          <div className="mt-10 pt-6 border-t border-brand-primary/25">
             <p className="text-[10px] uppercase tracking-[0.2em] text-ink/60 mb-2">Tentang</p>
             <p className="text-xs text-ink-muted leading-relaxed">
               Web ini dibuat untuk mempermudah peserta magang dalam mengisi aktivitas harian selama masa magang. Seluruh catatan otomatis tersusun dalam satu template tabel dan dapat diunduh dalam format{" "}

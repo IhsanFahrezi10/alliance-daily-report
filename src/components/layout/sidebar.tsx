@@ -51,21 +51,21 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
   return (
     <div className="flex flex-col h-full w-full">
       {/* TOP — Logos */}
-      <div className="px-6 pt-6 pb-5 border-b border-ink/15 shrink-0">
+      <div className="px-6 pt-6 pb-5 border-b border-brand-primary/25 shrink-0">
         <div className="flex items-center justify-between mb-4">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={130} height={36} className="h-7 w-auto" />
           <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.2</span>
         </div>
 
-        <div className="flex items-center gap-3 pt-3 border-t border-ink/10">
+        <div className="flex items-center gap-3 pt-3 border-t border-brand-primary/20">
           <Image src="/logo-alliance.png" alt="Alliance World" width={100} height={28} className="h-6 w-auto opacity-80" />
-          <div className="flex-1 h-px bg-ink/15" />
+          <div className="flex-1 h-px bg-brand-primary/30" />
           <Image src="/logo-kemnaker.png" alt="Kemnaker" width={80} height={22} className="h-5 w-auto opacity-80" />
         </div>
       </div>
 
       {/* USER */}
-      <div className="px-6 py-4 border-b border-ink/15 shrink-0">
+      <div className="px-6 py-4 border-b border-brand-primary/25 shrink-0">
         <div className="flex items-center gap-3">
           {profile?.avatar_url ? (
             <div className="w-9 h-9 shrink-0 overflow-hidden">
@@ -110,10 +110,10 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
       </nav>
 
       {/* BOTTOM */}
-      <div className="border-t border-ink/15 shrink-0">
+      <div className="border-t border-brand-primary/25 shrink-0">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-between px-6 py-3.5 text-[10px] mono uppercase tracking-[0.2em] text-ink/60 hover:text-brand-primary hover:bg-ink/[0.03] transition-colors group border-b border-ink/15"
+          className="w-full flex items-center justify-between px-6 py-3.5 text-[10px] mono uppercase tracking-[0.2em] text-ink/60 hover:text-brand-primary hover:bg-ink/[0.03] transition-colors group border-b border-brand-primary/25"
         >
           <span>Logout</span>
           <LogOut size={13} className="group-hover:translate-x-1 transition-transform" />
@@ -132,7 +132,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
 
 export function DesktopSidebar({ profile }: { profile: any }) {
   return (
-    <aside className="hidden md:flex w-72 shrink-0 bg-paper border-r border-ink/15 h-screen sticky top-0">
+    <aside className="hidden md:flex w-72 shrink-0 bg-paper border-r border-brand-primary/25 h-screen sticky top-0">
       <SidebarContent profile={profile} />
     </aside>
   );
@@ -143,7 +143,7 @@ export function MobileNav({ profile }: { profile: any }) {
 
   return (
     <>
-      <header className="md:hidden sticky top-0 z-30 bg-paper border-b border-ink/15 px-4 py-3 flex items-center justify-between">
+      <header className="md:hidden sticky top-0 z-30 bg-paper border-b border-brand-primary/25 px-4 py-3 flex items-center justify-between">
         <Image src="/logo-maganghub.png" alt="Maganghub" width={110} height={30} className="h-6 w-auto" />
         <button onClick={() => setOpen(true)} className="p-2 hover:bg-ink/[0.05] transition-colors" aria-label="Buka menu">
           <Menu size={20} />
@@ -160,7 +160,7 @@ export function MobileNav({ profile }: { profile: any }) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
-              className="fixed inset-y-0 left-0 w-72 bg-paper border-r border-ink/15 z-50 md:hidden flex flex-col"
+              className="fixed inset-y-0 left-0 w-72 bg-paper border-r border-brand-primary/25 z-50 md:hidden flex flex-col"
             >
               <button onClick={() => setOpen(false)} className="absolute top-3 right-3 p-2 hover:bg-ink/[0.05] transition-colors z-10" aria-label="Tutup menu">
                 <X size={18} />

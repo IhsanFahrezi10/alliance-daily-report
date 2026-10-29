@@ -30,7 +30,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8 md:space-y-10">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <div>
           <div className="flex items-center gap-3 mb-3 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Dashboard</span>
@@ -53,12 +53,12 @@ export default async function DashboardPage() {
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">01 — Status Hari Ini</span>
-          <div className="flex-1 h-px bg-ink/15" />
+          <div className="flex-1 h-px bg-brand-primary/30" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           {todayReport ? (
-            <div className="md:col-span-2 border border-ink/15 bg-white/40 p-5 md:p-6 flex items-start gap-3 md:gap-4 relative">
+            <div className="md:col-span-2 border border-brand-primary/25 bg-white/40 p-5 md:p-6 flex items-start gap-3 md:gap-4 relative">
               <div className="absolute top-0 left-0 w-1 h-full bg-green-600" />
               <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-green-700 mt-0.5 shrink-0" strokeWidth={1.75} />
               <div className="flex-1 min-w-0">
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="md:col-span-2 border border-ink/15 bg-white/40 p-5 md:p-6 flex items-start gap-3 md:gap-4 relative">
+            <div className="md:col-span-2 border border-brand-primary/25 bg-white/40 p-5 md:p-6 flex items-start gap-3 md:gap-4 relative">
               <div className="absolute top-0 left-0 w-1 h-full bg-brand-accent" />
               <Circle className="w-5 h-5 md:w-6 md:h-6 text-brand-primary mt-0.5 shrink-0" strokeWidth={1.75} />
               <div className="flex-1 min-w-0">
@@ -83,10 +83,10 @@ export default async function DashboardPage() {
             </div>
           )}
 
-          <div className="border border-ink/15 bg-white/40 p-5 md:p-6">
+          <div className="border border-brand-primary/25 bg-white/40 p-5 md:p-6">
             <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/70 mb-2 md:mb-3">Total Entri</p>
             <p className="mono text-4xl md:text-5xl font-light tracking-tight text-brand-primary">{String(totalReports ?? 0).padStart(3, "0")}</p>
-            <div className="mt-2 md:mt-3 h-px bg-ink/15" />
+            <div className="mt-2 md:mt-3 h-px bg-brand-primary/30" />
             <p className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 mt-2 md:mt-3">logbook tercatat</p>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">02 — Logbook Terakhir</span>
-          <div className="flex-1 h-px bg-ink/15" />
+          <div className="flex-1 h-px bg-brand-primary/30" />
           <Link href="/report" className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary hover:underline shrink-0">
             Lihat semua →
           </Link>
@@ -105,8 +105,8 @@ export default async function DashboardPage() {
         {recent?.length ? (
           <>
             {/* Desktop */}
-            <div className="hidden md:block border border-ink/15 bg-white/40">
-              <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
+            <div className="hidden md:block border border-brand-primary/25 bg-white/40">
+              <div className="grid grid-cols-12 px-5 py-3 border-b border-brand-primary/25 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
                 <div className="col-span-1">#</div>
                 <div className="col-span-6">Tanggal</div>
                 <div className="col-span-3">Aktivitas</div>
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
             </div>
 
             {/* Mobile */}
-            <div className="md:hidden border border-ink/15 bg-white/40 divide-y divide-ink/10">
+            <div className="md:hidden border border-brand-primary/25 bg-white/40 divide-y divide-ink/10">
               {recent.map((r: any, idx: number) => (
                 <Link key={r.id} href={`/report/${r.id}`} className="flex items-center justify-between p-4 active:bg-brand-primary/[0.05] transition-colors">
                   <div className="flex items-center gap-3 min-w-0 flex-1">

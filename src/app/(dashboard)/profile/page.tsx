@@ -36,7 +36,7 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-3xl space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="pb-5 md:pb-6 border-b border-ink/15">
+      <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Akun</span>
           <div className="h-px w-8 bg-brand-primary" />
@@ -48,19 +48,19 @@ export default async function ProfilePage() {
       </div>
 
       {/* IDENTITY CARD */}
-      <div className="border border-ink/15 bg-white/40">
+      <div className="border border-brand-primary/25 bg-white/40">
         <div className="hidden md:grid md:grid-cols-12">
-          <div className="col-span-4 p-6 border-r border-ink/15 flex flex-col items-center justify-center">
+          <div className="col-span-4 p-6 border-r border-brand-primary/25 flex flex-col items-center justify-center">
             <AvatarUpload userId={user.id} currentAvatarUrl={profile?.avatar_url || null} userName={profile?.nama || "User"} />
             <p className="mono text-[11px] uppercase tracking-[0.15em] text-brand-accent mt-5">{profile?.role?.replace("_", " ")}</p>
           </div>
 
           <div className="col-span-8 grid grid-cols-2">
-            <div className="p-6 border-b border-r border-ink/15">
+            <div className="p-6 border-b border-r border-brand-primary/25">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Email</p>
               <p className="text-sm font-medium break-all">{user.email}</p>
             </div>
-            <div className="p-6 border-b border-ink/15">
+            <div className="p-6 border-b border-brand-primary/25">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Terdaftar</p>
               <p className="text-sm font-medium">
                 {profile?.created_at
@@ -70,7 +70,7 @@ export default async function ProfilePage() {
                   : "-"}
               </p>
             </div>
-            <div className="p-6 border-r border-ink/15">
+            <div className="p-6 border-r border-brand-primary/25">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Departemen</p>
               <p className="font-serif italic text-lg">{departemenName}</p>
             </div>
@@ -85,7 +85,7 @@ export default async function ProfilePage() {
         </div>
 
         <div className="md:hidden">
-          <div className="p-5 flex flex-col items-center border-b border-ink/15">
+          <div className="p-5 flex flex-col items-center border-b border-brand-primary/25">
             <AvatarUpload userId={user.id} currentAvatarUrl={profile?.avatar_url || null} userName={profile?.nama || "User"} />
             <p className="text-base font-medium text-center mt-3">{profile?.nama}</p>
             <p className="mono text-[11px] uppercase tracking-[0.15em] text-brand-accent mt-1">{profile?.role?.replace("_", " ")}</p>

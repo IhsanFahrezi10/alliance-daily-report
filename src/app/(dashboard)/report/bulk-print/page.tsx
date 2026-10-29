@@ -99,7 +99,7 @@ function BulkPrintContent() {
   return (
     <div className="max-w-6xl space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 md:gap-4 min-w-0">
           <Link href="/report" className="p-2 hover:bg-ink/[0.05] transition-colors shrink-0">
             <ArrowLeft size={18} />
@@ -133,14 +133,14 @@ function BulkPrintContent() {
       </div>
 
       {/* SUMMARY */}
-      <div className="border border-ink/15 bg-white/40 p-4 md:p-5">
+      <div className="border border-brand-primary/25 bg-white/40 p-4 md:p-5">
         <div className="flex items-center gap-2 mb-3">
           <Printer size={14} className="text-brand-primary" />
           <p className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60">Logbook yang akan digabung:</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           {reports.map((r, idx) => (
-            <span key={r.id} className="flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.15em] border border-ink/20 px-2.5 py-1.5 text-ink/70">
+            <span key={r.id} className="flex items-center gap-1.5 mono text-[11px] uppercase tracking-[0.15em] border border-brand-primary/30 px-2.5 py-1.5 text-ink/70">
               <span className="text-ink/60">{String(idx + 1).padStart(2, "0")}</span>
               {format(new Date(r.tanggal), "EEE, d MMM", {
                 locale: localeId,
@@ -153,8 +153,8 @@ function BulkPrintContent() {
       </div>
 
       {/* PREVIEW */}
-      <div className="border border-ink/15 bg-white">
-        <div className="px-4 md:px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/70 overflow-hidden">
+      <div className="border border-brand-primary/25 bg-white">
+        <div className="px-4 md:px-5 py-3 border-b border-brand-primary/25 flex items-center gap-2 mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/70 overflow-hidden">
           <FileText size={12} className="shrink-0" />
           <span className="truncate">Preview — {filename}</span>
         </div>

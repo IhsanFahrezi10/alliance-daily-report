@@ -86,7 +86,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   return (
     <div className="max-w-4xl space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <Link href="/report" className="p-2 hover:bg-ink/[0.05] transition-colors shrink-0">
           <ArrowLeft size={18} />
         </Link>
@@ -108,11 +108,11 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">01 — Informasi</span>
-          <div className="flex-1 h-px bg-ink/15" />
+          <div className="flex-1 h-px bg-brand-primary/30" />
         </div>
 
-        <div className="border border-ink/15 bg-white/40">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink/15">
+        <div className="border border-brand-primary/25 bg-white/40">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-brand-primary/25">
             <div className="p-5 md:p-6">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Nama</p>
               <p className="text-base md:text-lg font-medium">{prof?.nama || "-"}</p>
@@ -129,7 +129,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
 
           {/* REVIEW STATUS BANNER */}
           {reviewRow ? (
-            <div className="border-t border-ink/15 bg-green-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
+            <div className="border-t border-brand-primary/25 bg-green-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
               <CheckCircle2 size={14} className="text-green-700 shrink-0" />
               <span className="mono text-[10px] uppercase tracking-[0.15em] text-green-800 font-medium">Sudah ditinjau</span>
               <span className="mono text-[10px] text-ink/30">·</span>
@@ -142,7 +142,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
               )}
             </div>
           ) : (
-            <div className="border-t border-ink/15 bg-orange-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
+            <div className="border-t border-brand-primary/25 bg-orange-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
               <Clock size={14} className="text-orange-600 shrink-0" />
               <span className="mono text-[10px] uppercase tracking-[0.15em] text-orange-800 font-medium">Belum ditinjau</span>
               <span className="mono text-[10px] text-ink/30">·</span>
@@ -151,7 +151,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           )}
 
           {/* Action bar */}
-          <div className="flex border-t border-ink/15 divide-x divide-ink/10">
+          <div className="flex border-t border-brand-primary/25 divide-x divide-ink/10">
             <a href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
               <Pencil size={14} />
               <span className="mono text-[11px] uppercase tracking-[0.15em]">Edit</span>
@@ -168,13 +168,13 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">02 — Aktivitas</span>
-          <div className="flex-1 h-px bg-ink/15" />
+          <div className="flex-1 h-px bg-brand-primary/30" />
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/60 shrink-0">{String(activities.length).padStart(2, "0")} entri</span>
         </div>
 
-        <div className="border border-ink/15 bg-white/40">
+        <div className="border border-brand-primary/25 bg-white/40">
           {/* Desktop header */}
-          <div className="hidden md:grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
+          <div className="hidden md:grid grid-cols-12 px-5 py-3 border-b border-brand-primary/25 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
             <div className="col-span-1">#</div>
             <div className="col-span-2">Waktu</div>
             <div className="col-span-7">Deskripsi</div>
@@ -228,10 +228,10 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         <div>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
             <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 font-medium">03 — Catatan</span>
-            <div className="flex-1 h-px bg-ink/15" />
+            <div className="flex-1 h-px bg-brand-primary/30" />
           </div>
 
-          <div className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
+          <div className="border border-brand-primary/25 bg-white/40 divide-y divide-ink/10">
             {report.lesson_learned && (
               <div className="p-5 md:p-6">
                 <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60 mb-2">Lesson Learned</p>

@@ -43,7 +43,7 @@ export default async function UsersPage() {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="pb-5 md:pb-6 border-b border-ink/15">
+      <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Super Admin</span>
           <div className="h-px w-8 bg-brand-primary" />
@@ -59,8 +59,8 @@ export default async function UsersPage() {
       {users.length ? (
         <>
           {/* Desktop */}
-          <div className="hidden md:block border border-ink/15 bg-white/40">
-            <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
+          <div className="hidden md:block border border-brand-primary/25 bg-white/40">
+            <div className="grid grid-cols-12 px-5 py-3 border-b border-brand-primary/25 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
               <div className="col-span-1">#</div>
               <div className="col-span-4">Nama</div>
               <div className="col-span-3">Departemen</div>
@@ -104,7 +104,7 @@ export default async function UsersPage() {
           {/* Mobile */}
           <div className="md:hidden space-y-3">
             {users.map((u, idx) => (
-              <div key={u.id} className="border border-ink/15 bg-white/40">
+              <div key={u.id} className="border border-brand-primary/25 bg-white/40">
                 <div className="p-4">
                   <div className="flex items-start gap-3">
                     <span className="mono text-[11px] text-ink/60 mt-1.5 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
@@ -128,7 +128,7 @@ export default async function UsersPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-ink/10 px-4 py-3">
+                <div className="border-t border-brand-primary/20 px-4 py-3">
                   <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 block mb-2">Role</label>
                   <UserRoleSelect userId={u.id} currentRole={u.role} disabled={u.id === user.id} />
                 </div>

@@ -73,7 +73,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
   return (
     <div className="space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <div>
           <div className="flex items-center gap-3 mb-3 flex-wrap">
             <span className="mono text-[10px] uppercase tracking-[0.15em] text-brand-primary font-medium">Logbook</span>
@@ -87,7 +87,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <Link href="/trash" className="flex items-center gap-1.5 border border-ink/20 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[10px] uppercase tracking-[0.15em]">
+          <Link href="/trash" className="flex items-center gap-1.5 border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[10px] uppercase tracking-[0.15em]">
             <Trash2 size={12} /> Sampah
           </Link>
           <Link href="/report/new" className="flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-4 py-2.5 mono text-[10px] uppercase tracking-[0.15em]">
@@ -118,7 +118,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
 
       {/* TOOLBAR */}
       {reports.length > 0 && (
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border border-ink/15 bg-white/40">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border border-brand-primary/25 bg-white/40">
           <button type="button" onClick={toggleAll} className="flex items-center gap-2 mono text-[10px] uppercase tracking-[0.15em] text-ink/70 hover:text-brand-primary transition-colors shrink-0">
             {allSelected ? <CheckSquare size={14} className="text-brand-primary" /> : <Square size={14} />}
             <span className="hidden sm:inline">{allSelected ? "Batal Pilih Semua" : "Pilih Semua"}</span>
@@ -146,8 +146,8 @@ export default function ReportListClient({ reports: initialReports }: { reports:
       {reports.length ? (
         <>
           {/* Desktop */}
-          <div className="hidden md:block border border-ink/15 bg-white/40">
-            <div className="grid grid-cols-12 px-5 py-3 border-b border-ink/15 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
+          <div className="hidden md:block border border-brand-primary/25 bg-white/40">
+            <div className="grid grid-cols-12 px-5 py-3 border-b border-brand-primary/25 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
               <div className="col-span-1">#</div>
               <div className="col-span-5">Tanggal</div>
               <div className="col-span-2">Aktivitas</div>
@@ -265,7 +265,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
                     </Link>
                   </div>
 
-                  <div className="flex border-t border-ink/10 divide-x divide-ink/10">
+                  <div className="flex border-t border-brand-primary/20 divide-x divide-ink/10">
                     <Link href={`/report/${r.id}`} className="flex-1 flex items-center justify-center gap-1.5 py-3 text-brand-primary active:bg-brand-primary/10 transition-colors">
                       <Eye size={13} />
                       <span className="mono text-[9px] uppercase tracking-[0.15em]">Lihat</span>

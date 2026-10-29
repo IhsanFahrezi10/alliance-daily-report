@@ -2,7 +2,7 @@ export default function DashboardLoading() {
   return (
     <div className="space-y-6 md:space-y-8 animate-pulse">
       {/* Header skeleton */}
-      <div className="pb-5 md:pb-6 border-b border-ink/15">
+      <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-3 w-20 bg-ink/10 rounded" />
           <div className="h-px w-8 bg-ink/10" />

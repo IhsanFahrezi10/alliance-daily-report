@@ -122,9 +122,9 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName }: Pro
       {/* Crop dialog */}
       {open && imageSrc && (
         <div className="fixed inset-0 z-50 bg-ink/70 flex items-center justify-center p-4">
-          <div className="bg-paper border border-ink/15 max-w-lg w-full">
+          <div className="bg-paper border border-brand-primary/25 max-w-lg w-full">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-ink/15">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-primary/25">
               <div>
                 <p className="text-sm font-medium">Atur Foto Profil</p>
                 <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/70 mt-0.5">Geser & zoom untuk atur</p>
@@ -140,13 +140,13 @@ export default function AvatarUpload({ userId, currentAvatarUrl, userName }: Pro
             </div>
 
             {/* Zoom slider */}
-            <div className="px-5 py-4 border-t border-ink/15">
+            <div className="px-5 py-4 border-t border-brand-primary/25">
               <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/70 block mb-2">Zoom</label>
               <input type="range" min={1} max={3} step={0.1} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-full" />
             </div>
 
             {/* Actions */}
-            <div className="flex border-t border-ink/15 divide-x divide-ink/10">
+            <div className="flex border-t border-brand-primary/25 divide-x divide-ink/10">
               <button type="button" onClick={handleClose} disabled={uploading} className="flex-1 py-3.5 mono text-[11px] uppercase tracking-[0.15em] text-ink/60 hover:bg-ink/[0.03] transition-colors disabled:opacity-50">
                 Batal
               </button>

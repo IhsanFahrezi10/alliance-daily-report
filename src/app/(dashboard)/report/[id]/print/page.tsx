@@ -12,7 +12,7 @@ import Link from "next/link";
 const PrintViewer = dynamic(() => import("@/components/pdf/print-viewer"), {
   ssr: false,
   loading: () => (
-    <div className="flex items-center justify-center h-96 border border-ink/15 bg-white/40">
+    <div className="flex items-center justify-center h-96 border border-brand-primary/25 bg-white/40">
       <p className="mono text-[10px] uppercase tracking-[0.25em] text-ink/60">Memuat PDF viewer...</p>
     </div>
   ),
@@ -81,7 +81,7 @@ export default function PrintReportPage() {
   return (
     <div className="max-w-5xl space-y-6">
       {/* HEADER */}
-      <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <Link href={`/report/${params.id}`} className="p-2 hover:bg-ink/[0.05] transition-colors shrink-0">
           <ArrowLeft size={18} />
         </Link>

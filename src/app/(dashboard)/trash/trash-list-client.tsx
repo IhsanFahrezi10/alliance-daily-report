@@ -57,7 +57,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
   return (
     <div className="space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <div>
           <div className="flex items-center gap-3 mb-3 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Arsip</span>
@@ -68,7 +68,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
           <p className="text-xs sm:text-sm text-ink-muted mt-2">Logbook yang dihapus bisa dipulihkan dari sini</p>
         </div>
 
-        <Link href="/report" className="flex items-center gap-1.5 border border-ink/20 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[11px] uppercase tracking-[0.2em] shrink-0">
+        <Link href="/report" className="flex items-center gap-1.5 border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[11px] uppercase tracking-[0.2em] shrink-0">
           <ArrowLeft size={12} /> Kembali
         </Link>
       </div>
@@ -90,7 +90,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
       {reports.length ? (
         <div className="space-y-3">
           {reports.map((r) => (
-            <div key={r.id} className="border border-ink/15 bg-white/40">
+            <div key={r.id} className="border border-brand-primary/25 bg-white/40">
               <div className="p-4 md:p-5 flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <p className="font-serif italic text-lg leading-tight">
@@ -116,7 +116,7 @@ export default function TrashListClient({ reports: initialReports }: { reports: 
                 </div>
               </div>
 
-              <div className="flex border-t border-ink/10 divide-x divide-ink/10">
+              <div className="flex border-t border-brand-primary/20 divide-x divide-ink/10">
                 <button
                   type="button"
                   onClick={() => handleRestore(r.id)}

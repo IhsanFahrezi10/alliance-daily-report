@@ -89,7 +89,7 @@ export default function RecapPage() {
 
   return (
     <div className="max-w-6xl space-y-6 md:space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-ink/15">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
         <div>
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Rekap</span>
@@ -107,13 +107,13 @@ export default function RecapPage() {
         </Link>
       </div>
 
-      <div className="border border-ink/15 bg-white/40 p-4 md:p-5 space-y-4">
+      <div className="border border-brand-primary/25 bg-white/40 p-4 md:p-5 space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-ink/70 shrink-0">Cepat:</span>
-          <button type="button" onClick={setThisWeek} className="mono text-[11px] uppercase tracking-[0.15em] border border-ink/20 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
+          <button type="button" onClick={setThisWeek} className="mono text-[11px] uppercase tracking-[0.15em] border border-brand-primary/30 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
             Minggu Ini
           </button>
-          <button type="button" onClick={setLastWeek} className="mono text-[11px] uppercase tracking-[0.15em] border border-ink/20 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
+          <button type="button" onClick={setLastWeek} className="mono text-[11px] uppercase tracking-[0.15em] border border-brand-primary/30 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-colors px-3 py-1.5">
             Minggu Lalu
           </button>
         </div>
@@ -134,7 +134,7 @@ export default function RecapPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 pt-2 border-t border-ink/10">
+        <div className="flex items-center gap-2 pt-2 border-t border-brand-primary/20">
           <Calendar size={13} className="text-brand-primary shrink-0" />
           <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Periode: {periodLabel}</p>
           <span className="mono text-[11px] text-ink/30">·</span>
@@ -143,7 +143,7 @@ export default function RecapPage() {
       </div>
 
       {loading ? (
-        <div className="border border-ink/15 bg-white/40 p-12 text-center">
+        <div className="border border-brand-primary/25 bg-white/40 p-12 text-center">
           <p className="mono text-[11px] uppercase tracking-[0.15em] text-ink/60">Memuat...</p>
         </div>
       ) : reports.length === 0 ? (
@@ -156,7 +156,7 @@ export default function RecapPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2 flex-wrap">
               {reports.map((r) => (
-                <span key={r.id} className="mono text-[10px] uppercase tracking-[0.15em] border border-ink/20 px-2 py-1 text-ink/60">
+                <span key={r.id} className="mono text-[10px] uppercase tracking-[0.15em] border border-brand-primary/30 px-2 py-1 text-ink/60">
                   {format(new Date(r.tanggal), "EEE, d MMM", {
                     locale: localeId,
                   })}
@@ -181,8 +181,8 @@ export default function RecapPage() {
             </PDFDownloadLink>
           </div>
 
-          <div className="border border-ink/15 bg-white">
-            <div className="px-4 md:px-5 py-3 border-b border-ink/15 flex items-center gap-2 mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/70 overflow-hidden">
+          <div className="border border-brand-primary/25 bg-white">
+            <div className="px-4 md:px-5 py-3 border-b border-brand-primary/25 flex items-center gap-2 mono text-[10px] md:text-[10px] uppercase tracking-[0.2em] text-ink/70 overflow-hidden">
               <FileText size={12} className="shrink-0" />
               <span className="truncate">Preview — {filename}</span>
             </div>

@@ -148,7 +148,7 @@ export default function ReviewsListClient({ reports: initialReports, departemenL
   return (
     <div className="space-y-6 md:space-y-8">
       {/* HEADER */}
-      <div className="pb-5 md:pb-6 border-b border-ink/15">
+      <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="mono text-[10px] uppercase tracking-[0.15em] text-brand-primary font-medium">HR Approver</span>
           <div className="h-px w-8 bg-brand-primary" />
@@ -162,18 +162,18 @@ export default function ReviewsListClient({ reports: initialReports, departemenL
 
       {/* STATS */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="border border-ink/15 bg-white/40 p-4">
+        <div className="border border-brand-primary/25 bg-white/40 p-4">
           <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-1">Sudah Ditinjau</p>
           <p className="text-2xl font-light text-green-700">{reviewedCount}</p>
         </div>
-        <div className="border border-ink/15 bg-white/40 p-4">
+        <div className="border border-brand-primary/25 bg-white/40 p-4">
           <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-1">Belum Ditinjau</p>
           <p className="text-2xl font-light text-orange-600">{pendingCount}</p>
         </div>
       </div>
 
       {/* FILTER BAR */}
-      <div className="border border-ink/15 bg-white/40 p-4 md:p-5 space-y-4">
+      <div className="border border-brand-primary/25 bg-white/40 p-4 md:p-5 space-y-4">
         {/* Status filter buttons */}
         <div className="flex items-center gap-2 flex-wrap">
           <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">Status:</span>
@@ -303,7 +303,7 @@ export default function ReviewsListClient({ reports: initialReports, departemenL
                               locale: localeId,
                             })}
                           </p>
-                          <span className="mono text-[9px] uppercase tracking-[0.15em] px-2 py-0.5 border border-ink/20 text-ink/60">Batch {r.batch}</span>
+                          <span className="mono text-[9px] uppercase tracking-[0.15em] px-2 py-0.5 border border-brand-primary/30 text-ink/60">Batch {r.batch}</span>
                         </div>
                         <div className="flex items-center gap-2 mt-1 flex-wrap">
                           <span className="text-xs font-medium">{r.user_nama}</span>
@@ -326,7 +326,7 @@ export default function ReviewsListClient({ reports: initialReports, departemenL
 
                   {/* Right — Actions */}
                   <div className="flex items-center gap-2 shrink-0">
-                    <Link href={`/report/${r.id}`} className="flex items-center gap-1.5 border border-ink/20 hover:bg-ink/[0.03] transition-colors px-3 py-2 mono text-[10px] uppercase tracking-[0.15em]">
+                    <Link href={`/report/${r.id}`} className="flex items-center gap-1.5 border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-3 py-2 mono text-[10px] uppercase tracking-[0.15em]">
                       <Eye size={12} /> Lihat
                     </Link>
                     <button
@@ -334,7 +334,7 @@ export default function ReviewsListClient({ reports: initialReports, departemenL
                       onClick={() => handleToggleReview(r.id, r.review)}
                       disabled={isProcessing}
                       className={`flex items-center gap-1.5 px-3 py-2 mono text-[10px] uppercase tracking-[0.15em] transition-colors disabled:opacity-50 ${
-                        isReviewed ? "border border-ink/20 hover:bg-ink/[0.03]" : "bg-brand-primary text-white hover:bg-brand-hover"
+                        isReviewed ? "border border-brand-primary/30 hover:bg-ink/[0.03]" : "bg-brand-primary text-white hover:bg-brand-hover"
                       }`}
                     >
                       {isReviewed ? (
