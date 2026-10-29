@@ -65,6 +65,27 @@ export default function ReportListClient({ reports: initialReports }: { reports:
     toast.success("Logbook dipindah ke Sampah");
   };
 
+  const handleBulkDelete = async () => {
+    if (selected.size === 0) return;
+    if (!window.confirm(`Hapus ${selected.size} logbook? Bisa dipulihkan dari menu Sampah.`)) return;
+
+    const ids = Array.from(selected);
+    const prev = reports;
+
+    setReports((r) => r.filter((x) => !selected.has(x.id)));
+    setSelected(new Set());
+
+    const { error } = await supabase.from("reports").update({ deleted_at: new Date().toISOString() }).in("id", ids);
+
+    if (error) {
+      setReports(prev);
+      toast.error("Gagal menghapus: " + error.message);
+      return;
+    }
+
+    toast.success(`${ids.length} logbook dipindah ke Sampah`);
+  };
+
   const bulkPrintUrl = useMemo(() => {
     if (!someSelected) return "#";
     return `/report/bulk-print?ids=${Array.from(selected).join(",")}`;
@@ -77,13 +98,13 @@ export default function ReportListClient({ reports: initialReports }: { reports:
         <div>
           <div className="flex items-center gap-3 mb-3 flex-wrap">
             <span className="mono text-[10px] uppercase tracking-[0.15em] text-brand-primary font-medium">Logbook</span>
-            <div className="h-px w-8 bg-brand-primary" />
+            <div className="h-px w-8 bg-brand-primary/30" />
             <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">{String(reports.length).padStart(3, "0")} Entri</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-light tracking-tight">
             Logbook <span className="font-serif italic text-brand-primary">Saya</span>
           </h1>
-          <p className="text-xs sm:text-sm text-ink-muted mt-2">Pilih beberapa logbook untuk di-print sekaligus</p>
+          <p className="text-xs sm:text-sm text-ink-muted mt-2">Pilih beberapa logbook untuk di-print atau dihapus sekaligus</p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
@@ -118,7 +139,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
 
       {/* TOOLBAR */}
       {reports.length > 0 && (
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border border-brand-primary/25 bg-white/40">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border border-brand-primary/25 bg-white/40 flex-wrap">
           <button type="button" onClick={toggleAll} className="flex items-center gap-2 mono text-[10px] uppercase tracking-[0.15em] text-ink/70 hover:text-brand-primary transition-colors shrink-0">
             {allSelected ? <CheckSquare size={14} className="text-brand-primary" /> : <Square size={14} />}
             <span className="hidden sm:inline">{allSelected ? "Batal Pilih Semua" : "Pilih Semua"}</span>
@@ -135,9 +156,12 @@ export default function ReportListClient({ reports: initialReports }: { reports:
               <Link href={bulkPrintUrl} className="flex items-center gap-1.5 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-3 py-1.5 mono text-[10px] uppercase tracking-[0.15em]">
                 <Printer size={12} /> Print
               </Link>
+              <button type="button" onClick={handleBulkDelete} className="flex items-center gap-1.5 bg-red-600 text-white hover:bg-red-700 transition-colors px-3 py-1.5 mono text-[10px] uppercase tracking-[0.15em]">
+                <Trash2 size={12} /> Hapus ({selected.size})
+              </button>
             </div>
           ) : (
-            <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">Ceklis untuk print sekaligus</span>
+            <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">Ceklis untuk print atau hapus sekaligus</span>
           )}
         </div>
       )}
@@ -221,12 +245,12 @@ export default function ReportListClient({ reports: initialReports }: { reports:
               const isReviewed = !!r.review;
 
               return (
-                <div key={r.id} className={`border bg-white/40 transition-colors ${isChecked ? "border-brand-primary bg-brand-primary/[0.06]" : "border-ink/15"}`}>
+                <div key={r.id} className={`border bg-white/40 transition-colors ${isChecked ? "border-brand-primary bg-brand-primary/[0.06]" : "border-brand-primary/25"}`}>
                   <div className="flex items-stretch">
                     <button
                       type="button"
                       onClick={() => toggleOne(r.id)}
-                      className={`flex items-center justify-center px-3 border-r transition-colors shrink-0 ${isChecked ? "border-brand-primary bg-brand-primary text-white" : "border-ink/15 text-ink/60"}`}
+                      className={`flex items-center justify-center px-3 border-r transition-colors shrink-0 ${isChecked ? "border-brand-primary bg-brand-primary text-white" : "border-brand-primary/25 text-ink/60"}`}
                     >
                       {isChecked ? <CheckSquare size={18} /> : <Square size={18} />}
                     </button>
@@ -289,7 +313,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
           </div>
         </>
       ) : (
-        <div className="border border-dashed border-ink/25 p-8 md:p-12 text-center">
+        <div className="border border-dashed border-brand-primary/30 p-8 md:p-12 text-center">
           <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-4">Belum ada logbook</p>
           <Link href="/report/new" className="inline-flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[10px] uppercase tracking-[0.15em]">
             Buat logbook pertama

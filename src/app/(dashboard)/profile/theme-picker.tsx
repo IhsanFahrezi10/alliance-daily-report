@@ -77,10 +77,10 @@ export default function ThemePicker({ current }: { current: string }) {
     <div>
       <div className="flex items-center gap-3 mb-5">
         <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 font-medium">Tema Warna</span>
-        <div className="flex-1 h-px bg-ink/15" />
+        <div className="flex-1 h-px bg-brand-primary/30" />
       </div>
 
-      <div className="border border-ink/15 bg-white/40 p-6">
+      <div className="border border-brand-primary/25 bg-white/40 p-6">
         <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-1">Pilih Aksen Warna</p>
         <p className="text-xs text-ink-muted mb-4">Hover untuk preview · Klik untuk simpan</p>
 

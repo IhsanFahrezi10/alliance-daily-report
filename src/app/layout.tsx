@@ -23,6 +23,17 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Magang Hub — Kemnaker",
   description: "Platform pengisian logbook aktivitas magang. Terintegrasi dengan Alliance World.",
+  manifest: "/manifest.json",
+  applicationName: "Maganghub",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Maganghub",
+  },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

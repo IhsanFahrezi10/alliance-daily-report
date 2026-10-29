@@ -67,10 +67,10 @@ export default function ProfileForm({ profile, departemenList }: Props) {
     <div>
       <div className="flex items-center gap-3 mb-5">
         <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 font-medium">Edit Profil</span>
-        <div className="flex-1 h-px bg-ink/15" />
+        <div className="flex-1 h-px bg-brand-primary/30" />
       </div>
 
-      <form onSubmit={handleSubmit} className="border border-ink/15 bg-white/40 divide-y divide-ink/10">
+      <form onSubmit={handleSubmit} className="border border-brand-primary/25 bg-white/40 divide-y divide-ink/10">
         <div className="p-6">
           <label className="block mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Nama Lengkap</label>
           <input
