@@ -4,6 +4,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { Printer, Pencil, ArrowLeft, CheckCircle2, Circle, Clock } from "lucide-react";
+import CommentsSection from "@/components/report/comments-section";
 
 export default async function ViewReportPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -14,7 +15,10 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Query report tanpa nested join dulu
+  // Query profile current user (buat cek role — siapa yang bisa comment)
+  const { data: myProfile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+
+  // Query report
   const { data: reportRaw } = await supabase
     .from("reports")
     .select(
@@ -33,20 +37,24 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
     .single();
 
   if (!reportRaw) notFound();
-
   const report = reportRaw as any;
 
-  // Query review terpisah (defensive)
+  // Query review terpisah
   const { data: reviewRow } = await supabase.from("report_reviews").select("id, reviewed_at, reviewed_by, notes").eq("report_id", id).maybeSingle();
 
-  // Ambil nama reviewer terpisah (defensive)
+  // Ambil nama reviewer terpisah
   let reviewerName: string | null = null;
   if (reviewRow?.reviewed_by) {
     const { data: reviewerProfile } = await supabase.from("profiles").select("nama").eq("id", reviewRow.reviewed_by).single();
     reviewerName = reviewerProfile?.nama || null;
   }
 
-  // Defensive: pastiin activities selalu array
+  // Query komentar
+  const { data: commentsData } = await supabase.from("report_comments").select("id, content, created_at, author_id, author:author_id (nama, role)").eq("report_id", id).order("created_at", { ascending: true });
+
+  const comments = commentsData || [];
+
+  // Defensive activities
   const activities = Array.isArray(report.report_activities) ? [...report.report_activities].sort((a: any, b: any) => (a.urutan || 0) - (b.urutan || 0)) : [];
 
   const statusLabel: Record<string, string> = {
@@ -69,11 +77,9 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
 
   const tanggalFormatted = format(new Date(report.tanggal), "EEEE, d MMMM yyyy", { locale: localeId });
 
-  // Ambil nama departemen (handle array/object)
   const prof = report.profiles;
   const departemenName = Array.isArray(prof?.departemen) ? prof.departemen[0]?.nama || "-" : prof?.departemen?.nama || "-";
 
-  // Format tanggal review (defensive)
   let reviewedAtFormatted = "";
   if (reviewRow?.reviewed_at) {
     try {
@@ -93,7 +99,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 md:gap-3 mb-1.5 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Detail Logbook</span>
-            <div className="h-px w-6 md:w-8 bg-brand-primary" />
+            <div className="h-px w-6 md:w-8 bg-brand-primary/30" />
             <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/60 truncate">#{report.id?.slice(0, 8) || "—"}</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-light tracking-tight">
@@ -112,7 +118,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         </div>
 
         <div className="border border-brand-primary/25 bg-white/40">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-brand-primary/25">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink/15">
             <div className="p-5 md:p-6">
               <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Nama</p>
               <p className="text-base md:text-lg font-medium">{prof?.nama || "-"}</p>
@@ -129,7 +135,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
 
           {/* REVIEW STATUS BANNER */}
           {reviewRow ? (
-            <div className="border-t border-brand-primary/25 bg-green-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
+            <div className="border-t border-brand-primary/20 bg-green-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
               <CheckCircle2 size={14} className="text-green-700 shrink-0" />
               <span className="mono text-[10px] uppercase tracking-[0.15em] text-green-800 font-medium">Sudah ditinjau</span>
               <span className="mono text-[10px] text-ink/30">·</span>
@@ -142,7 +148,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
               )}
             </div>
           ) : (
-            <div className="border-t border-brand-primary/25 bg-orange-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
+            <div className="border-t border-brand-primary/20 bg-orange-50/60 px-5 py-3 flex items-center gap-2 flex-wrap">
               <Clock size={14} className="text-orange-600 shrink-0" />
               <span className="mono text-[10px] uppercase tracking-[0.15em] text-orange-800 font-medium">Belum ditinjau</span>
               <span className="mono text-[10px] text-ink/30">·</span>
@@ -151,7 +157,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           )}
 
           {/* Action bar */}
-          <div className="flex border-t border-brand-primary/25 divide-x divide-ink/10">
+          <div className="flex border-t border-brand-primary/20 divide-x divide-ink/10">
             <a href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
               <Pencil size={14} />
               <span className="mono text-[11px] uppercase tracking-[0.15em]">Edit</span>
@@ -173,7 +179,6 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
         </div>
 
         <div className="border border-brand-primary/25 bg-white/40">
-          {/* Desktop header */}
           <div className="hidden md:grid grid-cols-12 px-5 py-3 border-b border-brand-primary/25 mono text-[10px] uppercase tracking-[0.2em] text-ink/60">
             <div className="col-span-1">#</div>
             <div className="col-span-2">Waktu</div>
@@ -186,7 +191,6 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
               const Icon = statusIcon[a.status] || Circle;
               return (
                 <div key={a.id} className="border-b last:border-0 border-ink/10 p-4 md:p-0 md:grid md:grid-cols-12 md:px-5 md:py-4 md:items-center">
-                  {/* Mobile */}
                   <div className="md:hidden space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="mono text-[11px] text-ink/60">#{String(idx + 1).padStart(2, "0")}</span>
@@ -202,7 +206,6 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
                     </div>
                   </div>
 
-                  {/* Desktop */}
                   <div className="hidden md:contents">
                     <div className="col-span-1 mono text-[11px] text-ink/60">{String(idx + 1).padStart(2, "0")}</div>
                     <div className="col-span-2 mono text-sm">{a.waktu?.slice(0, 5) || "—"}</div>
@@ -253,6 +256,9 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
           </div>
         </div>
       )}
+
+      {/* KOMENTAR */}
+      <CommentsSection reportId={report.id} currentUserId={user.id} currentUserRole={(myProfile as any)?.role || "user"} initialComments={comments as any} />
     </div>
   );
 }
