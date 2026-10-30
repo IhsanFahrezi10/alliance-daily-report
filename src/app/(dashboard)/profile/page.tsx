@@ -35,7 +35,9 @@ export default async function ProfilePage() {
   const departemenId = departemen?.id || "";
 
   return (
-          <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
+    <div className="max-w-3xl space-y-6 md:space-y-8">
+      {/* HEADER — dengan switch di kanan atas */}
+      <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Akun</span>
