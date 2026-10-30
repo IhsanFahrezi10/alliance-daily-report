@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
-import { Plus, Eye, Pencil, Printer, ArrowUpRight, CheckSquare, Square, X, Trash2, CheckCircle2, Clock } from "lucide-react";
+import { Plus, Eye, Pencil, Printer, ArrowUpRight, CheckSquare, Square, X, Trash2, CheckCircle2, Clock, Calendar } from "lucide-react";
 
 type ReportItem = {
   id: string;
@@ -107,7 +107,10 @@ export default function ReportListClient({ reports: initialReports }: { reports:
           <p className="text-xs sm:text-sm text-ink-muted mt-2">Pilih beberapa logbook untuk di-print atau dihapus sekaligus</p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          <Link href="/report/calendar" className="flex items-center gap-1.5 border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[10px] uppercase tracking-[0.15em]">
+            <Calendar size={12} /> Kalender
+          </Link>
           <Link href="/trash" className="flex items-center gap-1.5 border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-3 py-2.5 mono text-[10px] uppercase tracking-[0.15em]">
             <Trash2 size={12} /> Sampah
           </Link>

@@ -23,25 +23,59 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
 
   const menu = isHrApprover
     ? [
-        { href: "/reviews", label: "Review Logbook", num: "01", icon: CheckCheck },
+        {
+          href: "/reviews",
+          label: "Review Logbook",
+          num: "01",
+          icon: CheckCheck,
+        },
         { href: "/profile", label: "Profil", num: "02", icon: User },
       ]
     : [
         { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
         { href: "/report", label: "Logbook Saya", num: "02", icon: FileText },
-        { href: "/recap", label: "Rekap Mingguan", num: "03", icon: Calendar },
-        ...(profile?.role === "admin" || profile?.role === "super_admin" ? [{ href: "/reports", label: "Semua Logbook", num: "04", icon: Users }] : []),
-        ...(profile?.role === "super_admin" ? [{ href: "/users", label: "Kelola User", num: "05", icon: Settings }] : []),
+        {
+          href: "/report/calendar",
+          label: "Kalender",
+          num: "03",
+          icon: Calendar,
+        },
+        {
+          href: "/recap",
+          label: "Rekap Mingguan",
+          num: "04",
+          icon: Calendar,
+        },
+        ...(profile?.role === "admin" || profile?.role === "super_admin"
+          ? [
+              {
+                href: "/reports",
+                label: "Semua Logbook",
+                num: "05",
+                icon: Users,
+              },
+            ]
+          : []),
+        ...(profile?.role === "super_admin"
+          ? [
+              {
+                href: "/users",
+                label: "Kelola User",
+                num: "06",
+                icon: Settings,
+              },
+            ]
+          : []),
         {
           href: "/trash",
           label: "Sampah",
-          num: profile?.role === "super_admin" ? "06" : "04",
+          num: profile?.role === "super_admin" ? "07" : "05",
           icon: Trash2,
         },
         {
           href: "/profile",
           label: "Profil",
-          num: profile?.role === "super_admin" ? "07" : "05",
+          num: profile?.role === "super_admin" ? "08" : "06",
           icon: User,
         },
       ];
@@ -50,16 +84,16 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
 
   return (
     <div className="flex flex-col h-full w-full">
-      {/* TOP — Logos */}
+      {/* TOP */}
       <div className="px-6 pt-6 pb-5 border-b border-brand-primary/25 shrink-0">
         <div className="flex items-center justify-between mb-4">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={130} height={36} className="h-7 w-auto" />
-          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.2</span>
+          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.0</span>
         </div>
 
-        <div className="flex items-center gap-3 pt-3 border-t border-brand-primary/20">
+        <div className="flex items-center gap-3 pt-3 border-t border-ink/10">
           <Image src="/logo-alliance.png" alt="Alliance World" width={100} height={28} className="h-6 w-auto opacity-80" />
-          <div className="flex-1 h-px bg-brand-primary/30" />
+          <div className="flex-1 h-px bg-ink/15" />
           <Image src="/logo-kemnaker.png" alt="Kemnaker" width={80} height={22} className="h-5 w-auto opacity-80" />
         </div>
       </div>
