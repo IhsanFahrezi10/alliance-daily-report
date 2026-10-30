@@ -36,11 +36,10 @@ export default async function ProfilePage() {
 
   return (
     <div className="max-w-3xl space-y-6 md:space-y-8">
-      {/* HEADER */}
       <div className="pb-5 md:pb-6 border-b border-brand-primary/25">
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">Akun</span>
-          <div className="h-px w-8 bg-brand-primary" />
+          <div className="h-px w-8 bg-brand-primary/30" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-light tracking-tight">
           Profil <span className="font-serif italic text-brand-primary">Saya</span>
@@ -137,7 +136,6 @@ export default async function ProfilePage() {
 
       {/* THEME PICKER */}
       <ThemePicker current={profile?.theme_accent || "blue"} />
-      <ThemeModeToggle current={profile?.theme_mode || "light"} />
     </div>
   );
 }
