@@ -14,9 +14,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const { data: profile } = await supabase.from("profiles").select("*, departemen:departemen_id (nama)").eq("id", user.id).single();
 
   const themeAccent = (profile as any)?.theme_accent || "blue";
+  const themeMode = (profile as any)?.theme_mode || "light";
 
   return (
-    <ThemeProvider initialTheme={themeAccent}>
+    <ThemeProvider initialTheme={themeAccent} initialMode={themeMode}>
       <DesktopSidebar profile={profile} />
       <div className="flex-1 min-w-0 flex flex-col">
         <MobileNav profile={profile} />

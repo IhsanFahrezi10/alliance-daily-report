@@ -5,6 +5,7 @@ import { id as localeId } from "date-fns/locale";
 import ProfileForm from "./profile-form";
 import AvatarUpload from "@/components/profile/avatar-upload";
 import ThemePicker from "./theme-picker";
+import ThemeModeToggle from "./theme-mode-toggle";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -136,6 +137,7 @@ export default async function ProfilePage() {
 
       {/* THEME PICKER */}
       <ThemePicker current={profile?.theme_accent || "blue"} />
+      <ThemeModeToggle current={profile?.theme_mode || "light"} />
     </div>
   );
 }
