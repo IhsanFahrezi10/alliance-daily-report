@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { Printer, Pencil, ArrowLeft, CheckCircle2, Circle, Clock } from "lucide-react";
 import CommentsSection from "@/components/report/comments-section";
+import ReviewToggleButton from "@/components/report/review-toggle-button";
 
 export default async function ViewReportPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -15,8 +16,10 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Query profile current user (buat cek role — siapa yang bisa comment)
+  // Query role current user
   const { data: myProfile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+
+  const isHrApprover = myProfile?.role === "hr_approver";
 
   // Query report
   const { data: reportRaw } = await supabase
@@ -42,7 +45,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
   // Query review terpisah
   const { data: reviewRow } = await supabase.from("report_reviews").select("id, reviewed_at, reviewed_by, notes").eq("report_id", id).maybeSingle();
 
-  // Ambil nama reviewer terpisah
+  // Ambil nama reviewer
   let reviewerName: string | null = null;
   if (reviewRow?.reviewed_by) {
     const { data: reviewerProfile } = await supabase.from("profiles").select("nama").eq("id", reviewRow.reviewed_by).single();
@@ -93,7 +96,7 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
     <div className="max-w-4xl space-y-6 md:space-y-8">
       {/* HEADER */}
       <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6 border-b border-brand-primary/25">
-        <Link href="/report" className="p-2 hover:bg-ink/[0.05] transition-colors shrink-0">
+        <Link href={isHrApprover ? "/reviews" : "/report"} className="p-2 hover:bg-ink/[0.05] transition-colors shrink-0">
           <ArrowLeft size={18} />
         </Link>
         <div className="min-w-0 flex-1">
@@ -156,16 +159,24 @@ export default async function ViewReportPage({ params }: { params: Promise<{ id:
             </div>
           )}
 
-          {/* Action bar */}
+          {/* ACTION BAR — KONDISIONAL PER ROLE */}
           <div className="flex border-t border-brand-primary/20 divide-x divide-ink/10">
-            <a href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
-              <Pencil size={14} />
-              <span className="mono text-[11px] uppercase tracking-[0.15em]">Edit</span>
-            </a>
-            <a href={`/report/${report.id}/print`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 bg-brand-primary text-white hover:bg-brand-hover active:bg-brand-hover transition-colors">
-              <Printer size={14} />
-              <span className="mono text-[11px] uppercase tracking-[0.15em]">Print PDF</span>
-            </a>
+            {isHrApprover ? (
+              // HR APPROVER → tombol Tandai Ditinjau
+              <ReviewToggleButton reportId={report.id} initialReviewId={reviewRow?.id || null} reviewerName={reviewerName} reviewedAt={reviewedAtFormatted || null} />
+            ) : (
+              // INTERN / ADMIN / SUPER ADMIN → Edit + Print
+              <>
+                <Link href={`/report/${report.id}/edit`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 text-yellow-700 hover:bg-yellow-50 active:bg-yellow-50 transition-colors">
+                  <Pencil size={14} />
+                  <span className="mono text-[11px] uppercase tracking-[0.15em]">Edit</span>
+                </Link>
+                <Link href={`/report/${report.id}/print`} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 bg-brand-primary text-white hover:bg-brand-hover active:bg-brand-hover transition-colors">
+                  <Printer size={14} />
+                  <span className="mono text-[11px] uppercase tracking-[0.15em]">Print PDF</span>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
