@@ -6,9 +6,9 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck } from "lucide-react";
+import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck, Bell } from "lucide-react";
 
-function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: () => void }) {
+function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: any; hasSubmittedToday?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -20,20 +20,30 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
   };
 
   const isHrApprover = profile?.role === "hr_approver";
+  const isIntern = profile?.role === "user";
+  const isStaff = ["admin", "super_admin"].includes(profile?.role);
+  const showReminderDot = isIntern && !hasSubmittedToday;
 
   const menu = isHrApprover
     ? [
+        { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
         {
           href: "/reviews",
           label: "Review Logbook",
-          num: "01",
+          num: "02",
           icon: CheckCheck,
         },
-        { href: "/profile", label: "Profil", num: "02", icon: User },
+        { href: "/profile", label: "Profil", num: "03", icon: User },
       ]
     : [
         { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
-        { href: "/report", label: "Logbook Saya", num: "02", icon: FileText },
+        {
+          href: "/report",
+          label: "Logbook Saya",
+          num: "02",
+          icon: FileText,
+          alert: showReminderDot,
+        },
         {
           href: "/report/calendar",
           label: "Kalender",
@@ -46,13 +56,19 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
           num: "04",
           icon: Calendar,
         },
-        ...(profile?.role === "admin" || profile?.role === "super_admin"
+        ...(isStaff
           ? [
               {
                 href: "/reports",
                 label: "Semua Logbook",
                 num: "05",
                 icon: Users,
+              },
+              {
+                href: "/reminder",
+                label: "Reminder",
+                num: "06",
+                icon: Bell,
               },
             ]
           : []),
@@ -61,7 +77,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
               {
                 href: "/users",
                 label: "Kelola User",
-                num: "06",
+                num: "07",
                 icon: Settings,
               },
             ]
@@ -69,13 +85,13 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
         {
           href: "/trash",
           label: "Sampah",
-          num: profile?.role === "super_admin" ? "07" : "05",
+          num: profile?.role === "super_admin" ? "08" : isStaff ? "07" : "05",
           icon: Trash2,
         },
         {
           href: "/profile",
           label: "Profil",
-          num: profile?.role === "super_admin" ? "08" : "06",
+          num: profile?.role === "super_admin" ? "09" : isStaff ? "08" : "06",
           icon: User,
         },
       ];
@@ -122,7 +138,7 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
         </div>
 
         <div className="flex flex-col">
-          {menu.map((item) => {
+          {menu.map((item: any) => {
             const Icon = item.icon;
             const active = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
@@ -135,7 +151,8 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
                   <span className={`mono text-[11px] tracking-[0.1em] w-5 ${active ? "text-brand-primary font-semibold" : "text-ink/60"}`}>{item.num}</span>
                   <Icon size={15} className={active ? "text-brand-primary" : "text-ink/60"} strokeWidth={1.75} />
                   <span className={`text-sm flex-1 ${active ? "font-medium text-ink" : "text-ink/70 group-hover:text-ink"}`}>{item.label}</span>
-                  {active && <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />}
+                  {item.alert && <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" title="Belum isi logbook hari ini" />}
+                  {active && !item.alert && <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />}
                 </motion.div>
               </Link>
             );
@@ -164,24 +181,27 @@ function SidebarContent({ profile, onNavigate }: { profile: any; onNavigate?: ()
   );
 }
 
-export function DesktopSidebar({ profile }: { profile: any }) {
+export function DesktopSidebar({ profile, hasSubmittedToday }: { profile: any; hasSubmittedToday?: boolean }) {
   return (
     <aside className="hidden md:flex w-72 shrink-0 bg-paper border-r border-brand-primary/25 h-screen sticky top-0">
-      <SidebarContent profile={profile} />
+      <SidebarContent profile={profile} hasSubmittedToday={hasSubmittedToday} />
     </aside>
   );
 }
 
-export function MobileNav({ profile }: { profile: any }) {
+export function MobileNav({ profile, hasSubmittedToday }: { profile: any; hasSubmittedToday?: boolean }) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <header className="md:hidden sticky top-0 z-30 bg-paper border-b border-brand-primary/25 px-4 py-3 flex items-center justify-between">
         <Image src="/logo-maganghub.png" alt="Maganghub" width={110} height={30} className="h-6 w-auto" />
-        <button onClick={() => setOpen(true)} className="p-2 hover:bg-ink/[0.05] transition-colors" aria-label="Buka menu">
-          <Menu size={20} />
-        </button>
+        <div className="flex items-center gap-2">
+          {profile?.role === "user" && !hasSubmittedToday && <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" title="Belum isi logbook hari ini" />}
+          <button onClick={() => setOpen(true)} className="p-2 hover:bg-ink/[0.05] transition-colors" aria-label="Buka menu">
+            <Menu size={20} />
+          </button>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -200,7 +220,7 @@ export function MobileNav({ profile }: { profile: any }) {
                 <X size={18} />
               </button>
 
-              <SidebarContent profile={profile} onNavigate={() => setOpen(false)} />
+              <SidebarContent profile={profile} hasSubmittedToday={hasSubmittedToday} onNavigate={() => setOpen(false)} />
             </motion.aside>
           </>
         )}

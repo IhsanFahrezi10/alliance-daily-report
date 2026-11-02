@@ -13,10 +13,9 @@ export default async function DashboardPage() {
 
   const { data: myProfile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
 
-  // ============ KALAU HR APPROVER → TAMPILIN ANALYTICS ============
+  // ============ HR APPROVER → ANALYTICS ============
   if (myProfile?.role === "hr_approver") {
-    // Fetch semua reports + profiles + reviews
-    const { data: reportsRaw } = await supabase.from("reports").select("id, tanggal, user_id, report_reviews(id)").is("deleted_at", null);
+    const { data: reportsRaw } = await supabase.from("reports").select("id, tanggal, user_id, attendance, report_reviews(id)").is("deleted_at", null);
 
     const { data: profiles } = await supabase.from("profiles").select("id, nama, role, departemen_id, batch");
 
@@ -35,6 +34,7 @@ export default async function DashboardPage() {
         id: r.id,
         tanggal: r.tanggal,
         user_id: r.user_id,
+        attendance: r.attendance || "Present",
         user_nama: prof?.nama || "—",
         departemen: prof?.departemen_id ? departemenMap.get(prof.departemen_id) || "—" : "—",
         batch: prof?.batch || 1,
@@ -48,23 +48,30 @@ export default async function DashboardPage() {
     const totalReviewed = reports.filter((r) => r.is_reviewed).length;
     const totalPending = totalLogbooks - totalReviewed;
 
-    // Chart — 7 hari terakhir
-    const dailyChart: Array<{
+    // Chart — 30 hari terakhir
+    const thirtyDayChart: Array<{
       tanggal: string;
       label: string;
       count: number;
     }> = [];
-    for (let i = 6; i >= 0; i--) {
+    for (let i = 29; i >= 0; i--) {
       const d = subDays(new Date(), i);
       const key = format(d, "yyyy-MM-dd");
-      dailyChart.push({
+      thirtyDayChart.push({
         tanggal: key,
         label: format(d, "d MMM", { locale: localeId }),
         count: reports.filter((r) => r.tanggal === key).length,
       });
     }
 
-    // Top 5 interns
+    // Attendance
+    const attendanceStats = {
+      present: reports.filter((r) => r.attendance === "Present").length,
+      excused: reports.filter((r) => r.attendance === "Excused").length,
+      sick: reports.filter((r) => r.attendance === "Sick").length,
+    };
+
+    // Count per user
     const countPerUser = new Map<string, { nama: string; departemen: string; batch: number; count: number }>();
     reports.forEach((r) => {
       const existing = countPerUser.get(r.user_id);
@@ -79,16 +86,27 @@ export default async function DashboardPage() {
         });
       }
     });
-    const topInterns = Array.from(countPerUser.entries())
-      .map(([user_id, v]) => ({
-        user_id,
-        nama: v.nama,
-        departemen: v.departemen,
-        batch: v.batch,
-        logbook_count: v.count,
-      }))
-      .sort((a, b) => b.logbook_count - a.logbook_count)
-      .slice(0, 5);
+
+    // All interns — yang punya logbook + yang belum punya
+    const allInternsFromReports = Array.from(countPerUser.entries()).map(([user_id, v]) => ({
+      user_id,
+      nama: v.nama,
+      departemen: v.departemen,
+      batch: v.batch,
+      logbook_count: v.count,
+    }));
+
+    const internsWithZero = (profiles || [])
+      .filter((p) => p.role === "user" && !countPerUser.has(p.id))
+      .map((p) => ({
+        user_id: p.id,
+        nama: p.nama,
+        departemen: p.departemen_id ? departemenMap.get(p.departemen_id) || "—" : "—",
+        batch: p.batch || 1,
+        logbook_count: 0,
+      }));
+
+    const allInterns = [...allInternsFromReports, ...internsWithZero].sort((a, b) => b.logbook_count - a.logbook_count);
 
     // Dept stats
     const countPerDept = new Map<string, number>();
@@ -112,15 +130,16 @@ export default async function DashboardPage() {
           totalReviewed,
           totalPending,
         }}
-        dailyChart={dailyChart}
-        topInterns={topInterns}
+        thirtyDayChart={thirtyDayChart}
+        attendanceStats={attendanceStats}
         deptStats={deptStats}
+        allInterns={allInterns}
         recentReports={recentReports}
       />
     );
   }
 
-  // ============ USER & ADMIN → DASHBOARD BIASA ============
+  // ============ USER / ADMIN → DASHBOARD BIASA ============
   const today = format(new Date(), "yyyy-MM-dd");
 
   const { data: todayReport } = await supabase.from("reports").select("id").eq("user_id", user.id).eq("tanggal", today).is("deleted_at", null).maybeSingle();
@@ -249,7 +268,6 @@ export default async function DashboardPage() {
   );
 }
 
-// Inline SVG icons — biar nggak perlu import lucide di server component
 function CheckCircleIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-green-700 mt-0.5 shrink-0">
