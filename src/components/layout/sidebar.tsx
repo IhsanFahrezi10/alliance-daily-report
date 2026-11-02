@@ -104,7 +104,7 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
       <div className="px-6 pt-6 pb-5 border-b border-brand-primary/25 shrink-0">
         <div className="flex items-center justify-between mb-4">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={130} height={36} className="h-7 w-auto" />
-          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.0</span>
+          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.2</span>
         </div>
 
         <div className="flex items-center gap-3 pt-3 border-t border-ink/10">
