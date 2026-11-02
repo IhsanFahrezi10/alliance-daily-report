@@ -21,7 +21,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Magang Hub — Kemnaker",
+  title: "Alliance Daily Report - MagangHub",
   description: "Platform pengisian logbook aktivitas magang. Terintegrasi dengan Alliance World.",
   manifest: "/manifest.json",
   applicationName: "Maganghub",
