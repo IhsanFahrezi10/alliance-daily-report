@@ -14,6 +14,7 @@ const THEMES = [
   { value: "purple", label: "Ungu", color: "#6b3d91" },
   { value: "orange", label: "Oranye", color: "#c85c0a" },
   { value: "red", label: "Merah", color: "#a03030" },
+  { value: "pink", label: "Pink", color: "#d946a0" },
 ];
 
 type Ripple = { id: number; x: number; y: number; color: string };
@@ -28,15 +29,7 @@ export default function ThemePicker({ current }: { current: string }) {
   const addRipple = (color: string, e: React.MouseEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const id = Date.now();
-    setRipples((prev) => [
-      ...prev,
-      {
-        id,
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        color,
-      },
-    ]);
+    setRipples((prev) => [...prev, { id, x: e.clientX - rect.left, y: e.clientY - rect.top, color }]);
     setTimeout(() => {
       setRipples((prev) => prev.filter((r) => r.id !== id));
     }, 800);
@@ -44,7 +37,6 @@ export default function ThemePicker({ current }: { current: string }) {
 
   const handleSelect = async (value: string, color: string, e: React.MouseEvent) => {
     if (value === current) return;
-
     addRipple(color, e);
     setLoading(value);
 
@@ -84,8 +76,8 @@ export default function ThemePicker({ current }: { current: string }) {
         <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-1">Pilih Aksen Warna</p>
         <p className="text-xs text-ink-muted mb-4">Hover untuk preview · Klik untuk simpan</p>
 
-        {/* Swatch grid */}
-        <div className="grid grid-cols-5 gap-3">
+        {/* Swatch grid — 6 items */}
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
           {THEMES.map((t) => {
             const isSaved = current === t.value;
             const isPreviewing = previewTheme === t.value;
@@ -109,7 +101,6 @@ export default function ThemePicker({ current }: { current: string }) {
                 title={`${t.label}${isSaved ? " (aktif)" : ""}`}
                 aria-label={t.label}
               >
-                {/* Ripples */}
                 <AnimatePresence>
                   {swatchRipples.map((r) => (
                     <motion.span
@@ -130,14 +121,12 @@ export default function ThemePicker({ current }: { current: string }) {
                   ))}
                 </AnimatePresence>
 
-                {/* Icon */}
                 <span className="relative z-10">{processing ? <Loader2 size={16} className="text-white animate-spin" /> : isSaved ? <Check size={16} className="text-white" /> : null}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Active indicator */}
         <div className="mt-5 flex items-center gap-2">
           <span className="w-3 h-3 rounded-full" style={{ backgroundColor: savedColor }} />
           <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">Aktif: {savedLabel}</p>
