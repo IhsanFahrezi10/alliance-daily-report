@@ -613,3 +613,35 @@ html.dark body {
   --color-brand-deep: #d96b6b;
   background-image: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(209, 84, 84, 0.05) 30px, rgba(209, 84, 84, 0.05) 31px);
 }
+
+/* ============================================
+   PINK THEME — Light & Dark
+   ============================================ */
+
+.theme-pink {
+  --color-brand-primary: #d946a0;
+  --color-brand-accent: #f472b6;
+  --color-brand-deep: #9d1c6f;
+  --color-brand-hover: #be2d87;
+  background-image: radial-gradient(circle, rgba(217, 70, 160, 0.05) 1px, transparent 1px), radial-gradient(circle, rgba(244, 114, 182, 0.04) 1.5px, transparent 1.5px);
+  background-size:
+    24px 24px,
+    48px 48px;
+  background-position:
+    0 0,
+    12px 12px;
+}
+
+.dark.theme-pink {
+  --color-brand-primary: #ec4899;
+  --color-brand-accent: #f9a8d4;
+  --color-brand-hover: #db2777;
+  --color-brand-deep: #be2d87;
+  background-image: radial-gradient(circle, rgba(236, 72, 153, 0.08) 1px, transparent 1px), radial-gradient(circle, rgba(249, 168, 212, 0.05) 1.5px, transparent 1.5px);
+  background-size:
+    24px 24px,
+    48px 48px;
+  background-position:
+    0 0,
+    12px 12px;
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import PinkDecorations from "./theme/pink-decorations";
 
 type ThemeContextType = {
   theme: string;
@@ -25,7 +26,6 @@ export function ThemeProvider({ initialTheme, initialMode, children }: { initial
   const activeTheme = previewTheme || initialTheme;
   const activeMode = initialMode || "light";
 
-  // Set class `dark` di <html> biar body background ikut gelap
   useEffect(() => {
     if (activeMode === "dark") {
       document.documentElement.classList.add("dark");
@@ -45,7 +45,13 @@ export function ThemeProvider({ initialTheme, initialMode, children }: { initial
         setPreviewTheme,
       }}
     >
-      <div className={`theme-${activeTheme} ${activeMode === "dark" ? "dark" : ""} min-h-screen bg-paper text-ink flex`}>{children}</div>
+      <div className={`theme-${activeTheme} ${activeMode === "dark" ? "dark" : ""} min-h-screen bg-paper text-ink flex relative`}>
+        {/* Pink decorations — cuma muncul di tema pink */}
+        {activeTheme === "pink" && <PinkDecorations />}
+
+        {/* Content wrapper — z-10 biar di atas decorations */}
+        <div className="relative z-10 flex w-full min-h-screen">{children}</div>
+      </div>
     </ThemeContext.Provider>
   );
 }
