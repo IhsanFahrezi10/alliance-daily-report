@@ -6,7 +6,8 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck, Bell } from "lucide-react";
+import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck, Bell, History } from "lucide-react";
+import NotificationBell from "./notification-bell";
 
 function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: any; hasSubmittedToday?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -70,6 +71,12 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
                 num: "06",
                 icon: Bell,
               },
+              {
+                href: "/audit",
+                label: "Audit Log",
+                num: "07",
+                icon: History,
+              },
             ]
           : []),
         ...(profile?.role === "super_admin"
@@ -77,7 +84,7 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
               {
                 href: "/users",
                 label: "Kelola User",
-                num: "07",
+                num: "08",
                 icon: Settings,
               },
             ]
@@ -85,13 +92,13 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
         {
           href: "/trash",
           label: "Sampah",
-          num: profile?.role === "super_admin" ? "08" : isStaff ? "07" : "05",
+          num: profile?.role === "super_admin" ? "09" : isStaff ? "08" : "05",
           icon: Trash2,
         },
         {
           href: "/profile",
           label: "Profil",
-          num: profile?.role === "super_admin" ? "09" : isStaff ? "08" : "06",
+          num: profile?.role === "super_admin" ? "10" : isStaff ? "09" : "06",
           icon: User,
         },
       ];
@@ -100,11 +107,10 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
 
   return (
     <div className="flex flex-col h-full w-full">
-      {/* TOP */}
       <div className="px-6 pt-6 pb-5 border-b border-brand-primary/25 shrink-0">
         <div className="flex items-center justify-between mb-4">
           <Image src="/logo-maganghub.png" alt="Maganghub" width={130} height={36} className="h-7 w-auto" />
-          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.2</span>
+          <span className="mono text-[10px] tracking-[0.15em] text-ink/60 uppercase">v1.0</span>
         </div>
 
         <div className="flex items-center gap-3 pt-3 border-t border-ink/10">
@@ -114,7 +120,6 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
         </div>
       </div>
 
-      {/* USER */}
       <div className="px-6 py-4 border-b border-brand-primary/25 shrink-0">
         <div className="flex items-center gap-3">
           {profile?.avatar_url ? (
@@ -131,7 +136,6 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
         </div>
       </div>
 
-      {/* NAV */}
       <nav className="flex-1 overflow-y-auto">
         <div className="px-6 pt-5 pb-3">
           <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">— Menu</p>
@@ -160,7 +164,6 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
         </div>
       </nav>
 
-      {/* BOTTOM */}
       <div className="border-t border-brand-primary/25 shrink-0">
         <button
           onClick={handleLogout}
@@ -196,8 +199,9 @@ export function MobileNav({ profile, hasSubmittedToday }: { profile: any; hasSub
     <>
       <header className="md:hidden sticky top-0 z-30 bg-paper border-b border-brand-primary/25 px-4 py-3 flex items-center justify-between">
         <Image src="/logo-maganghub.png" alt="Maganghub" width={110} height={30} className="h-6 w-auto" />
-        <div className="flex items-center gap-2">
-          {profile?.role === "user" && !hasSubmittedToday && <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" title="Belum isi logbook hari ini" />}
+        <div className="flex items-center gap-1">
+          {profile?.role === "user" && !hasSubmittedToday && <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse mr-1" title="Belum isi logbook hari ini" />}
+          <NotificationBell userId={profile?.id} />
           <button onClick={() => setOpen(true)} className="p-2 hover:bg-ink/[0.05] transition-colors" aria-label="Buka menu">
             <Menu size={20} />
           </button>

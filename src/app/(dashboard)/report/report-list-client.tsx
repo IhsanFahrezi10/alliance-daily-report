@@ -2,30 +2,77 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { format } from "date-fns";
+import { format, parseISO, isSameMonth } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
-import { Plus, Eye, Pencil, Printer, ArrowUpRight, CheckSquare, Square, X, Trash2, CheckCircle2, Clock, Calendar } from "lucide-react";
+import { Plus, Eye, Pencil, Printer, ArrowUpRight, CheckSquare, Square, X, Trash2, CheckCircle2, Clock, Calendar, Search, Filter } from "lucide-react";
 
 type ReportItem = {
   id: string;
   tanggal: string;
   created_at: string;
-  report_activities: { id: string; status: string }[];
+  attendance: string;
+  kendala: string | null;
+  lesson_learned: string | null;
+  catatan: string | null;
+  report_activities: { id: string; status: string; deskripsi: string }[];
   review: { id: string; reviewed_at: string } | null;
 };
+
+type ReviewFilter = "all" | "reviewed" | "pending";
+type AttendanceFilter = "all" | "Present" | "Excused" | "Sick";
 
 export default function ReportListClient({ reports: initialReports }: { reports: ReportItem[] }) {
   const supabase = createClient();
   const [reports, setReports] = useState(initialReports);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  const allSelected = reports.length > 0 && selected.size === reports.length;
-  const someSelected = selected.size > 0;
+  // Filter states
+  const [search, setSearch] = useState("");
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
+  const [attendanceFilter, setAttendanceFilter] = useState<AttendanceFilter>("all");
+  const [monthFilter, setMonthFilter] = useState("");
+
+  // Apply filters
+  const filteredReports = useMemo(() => {
+    return reports.filter((r) => {
+      if (search.trim()) {
+        const q = search.toLowerCase();
+        const searchInText = [r.kendala, r.lesson_learned, r.catatan, ...r.report_activities.map((a) => a.deskripsi)].filter(Boolean).some((text) => text!.toLowerCase().includes(q));
+
+        if (!searchInText) return false;
+      }
+
+      if (reviewFilter === "reviewed" && !r.review) return false;
+      if (reviewFilter === "pending" && r.review) return false;
+
+      if (attendanceFilter !== "all" && r.attendance !== attendanceFilter) return false;
+
+      if (monthFilter) {
+        const reportDate = parseISO(r.tanggal);
+        const filterDate = parseISO(monthFilter + "-01");
+        if (!isSameMonth(reportDate, filterDate)) return false;
+      }
+
+      return true;
+    });
+  }, [reports, search, reviewFilter, attendanceFilter, monthFilter]);
 
   const reviewedCount = reports.filter((r) => !!r.review).length;
   const pendingCount = reports.length - reviewedCount;
+
+  const activeFilterCount = [search ? 1 : 0, reviewFilter !== "all" ? 1 : 0, attendanceFilter !== "all" ? 1 : 0, monthFilter ? 1 : 0].reduce((s, n) => s + n, 0);
+
+  const resetFilters = () => {
+    setSearch("");
+    setReviewFilter("all");
+    setAttendanceFilter("all");
+    setMonthFilter("");
+  };
+
+  const allSelected = filteredReports.length > 0 && filteredReports.every((r) => selected.has(r.id));
+  const someSelected = selected.size > 0;
 
   const toggleOne = (id: string) => {
     setSelected((prev) => {
@@ -37,8 +84,11 @@ export default function ReportListClient({ reports: initialReports }: { reports:
   };
 
   const toggleAll = () => {
-    if (allSelected) setSelected(new Set());
-    else setSelected(new Set(reports.map((r) => r.id)));
+    if (allSelected) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(filteredReports.map((r) => r.id)));
+    }
   };
 
   const clearSelection = () => setSelected(new Set());
@@ -104,7 +154,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
           <h1 className="text-3xl sm:text-4xl font-light tracking-tight">
             Logbook <span className="font-serif italic text-brand-primary">Saya</span>
           </h1>
-          <p className="text-xs sm:text-sm text-ink-muted mt-2">Pilih beberapa logbook untuk di-print atau dihapus sekaligus</p>
+          <p className="text-xs sm:text-sm text-ink-muted mt-2">Cari, filter, dan kelola logbook kamu</p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0 flex-wrap">
@@ -140,8 +190,88 @@ export default function ReportListClient({ reports: initialReports }: { reports:
         </div>
       )}
 
-      {/* TOOLBAR */}
+      {/* SEARCH & FILTER */}
       {reports.length > 0 && (
+        <div className="border border-brand-primary/25 bg-white/40 p-4 md:p-5 space-y-4">
+          <div>
+            <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 block mb-2">Cari Logbook</label>
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40 pointer-events-none" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Ketik keyword: aktivitas, kendala, lesson learned..."
+                className="w-full bg-transparent border border-brand-primary/30 focus:border-brand-primary focus:outline-none py-2.5 pl-9 pr-9 text-sm transition-colors placeholder:text-ink/30"
+              />
+              {search && (
+                <button type="button" onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink transition-colors">
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+            {search && (
+              <p className="mono text-[10px] text-ink/60 mt-1.5">
+                {filteredReports.length} hasil untuk "{search}"
+              </p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 block mb-2">Status Review</label>
+              <select
+                value={reviewFilter}
+                onChange={(e) => setReviewFilter(e.target.value as any)}
+                className="w-full bg-transparent border border-brand-primary/30 focus:border-brand-primary focus:outline-none py-2 px-3 text-sm transition-colors cursor-pointer"
+              >
+                <option value="all">Semua</option>
+                <option value="reviewed">Sudah Ditinjau</option>
+                <option value="pending">Belum Ditinjau</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 block mb-2">Kehadiran</label>
+              <select
+                value={attendanceFilter}
+                onChange={(e) => setAttendanceFilter(e.target.value as any)}
+                className="w-full bg-transparent border border-brand-primary/30 focus:border-brand-primary focus:outline-none py-2 px-3 text-sm transition-colors cursor-pointer"
+              >
+                <option value="all">Semua</option>
+                <option value="Present">Present</option>
+                <option value="Excused">Excused</option>
+                <option value="Sick">Sick</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 block mb-2">Bulan</label>
+              <input
+                type="month"
+                value={monthFilter}
+                onChange={(e) => setMonthFilter(e.target.value)}
+                className="w-full bg-transparent border border-brand-primary/30 focus:border-brand-primary focus:outline-none py-2 px-3 text-sm transition-colors font-mono"
+              />
+            </div>
+          </div>
+
+          {activeFilterCount > 0 && (
+            <div className="flex items-center justify-between gap-2 pt-3 border-t border-brand-primary/20 flex-wrap">
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">
+                <Filter size={11} className="inline mr-1" />
+                {activeFilterCount} filter aktif · {filteredReports.length}/{reports.length} hasil
+              </p>
+              <button type="button" onClick={resetFilters} className="flex items-center gap-1 mono text-[10px] uppercase tracking-[0.15em] text-red-600 hover:text-red-700 transition-colors">
+                <X size={11} /> Reset Semua
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TOOLBAR */}
+      {filteredReports.length > 0 && (
         <div className="flex items-center justify-between gap-3 px-4 py-3 border border-brand-primary/25 bg-white/40 flex-wrap">
           <button type="button" onClick={toggleAll} className="flex items-center gap-2 mono text-[10px] uppercase tracking-[0.15em] text-ink/70 hover:text-brand-primary transition-colors shrink-0">
             {allSelected ? <CheckSquare size={14} className="text-brand-primary" /> : <Square size={14} />}
@@ -170,7 +300,27 @@ export default function ReportListClient({ reports: initialReports }: { reports:
       )}
 
       {/* LIST */}
-      {reports.length ? (
+      {filteredReports.length === 0 ? (
+        <div className="border border-dashed border-brand-primary/30 p-8 md:p-12 text-center">
+          {reports.length === 0 ? (
+            <>
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-4">Belum ada logbook</p>
+              <Link href="/report/new" className="inline-flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[10px] uppercase tracking-[0.15em]">
+                Buat logbook pertama
+                <ArrowUpRight size={13} />
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-2">Tidak ada hasil</p>
+              <p className="text-xs text-ink-muted mb-4">Coba ubah filter atau reset</p>
+              <button type="button" onClick={resetFilters} className="inline-flex items-center gap-1.5 border border-brand-primary/30 hover:bg-ink/[0.03] transition-colors px-4 py-2 mono text-[10px] uppercase tracking-[0.15em]">
+                <X size={11} /> Reset Filter
+              </button>
+            </>
+          )}
+        </div>
+      ) : (
         <>
           {/* Desktop */}
           <div className="hidden md:block border border-brand-primary/25 bg-white/40">
@@ -182,7 +332,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
               <div className="col-span-3 text-right">Aksi</div>
             </div>
 
-            {reports.map((r, idx) => {
+            {filteredReports.map((r, idx) => {
               const isChecked = selected.has(r.id);
               const isReviewed = !!r.review;
 
@@ -243,7 +393,7 @@ export default function ReportListClient({ reports: initialReports }: { reports:
 
           {/* Mobile */}
           <div className="md:hidden space-y-3">
-            {reports.map((r) => {
+            {filteredReports.map((r) => {
               const isChecked = selected.has(r.id);
               const isReviewed = !!r.review;
 
@@ -315,14 +465,6 @@ export default function ReportListClient({ reports: initialReports }: { reports:
             })}
           </div>
         </>
-      ) : (
-        <div className="border border-dashed border-brand-primary/30 p-8 md:p-12 text-center">
-          <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-4">Belum ada logbook</p>
-          <Link href="/report/new" className="inline-flex items-center gap-2 bg-brand-primary text-white hover:bg-brand-hover transition-colors px-5 py-3 mono text-[10px] uppercase tracking-[0.15em]">
-            Buat logbook pertama
-            <ArrowUpRight size={13} />
-          </Link>
-        </div>
       )}
     </div>
   );
