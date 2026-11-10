@@ -220,6 +220,38 @@ export default async function DashboardPage() {
         </div>
       </div>
 
+      {/* RUANG CHAT INTERN BANNER */}
+      {myProfile?.role === "user" && (
+        <div className="border border-brand-primary/25 bg-white/40 p-5 md:p-6 relative overflow-hidden group hover:border-brand-primary/40 transition-colors">
+          <div className="absolute top-0 left-0 w-1.5 h-full bg-brand-primary" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1.5 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="mono text-[10px] uppercase tracking-[0.2em] bg-brand-primary/10 text-brand-primary font-semibold px-2 py-0.5">
+                  Fitur Utama Intern
+                </span>
+                <span className="flex items-center gap-1 mono text-[9px] uppercase tracking-[0.15em] text-emerald-600 font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Chat
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-light tracking-tight text-ink">
+                Ruang Obrolan <span className="font-serif italic text-brand-primary">Anak Intern</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-ink-muted leading-relaxed max-w-2xl">
+                Tempat diskusi santai, saling sapa, kirim emot, dan koordinasi dengan seluruh rekan magang. Ketik <span className="text-brand-primary font-medium">@</span> untuk mention teman intern kamu!
+              </p>
+            </div>
+            <a
+              href="/chat"
+              className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-hover text-white px-5 py-3 mono text-[11px] uppercase tracking-[0.15em] shrink-0 transition-all self-start sm:self-auto shadow-sm"
+            >
+              Buka Chat Intern →
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* RECENT */}
       <div>
         <div className="flex items-center gap-3 mb-4 md:mb-5">

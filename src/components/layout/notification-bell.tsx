@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { formatDistanceToNow } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { toast } from "sonner";
-import { Bell, MessageSquare, Eye, CheckCheck } from "lucide-react";
+import { Bell, MessageSquare, Eye, CheckCheck, AtSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Notification = {
@@ -87,12 +87,14 @@ export default function NotificationBell({ userId }: { userId: string }) {
   const typeIcon = (type: string) => {
     if (type === "comment") return <MessageSquare size={12} />;
     if (type === "review") return <Eye size={12} />;
+    if (type === "chat") return <AtSign size={12} />;
     return <Bell size={12} />;
   };
 
   const typeColor = (type: string) => {
     if (type === "comment") return "text-blue-600";
     if (type === "review") return "text-green-600";
+    if (type === "chat") return "text-brand-accent";
     return "text-brand-primary";
   };
 

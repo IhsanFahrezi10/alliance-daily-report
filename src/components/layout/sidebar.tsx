@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck, Bell, History } from "lucide-react";
+import { Home, FileText, Users, LogOut, User, Settings, Menu, X, Calendar, Trash2, CheckCheck, Bell, History, MessagesSquare } from "lucide-react";
 import NotificationBell from "./notification-bell";
 
 function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: any; hasSubmittedToday?: boolean; onNavigate?: () => void }) {
@@ -35,6 +35,48 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
           icon: CheckCheck,
         },
         { href: "/profile", label: "Profil", num: "03", icon: User },
+      ]
+    : isIntern
+    ? [
+        { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
+        {
+          href: "/chat",
+          label: "Chat Intern",
+          num: "02",
+          icon: MessagesSquare,
+          badge: "LIVE",
+        },
+        {
+          href: "/report",
+          label: "Logbook Saya",
+          num: "03",
+          icon: FileText,
+          alert: showReminderDot,
+        },
+        {
+          href: "/report/calendar",
+          label: "Kalender",
+          num: "04",
+          icon: Calendar,
+        },
+        {
+          href: "/recap",
+          label: "Rekap Mingguan",
+          num: "05",
+          icon: Calendar,
+        },
+        {
+          href: "/trash",
+          label: "Sampah",
+          num: "06",
+          icon: Trash2,
+        },
+        {
+          href: "/profile",
+          label: "Profil",
+          num: "07",
+          icon: User,
+        },
       ]
     : [
         { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
@@ -155,6 +197,11 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
                   <span className={`mono text-[11px] tracking-[0.1em] w-5 ${active ? "text-brand-primary font-semibold" : "text-ink/60"}`}>{item.num}</span>
                   <Icon size={15} className={active ? "text-brand-primary" : "text-ink/60"} strokeWidth={1.75} />
                   <span className={`text-sm flex-1 ${active ? "font-medium text-ink" : "text-ink/70 group-hover:text-ink"}`}>{item.label}</span>
+                  {item.badge && (
+                    <span className="mono text-[8px] uppercase tracking-[0.15em] bg-emerald-500/15 text-emerald-700 px-1.5 py-0.5 font-bold shrink-0">
+                      {item.badge}
+                    </span>
+                  )}
                   {item.alert && <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" title="Belum isi logbook hari ini" />}
                   {active && !item.alert && <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />}
                 </motion.div>

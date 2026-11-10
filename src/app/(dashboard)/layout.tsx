@@ -5,6 +5,7 @@ import { DesktopSidebar, MobileNav } from "@/components/layout/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import SubmissionReminder from "@/components/dashboard/submission-reminder";
 import NotificationBell from "@/components/layout/notification-bell";
+import ChatFloatingButton from "@/components/chat/chat-floating-button";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -48,6 +49,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <div className="max-w-6xl mx-auto p-4 sm:p-6 md:p-10">{children}</div>
         </main>
       </div>
+
+      <ChatFloatingButton role={(profile as any)?.role || "user"} />
     </ThemeProvider>
   );
 }
