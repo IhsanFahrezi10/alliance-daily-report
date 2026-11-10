@@ -1,5 +1,24 @@
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+
+const ALLOWED_ROLES = ["user", "super_admin", "admin"];
+
+function getAdminClient() {
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      }
+    );
+  }
+  return null;
+}
 
 export async function POST(request: Request) {
   try {
@@ -20,8 +39,7 @@ export async function POST(request: Request) {
       .eq("id", user.id)
       .single();
 
-    const allowedRoles = ["user", "super_admin", "admin"];
-    if (!allowedRoles.includes(profile?.role)) {
+    if (!ALLOWED_ROLES.includes(profile?.role)) {
       return NextResponse.json(
         { error: "Akses terbatas" },
         { status: 403 }
@@ -37,8 +55,10 @@ export async function POST(request: Request) {
       );
     }
 
+    const db = getAdminClient() || supabase;
+
     // Fetch existing message reactions
-    const { data: msg, error: fetchError } = await supabase
+    const { data: msg, error: fetchError } = await db
       .from("intern_messages")
       .select("reactions")
       .eq("id", messageId)
@@ -72,7 +92,7 @@ export async function POST(request: Request) {
       updatedReactions[emoji] = userList;
     }
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await db
       .from("intern_messages")
       .update({ reactions: updatedReactions })
       .eq("id", messageId);
@@ -89,4 +109,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

@@ -1,7 +1,24 @@
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import ChatRoom, { ChatMessage } from "@/components/chat/chat-room";
 import { InternProfile } from "@/components/chat/mention-popup";
+
+function getAdminClient() {
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      }
+    );
+  }
+  return null;
+}
 
 export const metadata = {
   title: "Chat Global Anak Intern | Maganghub",
@@ -49,7 +66,9 @@ export default async function ChatPage() {
   let initialMessages: ChatMessage[] = [];
   let needsSetup = false;
 
-  const { data: messagesData, error: messagesError } = await supabase
+  const db = getAdminClient() || supabase;
+
+  const { data: messagesData, error: messagesError } = await db
     .from("intern_messages")
     .select(
       `

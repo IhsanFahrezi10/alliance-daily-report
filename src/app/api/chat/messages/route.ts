@@ -1,7 +1,24 @@
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
 const ALLOWED_ROLES = ["user", "super_admin", "admin"];
+
+function getAdminClient() {
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      }
+    );
+  }
+  return null;
+}
 
 export async function GET() {
   try {
@@ -29,8 +46,10 @@ export async function GET() {
       );
     }
 
+    const db = getAdminClient() || supabase;
+
     // Ambil pesan chat terakhir (maks 100)
-    const { data: messages, error } = await supabase
+    const { data: messages, error } = await db
       .from("intern_messages")
       .select(
         `
@@ -53,8 +72,7 @@ export async function GET() {
       .limit(100);
 
     if (error) {
-      // Jika tabel belum dibuat di database
-      if (error.code === "PGRST205" || error.message.includes("does not exist")) {
+      if (error.code === "PGRST205" || error.message?.includes("does not exist")) {
         return NextResponse.json({ needsSetup: true, messages: [] });
       }
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -113,8 +131,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Insert pesan baru
-    const { data: newMessage, error: insertError } = await supabase
+    // Gunakan admin client untuk bypass RLS setelah verifikasi role server-side
+    const db = getAdminClient() || supabase;
+
+    const { data: newMessage, error: insertError } = await db
       .from("intern_messages")
       .insert({
         user_id: user.id,
@@ -157,13 +177,12 @@ export async function POST(request: Request) {
     // Kirim notifikasi jika ada intern yang di-mention
     if (mentions.length > 0) {
       try {
-        // Cari user yang ditag berdasarkan nama atau id
         const cleanMentions = mentions
           .map((m: any) => (typeof m === "string" ? m.replace(/^@/, "").trim() : ""))
           .filter(Boolean);
 
         if (cleanMentions.length > 0) {
-          const { data: taggedUsers } = await supabase
+          const { data: taggedUsers } = await db
             .from("profiles")
             .select("id, nama")
             .in("role", ["user", "super_admin", "admin"])
@@ -183,7 +202,7 @@ export async function POST(request: Request) {
               }));
 
             if (notifPayloads.length > 0) {
-              await supabase.from("notifications").insert(notifPayloads);
+              await db.from("notifications").insert(notifPayloads);
             }
           }
         }
@@ -220,12 +239,21 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "ID pesan diperlukan" }, { status: 400 });
     }
 
-    // Hapus pesan (hanya pengirim yang boleh menghapus)
-    const { error: deleteError } = await supabase
-      .from("intern_messages")
-      .delete()
-      .eq("id", messageId)
-      .eq("user_id", user.id);
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    const db = getAdminClient() || supabase;
+    let query = db.from("intern_messages").delete().eq("id", messageId);
+
+    // Jika bukan super_admin, hanya bisa hapus pesan miliknya sendiri
+    if (profile?.role !== "super_admin") {
+      query = query.eq("user_id", user.id);
+    }
+
+    const { error: deleteError } = await query;
 
     if (deleteError) {
       return NextResponse.json({ error: deleteError.message }, { status: 500 });
@@ -239,4 +267,3 @@ export async function DELETE(request: Request) {
     );
   }
 }
-
