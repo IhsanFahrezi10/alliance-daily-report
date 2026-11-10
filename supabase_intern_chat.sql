@@ -1,5 +1,5 @@
 -- ==============================================================================
--- MIGRATION: Fitur Chat Global Khusus Anak Intern
+-- MIGRATION: Fitur Chat Global Anak Intern (dengan akses Admin & Super Admin)
 -- Tabel: intern_messages
 -- Jalankan query ini di Supabase SQL Editor (Dashboard Supabase -> SQL Editor -> New Query)
 -- ==============================================================================
@@ -24,7 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_intern_messages_deleted_at ON public.intern_messa
 ALTER TABLE public.intern_messages ENABLE ROW LEVEL SECURITY;
 
 -- 4. Kebijakan RLS:
--- Hanya akun dengan role 'user' (anak intern) yang dapat membaca chat
+-- Akun intern ('user'), 'admin', dan 'super_admin' dapat membaca pesan chat
 DROP POLICY IF EXISTS "Interns can read chat messages" ON public.intern_messages;
 CREATE POLICY "Interns can read chat messages"
 ON public.intern_messages
@@ -33,11 +33,11 @@ USING (
   deleted_at IS NULL AND
   EXISTS (
     SELECT 1 FROM public.profiles
-    WHERE profiles.id = auth.uid() AND profiles.role = 'user'
+    WHERE profiles.id = auth.uid() AND profiles.role IN ('user', 'super_admin', 'admin')
   )
 );
 
--- Hanya akun dengan role 'user' (anak intern) yang dapat mengirim pesan
+-- Akun intern ('user'), 'admin', dan 'super_admin' dapat mengirim pesan
 DROP POLICY IF EXISTS "Interns can insert chat messages" ON public.intern_messages;
 CREATE POLICY "Interns can insert chat messages"
 ON public.intern_messages
@@ -46,23 +46,42 @@ WITH CHECK (
   auth.uid() = user_id AND
   EXISTS (
     SELECT 1 FROM public.profiles
-    WHERE profiles.id = auth.uid() AND profiles.role = 'user'
+    WHERE profiles.id = auth.uid() AND profiles.role IN ('user', 'super_admin', 'admin')
   )
 );
 
--- Pengirim dapat menghapus pesannya sendiri (soft-delete atau delete)
+-- Pengirim (atau super_admin) dapat memperbarui pesan
 DROP POLICY IF EXISTS "Interns can update own messages" ON public.intern_messages;
 CREATE POLICY "Interns can update own messages"
 ON public.intern_messages
 FOR UPDATE
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
+USING (
+  auth.uid() = user_id OR
+  EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid() AND profiles.role = 'super_admin'
+  )
+)
+WITH CHECK (
+  auth.uid() = user_id OR
+  EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid() AND profiles.role = 'super_admin'
+  )
+);
 
+-- Pengirim (atau super_admin) dapat menghapus pesan
 DROP POLICY IF EXISTS "Interns can delete own messages" ON public.intern_messages;
 CREATE POLICY "Interns can delete own messages"
 ON public.intern_messages
 FOR DELETE
-USING (auth.uid() = user_id);
+USING (
+  auth.uid() = user_id OR
+  EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid() AND profiles.role = 'super_admin'
+  )
+);
 
 -- 5. Aktifkan Realtime Publication agar pesan baru langsung muncul realtime tanpa refresh
 DO $$
@@ -74,4 +93,3 @@ BEGIN
     ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;
   END IF;
 END $$;
-

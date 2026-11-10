@@ -13,16 +13,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Role check: intern only
+    // Role check: intern & admin
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
       .single();
 
-    if (profile?.role !== "user") {
+    const allowedRoles = ["user", "super_admin", "admin"];
+    if (!allowedRoles.includes(profile?.role)) {
       return NextResponse.json(
-        { error: "Akses terbatas untuk anak intern" },
+        { error: "Akses terbatas" },
         { status: 403 }
       );
     }

@@ -8,8 +8,8 @@ import { motion } from "framer-motion";
 export default function ChatFloatingButton({ role }: { role?: string }) {
   const pathname = usePathname();
 
-  // Hanya tampil untuk anak intern dan tidak tampil saat sudah di halaman /chat
-  if (role !== "user" || pathname === "/chat" || pathname.startsWith("/chat/")) {
+  const allowed = ["user", "super_admin", "admin"].includes(role || "");
+  if (!allowed || pathname === "/chat" || pathname.startsWith("/chat/")) {
     return null;
   }
 

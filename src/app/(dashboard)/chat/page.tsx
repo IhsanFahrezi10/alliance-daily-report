@@ -23,16 +23,17 @@ export default async function ChatPage() {
     .eq("id", user.id)
     .single();
 
-  // Proteksi hak akses: HANYA role 'user' (anak intern)
-  if (profile?.role !== "user") {
+  // Proteksi hak akses: role 'user' (intern) dan admin / super_admin
+  const allowedRoles = ["user", "super_admin", "admin"];
+  if (!allowedRoles.includes(profile?.role)) {
     redirect("/dashboard");
   }
 
-  // Ambil semua daftar anak intern (role === 'user')
+  // Ambil semua daftar anak intern + admin untuk mention
   const { data: internsRaw } = await supabase
     .from("profiles")
-    .select("id, nama, avatar_url, departemen:departemen_id(nama)")
-    .eq("role", "user")
+    .select("id, nama, role, avatar_url, departemen:departemen_id(nama)")
+    .in("role", ["user", "super_admin", "admin"])
     .order("nama", { ascending: true });
 
   const interns: InternProfile[] = (internsRaw || []).map((u: any) => ({
@@ -103,7 +104,7 @@ export default async function ChatPage() {
         initialMessages={initialMessages}
         interns={interns}
         currentUserId={user.id}
-        currentUserName={profile.nama || "Anak Intern"}
+        currentUserName={profile?.nama || "Anak Intern"}
         initialNeedsSetup={needsSetup}
       />
     </div>

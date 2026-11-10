@@ -221,7 +221,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* RUANG CHAT INTERN BANNER */}
-      {myProfile?.role === "user" && (
+      {["user", "super_admin", "admin"].includes(myProfile?.role) && (
         <div className="border border-brand-primary/25 bg-white/40 p-5 md:p-6 relative overflow-hidden group hover:border-brand-primary/40 transition-colors">
           <div className="absolute top-0 left-0 w-1.5 h-full bg-brand-primary" />
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

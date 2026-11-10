@@ -331,9 +331,9 @@ CREATE TABLE IF NOT EXISTS public.intern_messages (
 CREATE INDEX IF NOT EXISTS idx_intern_messages_created_at ON public.intern_messages (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_intern_messages_user_id ON public.intern_messages (user_id);
 ALTER TABLE public.intern_messages ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Interns can read chat messages" ON public.intern_messages FOR SELECT USING (deleted_at IS NULL AND EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role = 'user'));
-CREATE POLICY "Interns can insert chat messages" ON public.intern_messages FOR INSERT WITH CHECK (auth.uid() = user_id AND EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role = 'user'));
-CREATE POLICY "Interns can delete own messages" ON public.intern_messages FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY "Interns can read chat messages" ON public.intern_messages FOR SELECT USING (deleted_at IS NULL AND EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role IN ('user', 'super_admin', 'admin')));
+CREATE POLICY "Interns can insert chat messages" ON public.intern_messages FOR INSERT WITH CHECK (auth.uid() = user_id AND EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role IN ('user', 'super_admin', 'admin')));
+CREATE POLICY "Interns can delete own messages" ON public.intern_messages FOR DELETE USING (auth.uid() = user_id OR EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role = 'super_admin'));
 ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
 
     await navigator.clipboard.writeText(sql);

@@ -81,22 +81,29 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
     : [
         { href: "/dashboard", label: "Dashboard", num: "01", icon: Home },
         {
+          href: "/chat",
+          label: "Chat Intern",
+          num: "02",
+          icon: MessagesSquare,
+          badge: "LIVE",
+        },
+        {
           href: "/report",
           label: "Logbook Saya",
-          num: "02",
+          num: "03",
           icon: FileText,
           alert: showReminderDot,
         },
         {
           href: "/report/calendar",
           label: "Kalender",
-          num: "03",
+          num: "04",
           icon: Calendar,
         },
         {
           href: "/recap",
           label: "Rekap Mingguan",
-          num: "04",
+          num: "05",
           icon: Calendar,
         },
         ...(isStaff
@@ -104,19 +111,19 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
               {
                 href: "/reports",
                 label: "Semua Logbook",
-                num: "05",
+                num: "06",
                 icon: Users,
               },
               {
                 href: "/reminder",
                 label: "Reminder",
-                num: "06",
+                num: "07",
                 icon: Bell,
               },
               {
                 href: "/audit",
                 label: "Audit Log",
-                num: "07",
+                num: "08",
                 icon: History,
               },
             ]
@@ -126,7 +133,7 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
               {
                 href: "/users",
                 label: "Kelola User",
-                num: "08",
+                num: "09",
                 icon: Settings,
               },
             ]
@@ -134,13 +141,13 @@ function SidebarContent({ profile, hasSubmittedToday, onNavigate }: { profile: a
         {
           href: "/trash",
           label: "Sampah",
-          num: profile?.role === "super_admin" ? "09" : isStaff ? "08" : "05",
+          num: profile?.role === "super_admin" ? "10" : isStaff ? "09" : "06",
           icon: Trash2,
         },
         {
           href: "/profile",
           label: "Profil",
-          num: profile?.role === "super_admin" ? "10" : isStaff ? "09" : "06",
+          num: profile?.role === "super_admin" ? "11" : isStaff ? "10" : "07",
           icon: User,
         },
       ];

@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+const ALLOWED_ROLES = ["user", "super_admin", "admin"];
+
 export async function GET() {
   try {
     const supabase = await createClient();
@@ -13,16 +15,16 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Pastikan user adalah intern (role === 'user')
+    // Pastikan user memiliki akses (intern / admin / super_admin)
     const { data: profile } = await supabase
       .from("profiles")
       .select("role, nama")
       .eq("id", user.id)
       .single();
 
-    if (profile?.role !== "user") {
+    if (!ALLOWED_ROLES.includes(profile?.role)) {
       return NextResponse.json(
-        { error: "Akses terbatas: Chat ini khusus untuk anak intern." },
+        { error: "Akses terbatas: Chat ini khusus untuk anak intern & admin." },
         { status: 403 }
       );
     }
@@ -79,16 +81,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Pastikan user adalah anak intern
+    // Pastikan user adalah anak intern atau admin
     const { data: senderProfile } = await supabase
       .from("profiles")
       .select("id, nama, role, avatar_url, departemen:departemen_id (nama)")
       .eq("id", user.id)
       .single();
 
-    if (senderProfile?.role !== "user") {
+    if (!ALLOWED_ROLES.includes(senderProfile?.role)) {
       return NextResponse.json(
-        { error: "Akses terbatas: Hanya anak intern yang boleh mengirim pesan." },
+        { error: "Akses terbatas: Anda tidak memiliki izin mengirim pesan." },
         { status: 403 }
       );
     }
@@ -164,7 +166,7 @@ export async function POST(request: Request) {
           const { data: taggedUsers } = await supabase
             .from("profiles")
             .select("id, nama")
-            .eq("role", "user")
+            .in("role", ["user", "super_admin", "admin"])
             .in("nama", cleanMentions);
 
           if (taggedUsers && taggedUsers.length > 0) {
@@ -173,7 +175,7 @@ export async function POST(request: Request) {
               .map((u) => ({
                 user_id: u.id,
                 type: "chat",
-                title: `Mention dari ${senderProfile.nama}`,
+                title: `Mention dari ${senderProfile?.nama || "Seseorang"}`,
                 message:
                   content.length > 80 ? content.slice(0, 80) + "..." : content,
                 link: "/chat",
