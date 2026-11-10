@@ -15,6 +15,8 @@ import {
   AlertCircle,
   ArrowDown,
   Sparkles,
+  SmilePlus,
+  X,
 } from "lucide-react";
 import ChatInput from "./chat-input";
 import InternMembersList from "./intern-members-list";
@@ -57,9 +59,11 @@ export default function ChatRoom({
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [needsSetup, setNeedsSetup] = useState(initialNeedsSetup);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSearchMobile, setShowSearchMobile] = useState(false);
   const [showMembersMobile, setShowMembersMobile] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(false);
   const [copiedSql, setCopiedSql] = useState(false);
+  const [activeMessageAction, setActiveMessageAction] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,7 +93,6 @@ export default function ChatRoom({
 
   // Realtime subscription + polling fallback
   useEffect(() => {
-    // 1. Supabase Realtime
     const channel = supabase
       .channel("intern-chat-room")
       .on(
@@ -99,11 +102,9 @@ export default function ChatRoom({
           const newRow = payload.new;
           if (!newRow || newRow.deleted_at) return;
 
-          // Cek apakah pesan sudah ada (misal dari optimistic update)
           setMessages((prev) => {
             if (prev.some((m) => m.id === newRow.id)) return prev;
 
-            // Fetch author profile
             const author = interns.find((i) => i.id === newRow.user_id);
             const enriched: ChatMessage = {
               ...newRow,
@@ -143,7 +144,6 @@ export default function ChatRoom({
           setMessages((prev) => prev.filter((m) => m.id !== old.id));
         }
       )
-      // Broadcast fallback
       .on("broadcast", { event: "new_message" }, ({ payload }: any) => {
         if (!payload) return;
         setMessages((prev) => {
@@ -154,7 +154,7 @@ export default function ChatRoom({
       })
       .subscribe();
 
-    // 2. Polling interval fallback (setiap 8 detik)
+    // Polling interval fallback
     const pollInterval = setInterval(async () => {
       try {
         const res = await fetch("/api/chat/messages");
@@ -164,7 +164,6 @@ export default function ChatRoom({
         } else if (Array.isArray(json.messages)) {
           setNeedsSetup(false);
           setMessages((prev) => {
-            // Gabungkan pesan yang belum ada
             const ids = new Set(prev.map((m) => m.id));
             const fresh = json.messages.filter((m: ChatMessage) => !ids.has(m.id));
             if (fresh.length === 0) return prev;
@@ -174,7 +173,7 @@ export default function ChatRoom({
           });
         }
       } catch {
-        // Abaikan error polling
+        // ignore
       }
     }, 8000);
 
@@ -189,7 +188,6 @@ export default function ChatRoom({
     const tempId = `temp-${Date.now()}`;
     const myProfile = interns.find((i) => i.id === currentUserId);
 
-    // Optimistic message
     const optimisticMsg: ChatMessage = {
       id: tempId,
       user_id: currentUserId,
@@ -225,18 +223,15 @@ export default function ChatRoom({
           setNeedsSetup(true);
         }
         toast.error(data.error || "Gagal mengirim pesan");
-        // Hapus optimistic
         setMessages((prev) => prev.filter((m) => m.id !== tempId));
         return false;
       }
 
-      // Ganti optimistic dengan data dari server
       const confirmedMsg = data.message || optimisticMsg;
       setMessages((prev) =>
         prev.map((m) => (m.id === tempId ? { ...confirmedMsg, isPending: false } : m))
       );
 
-      // Broadcast ke channel realtime
       try {
         const channel = supabase.channel("intern-chat-room");
         await channel.send({
@@ -245,11 +240,11 @@ export default function ChatRoom({
           payload: confirmedMsg,
         });
       } catch {
-        // Broadcast best-effort
+        // best-effort
       }
 
       return true;
-    } catch (err: any) {
+    } catch {
       toast.error("Gagal terhubung ke server");
       setMessages((prev) => prev.filter((m) => m.id !== tempId));
       return false;
@@ -258,7 +253,8 @@ export default function ChatRoom({
 
   // Toggle emoji reaction
   const handleReaction = async (messageId: string, emoji: string) => {
-    // Optimistic reaction update
+    setActiveMessageAction(null);
+
     setMessages((prev) =>
       prev.map((msg) => {
         if (msg.id !== messageId) return msg;
@@ -290,15 +286,15 @@ export default function ChatRoom({
         toast.error(err.error || "Gagal memberi reaksi");
       }
     } catch {
-      // rollback handled on next sync
+      // rollback handled on next fetch
     }
   };
 
   // Delete message handler
   const handleDeleteMessage = async (messageId: string) => {
+    setActiveMessageAction(null);
     if (!window.confirm("Hapus pesan ini?")) return;
 
-    // Optimistic remove
     setMessages((prev) => prev.filter((m) => m.id !== messageId));
 
     try {
@@ -344,7 +340,6 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
 
   // Render message text with highlighted mentions & links
   const renderMessageContent = (text: string) => {
-    // Regex untuk memisahkan @Mention dan URL
     const parts = text.split(/(@[\w\s.-]+|https?:\/\/[^\s]+)/g);
 
     return parts.map((part, idx) => {
@@ -421,33 +416,33 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
   }, [filteredMessages]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8.5rem)] border border-brand-primary/25 bg-white/40 overflow-hidden shadow-sm">
+    <div className="flex flex-col h-[calc(100dvh-12rem)] sm:h-[calc(100dvh-13.5rem)] md:h-[calc(100vh-14.5rem)] border border-brand-primary/25 bg-white/40 overflow-hidden shadow-sm relative">
       {/* HEADER */}
-      <div className="px-4 sm:px-6 py-3.5 border-b border-brand-primary/25 bg-paper/90 backdrop-blur-sm flex items-center justify-between gap-3 shrink-0">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-9 h-9 bg-brand-primary text-white flex items-center justify-center shrink-0">
-            <MessagesSquare size={18} />
+      <div className="px-3 sm:px-5 py-2.5 sm:py-3 border-b border-brand-primary/25 bg-paper/90 backdrop-blur-sm flex items-center justify-between gap-2 shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 bg-brand-primary text-white flex items-center justify-center shrink-0">
+            <MessagesSquare size={17} />
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm sm:text-base font-semibold truncate leading-tight">
-                Chat Global Anak Intern
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h2 className="text-xs sm:text-base font-semibold truncate leading-tight">
+                Chat Global Intern
               </h2>
-              <span className="mono text-[9px] uppercase tracking-[0.15em] bg-emerald-500/15 text-emerald-700 px-2 py-0.5 font-bold shrink-0 flex items-center gap-1">
+              <span className="mono text-[8px] sm:text-[9px] uppercase tracking-[0.12em] bg-emerald-500/15 text-emerald-700 px-1.5 py-0.2 font-bold shrink-0 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Live
               </span>
             </div>
-            <p className="mono text-[10px] uppercase tracking-[0.12em] text-ink/50 truncate mt-0.5">
-              Khusus {interns.length} anak intern · Tag pakai @ · Kirim emot
+            <p className="mono text-[9px] sm:text-[10px] uppercase tracking-[0.1em] text-ink/50 truncate mt-0.5 hidden xs:block">
+              {interns.length} rekan intern · Tag pakai @ · Kirim emot
             </p>
           </div>
         </div>
 
         {/* Actions: Search & Toggle members list */}
-        <div className="flex items-center gap-2">
-          {/* Search bar */}
-          <div className="relative hidden sm:block w-44 md:w-56">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Desktop Search bar */}
+          <div className="relative hidden md:block w-48 lg:w-56">
             <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink/40" />
             <input
               type="text"
@@ -458,11 +453,26 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
             />
           </div>
 
-          {/* Toggle Members Button (Mobile & Desktop) */}
+          {/* Mobile Search Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowSearchMobile(!showSearchMobile)}
+            className={`p-2 border border-brand-primary/25 transition-colors md:hidden ${
+              showSearchMobile || searchQuery
+                ? "bg-brand-primary text-white"
+                : "bg-paper text-ink/70 hover:bg-brand-primary/10"
+            }`}
+            title="Cari pesan"
+            aria-label="Cari pesan"
+          >
+            <Search size={14} />
+          </button>
+
+          {/* Toggle Members Button */}
           <button
             type="button"
             onClick={() => setShowMembersMobile(!showMembersMobile)}
-            className={`p-2 border border-brand-primary/25 transition-colors flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.1em] ${
+            className={`p-1.5 sm:p-2 border border-brand-primary/25 transition-colors flex items-center gap-1.5 mono text-[10px] uppercase tracking-[0.1em] ${
               showMembersMobile
                 ? "bg-brand-primary text-white"
                 : "bg-paper hover:bg-brand-primary/10 text-ink/70"
@@ -470,28 +480,65 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
             title="Daftar Teman Intern"
           >
             <Users size={14} />
-            <span className="hidden md:inline">{interns.length} Teman</span>
+            <span className="hidden sm:inline">{interns.length} Teman</span>
+            <span className="sm:hidden font-bold">{interns.length}</span>
           </button>
         </div>
       </div>
 
-      {/* SETUP WARNING BANNER (If table not migrated yet) */}
+      {/* MOBILE SEARCH BAR (Expandable) */}
+      {showSearchMobile && (
+        <div className="md:hidden p-2 bg-paper border-b border-brand-primary/20 flex items-center gap-2 shrink-0">
+          <div className="relative flex-1">
+            <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink/40" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Ketik kata kunci pesan..."
+              autoFocus
+              className="w-full pl-7 pr-8 py-1.5 text-xs bg-white border border-brand-primary/25 focus:border-brand-primary focus:outline-none placeholder:text-ink/40"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink p-0.5"
+              >
+                <X size={12} />
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setShowSearchMobile(false);
+              setSearchQuery("");
+            }}
+            className="p-1.5 text-ink/60 hover:text-ink text-xs mono uppercase"
+          >
+            Tutup
+          </button>
+        </div>
+      )}
+
+      {/* SETUP WARNING BANNER */}
       {needsSetup && (
-        <div className="bg-amber-500/10 border-b border-amber-500/30 px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-          <div className="flex items-start gap-2.5 text-xs text-amber-900">
-            <AlertCircle size={16} className="text-amber-600 shrink-0 mt-0.5" />
+        <div className="bg-amber-500/10 border-b border-amber-500/30 px-3 sm:px-5 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shrink-0">
+          <div className="flex items-start gap-2 text-xs text-amber-900">
+            <AlertCircle size={15} className="text-amber-600 shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold">Setup Database Diperlukan</p>
-              <p className="text-ink/70 mt-0.5">
-                Tabel <code className="mono text-[11px] bg-white/80 px-1 py-0.5">intern_messages</code> belum
-                dibuat di database Supabase. Jalankan query setup di Supabase SQL Editor sekali saja.
+              <p className="font-semibold text-xs">Setup Database Diperlukan</p>
+              <p className="text-ink/70 text-[11px] mt-0.5 leading-tight">
+                Tabel <code className="mono bg-white/80 px-1 py-0.2">intern_messages</code> belum
+                ada di Supabase. Jalankan query setup di Supabase SQL Editor.
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleCopySql}
-            className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 mono text-[10px] uppercase tracking-[0.15em] shrink-0 transition-colors"
+            className="flex items-center justify-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 mono text-[10px] uppercase tracking-[0.12em] shrink-0 transition-colors w-full sm:w-auto"
           >
             {copiedSql ? (
               <>
@@ -506,35 +553,36 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
         </div>
       )}
 
-      {/* BODY: CHAT MESSAGES + MEMBERS SIDEBAR */}
-      <div className="flex-1 min-h-0 flex relative">
+      {/* BODY: MESSAGES STREAM + MEMBERS DRAWER */}
+      <div className="flex-1 min-h-0 flex relative overflow-hidden">
         {/* Messages Stream */}
         <div
           ref={containerRef}
           onScroll={handleScroll}
-          className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-6"
+          onClick={() => setActiveMessageAction(null)}
+          className="flex-1 min-w-0 overflow-y-auto p-3 sm:p-5 space-y-4 sm:space-y-5"
         >
-          {/* Welcome message */}
-          <div className="border border-dashed border-brand-primary/25 bg-brand-primary/[0.02] p-4 text-center max-w-lg mx-auto">
-            <div className="w-8 h-8 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center mx-auto mb-2">
-              <Sparkles size={16} />
+          {/* Welcome Card */}
+          <div className="border border-dashed border-brand-primary/25 bg-brand-primary/[0.02] p-3 sm:p-4 text-center max-w-md mx-auto">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center mx-auto mb-1.5">
+              <Sparkles size={15} />
             </div>
-            <p className="mono text-[11px] uppercase tracking-[0.15em] text-brand-primary font-medium">
+            <p className="mono text-[10px] sm:text-[11px] uppercase tracking-[0.15em] text-brand-primary font-semibold">
               Selamat datang di Ruang Obrolan Intern
             </p>
-            <p className="text-xs text-ink/70 mt-1 leading-relaxed">
+            <p className="text-[11px] sm:text-xs text-ink/70 mt-1 leading-relaxed">
               Ruang santai & diskusi bebas untuk sesama anak magang Maganghub. Ketik{" "}
-              <strong className="text-brand-primary">@</strong> untuk tag teman dan klik emot untuk kirim reaksi!
+              <strong className="text-brand-primary">@</strong> untuk tag teman dan pilih emot untuk kirim reaksi!
             </p>
           </div>
 
           {/* Grouped Messages */}
           {groupedMessages.map((group) => (
-            <div key={group.dateLabel} className="space-y-4">
+            <div key={group.dateLabel} className="space-y-3 sm:space-y-4">
               {/* Date divider */}
-              <div className="flex items-center gap-3 my-4">
+              <div className="flex items-center gap-2.5 my-3">
                 <div className="flex-1 h-px bg-brand-primary/20" />
-                <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink/50 bg-paper px-2 py-0.5 border border-brand-primary/15">
+                <span className="mono text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-ink/50 bg-paper px-2 py-0.5 border border-brand-primary/15 shrink-0">
                   {group.dateLabel}
                 </span>
                 <div className="flex-1 h-px bg-brand-primary/20" />
@@ -548,22 +596,22 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
                 const initial = authorName.charAt(0).toUpperCase();
                 const avatar = msg.author?.avatar_url;
                 const timeStr = format(new Date(msg.created_at), "HH:mm");
+                const isActionActive = activeMessageAction === msg.id;
 
-                // Check if current user was mentioned in this message
                 const amIMentioned =
                   msg.content.includes(`@${currentUserName}`) && !isMe;
 
                 return (
                   <div
                     key={msg.id}
-                    className={`flex items-start gap-3 group/msg ${
+                    className={`flex items-start gap-2 sm:gap-2.5 group/msg ${
                       isMe ? "flex-row-reverse" : "flex-row"
                     }`}
                   >
                     {/* Avatar */}
                     <div className="shrink-0 mt-0.5">
                       {avatar ? (
-                        <div className="w-8 h-8 overflow-hidden border border-brand-primary/25">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 overflow-hidden border border-brand-primary/25">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={avatar}
@@ -573,7 +621,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
                         </div>
                       ) : (
                         <div
-                          className={`w-8 h-8 flex items-center justify-center text-xs font-medium text-white ${
+                          className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-xs font-semibold text-white ${
                             isMe ? "bg-brand-deep" : "bg-brand-primary"
                           }`}
                         >
@@ -584,33 +632,50 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
 
                     {/* Bubble Container */}
                     <div
-                      className={`max-w-[82%] sm:max-w-[70%] space-y-1.5 ${
+                      className={`max-w-[86%] sm:max-w-[74%] space-y-1 ${
                         isMe ? "items-end text-right" : "items-start text-left"
                       }`}
                     >
                       {/* Meta: Name + Dept + Time */}
                       <div
-                        className={`flex items-center gap-2 flex-wrap ${
+                        className={`flex items-center gap-1.5 sm:gap-2 flex-wrap ${
                           isMe ? "justify-end" : "justify-start"
                         }`}
                       >
-                        <span className="text-xs font-semibold text-ink">
+                        <span className="text-[11px] sm:text-xs font-semibold text-ink">
                           {isMe ? "Kamu" : authorName}
                         </span>
-                        <span className="mono text-[9px] uppercase tracking-[0.1em] text-ink/50 bg-ink/[0.04] px-1.5 py-0.2 border border-ink/10">
+                        <span className="mono text-[8px] sm:text-[9px] uppercase tracking-[0.1em] text-ink/50 bg-ink/[0.04] px-1.5 py-0.2 border border-ink/10">
                           {authorDept}
                         </span>
-                        <span className="mono text-[10px] text-ink/40">{timeStr}</span>
+                        <span className="mono text-[9px] sm:text-[10px] text-ink/40">{timeStr}</span>
                         {msg.isPending && (
-                          <span className="mono text-[9px] text-amber-600 animate-pulse">
+                          <span className="mono text-[8px] sm:text-[9px] text-amber-600 animate-pulse">
                             Mengirim...
                           </span>
                         )}
+
+                        {/* Mobile Action Toggle Button (Touch Friendly) */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMessageAction(isActionActive ? null : msg.id);
+                          }}
+                          className="sm:hidden text-ink/30 hover:text-ink/70 p-0.5 rounded transition-colors"
+                          title="Beri reaksi atau opsi"
+                        >
+                          <SmilePlus size={13} />
+                        </button>
                       </div>
 
-                      {/* Bubble */}
+                      {/* Bubble with Text */}
                       <div
-                        className={`relative p-3 text-sm leading-relaxed whitespace-pre-wrap break-words border transition-all ${
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveMessageAction(isActionActive ? null : msg.id);
+                        }}
+                        className={`relative p-2.5 sm:p-3 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words border transition-all ${
                           isMe
                             ? "bg-brand-primary text-white border-brand-primary shadow-sm"
                             : amIMentioned
@@ -620,18 +685,25 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
                       >
                         {renderMessageContent(msg.content)}
 
-                        {/* Hover Quick Action Bar */}
+                        {/* Reaction / Action Bar (Hover on desktop, Click/Touch on mobile) */}
                         <div
-                          className={`absolute top-0 -translate-y-1/2 opacity-0 group-hover/msg:opacity-100 transition-opacity bg-paper border border-brand-primary/30 shadow-lg px-1.5 py-0.5 flex items-center gap-1 z-10 ${
+                          className={`absolute top-0 -translate-y-1/2 transition-all bg-paper border border-brand-primary/30 shadow-lg px-1.5 py-0.5 flex items-center gap-1 z-10 ${
                             isMe ? "left-2" : "right-2"
+                          } ${
+                            isActionActive
+                              ? "opacity-100 scale-100 pointer-events-auto"
+                              : "opacity-0 scale-95 pointer-events-none sm:group-hover/msg:opacity-100 sm:group-hover/msg:scale-100 sm:group-hover/msg:pointer-events-auto"
                           }`}
                         >
                           {QUICK_REACTION_EMOJIS.map((emoji) => (
                             <button
                               key={emoji}
                               type="button"
-                              onClick={() => handleReaction(msg.id, emoji)}
-                              className="text-xs hover:scale-130 transition-transform p-0.5"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleReaction(msg.id, emoji);
+                              }}
+                              className="text-xs sm:text-sm hover:scale-130 active:scale-130 transition-transform p-1"
                               title={`Beri reaksi ${emoji}`}
                             >
                               {emoji}
@@ -640,11 +712,14 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
                           {isMe && (
                             <button
                               type="button"
-                              onClick={() => handleDeleteMessage(msg.id)}
-                              className="text-ink/40 hover:text-red-600 p-0.5 ml-1 border-l border-ink/20 pl-1"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteMessage(msg.id);
+                              }}
+                              className="text-ink/40 hover:text-red-600 active:text-red-600 p-1 ml-0.5 border-l border-ink/20 pl-1.5"
                               title="Hapus pesan"
                             >
-                              <Trash2 size={12} />
+                              <Trash2 size={13} />
                             </button>
                           )}
                         </div>
@@ -653,7 +728,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
                       {/* Reactions Chips */}
                       {msg.reactions && Object.keys(msg.reactions).length > 0 && (
                         <div
-                          className={`flex items-center gap-1.5 flex-wrap pt-0.5 ${
+                          className={`flex items-center gap-1 sm:gap-1.5 flex-wrap pt-0.5 ${
                             isMe ? "justify-end" : "justify-start"
                           }`}
                         >
@@ -665,7 +740,10 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
                               <button
                                 key={emoji}
                                 type="button"
-                                onClick={() => handleReaction(msg.id, emoji)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleReaction(msg.id, emoji);
+                                }}
                                 className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full border transition-colors ${
                                   hasReacted
                                     ? "bg-brand-primary/15 border-brand-primary text-brand-primary font-medium"
@@ -688,38 +766,46 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
           ))}
 
           {filteredMessages.length === 0 && (
-            <div className="p-12 text-center text-ink/40 space-y-2">
-              <MessagesSquare size={32} className="mx-auto text-ink/20" />
+            <div className="p-8 sm:p-12 text-center text-ink/40 space-y-2">
+              <MessagesSquare size={30} className="mx-auto text-ink/20" />
               <p className="mono text-xs uppercase tracking-[0.15em]">
                 {searchQuery ? "Tidak ada pesan yang cocok" : "Belum ada pesan"}
               </p>
-              <p className="text-xs text-ink/50">Jadilah yang pertama menyapa teman-teman magang!</p>
+              <p className="text-xs text-ink/50">Jadilah yang pertama menyapa rekan magang!</p>
             </div>
           )}
 
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Scroll to bottom floating button */}
+        {/* Scroll to bottom button */}
         {showScrollBottom && (
           <button
             type="button"
             onClick={() => scrollToBottom()}
-            className="absolute bottom-20 right-6 bg-brand-primary text-white p-2 shadow-lg border border-white/20 hover:bg-brand-hover transition-colors z-20"
+            className="absolute bottom-4 right-4 sm:right-6 bg-brand-primary text-white p-2 shadow-lg border border-white/20 hover:bg-brand-hover transition-colors z-20 rounded-full sm:rounded-none"
             title="Lihat pesan terbaru"
           >
-            <ArrowDown size={16} />
+            <ArrowDown size={15} />
           </button>
         )}
 
-        {/* Members Sidebar (Desktop: visible if toggled or screen wide, Mobile: overlay) */}
+        {/* Mobile Backdrop Overlay when Members drawer is open */}
         {showMembersMobile && (
-          <div className="absolute inset-y-0 right-0 z-30 shadow-2xl md:relative md:shadow-none">
+          <div
+            className="fixed inset-0 bg-ink/50 z-40 md:hidden backdrop-blur-xs transition-opacity"
+            onClick={() => setShowMembersMobile(false)}
+          />
+        )}
+
+        {/* Members Sidebar (Drawer on mobile, split panel on desktop) */}
+        {showMembersMobile && (
+          <div className="fixed inset-y-0 right-0 z-50 md:relative md:z-auto h-full shadow-2xl md:shadow-none animate-slide-left md:animate-none">
             <InternMembersList
               interns={interns}
               currentUserId={currentUserId}
+              onClose={() => setShowMembersMobile(false)}
               onTagIntern={(intern) => {
-                // Focus textarea and insert @intern.nama
                 setShowMembersMobile(false);
                 const el = document.querySelector("textarea") as HTMLTextAreaElement | null;
                 if (el) {
@@ -742,4 +828,3 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.intern_messages;`;
     </div>
   );
 }
-

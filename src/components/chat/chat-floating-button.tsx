@@ -18,18 +18,19 @@ export default function ChatFloatingButton({ role }: { role?: string }) {
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
-      className="fixed bottom-6 right-6 z-40"
+      className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40"
     >
       <Link
         href="/chat"
-        className="group flex items-center gap-2.5 bg-brand-primary text-white pl-4 pr-5 py-3 shadow-2xl hover:bg-brand-hover hover:scale-105 active:scale-95 transition-all border border-brand-accent/30"
+        className="group flex items-center gap-2 sm:gap-2.5 bg-brand-primary text-white p-3 sm:pl-4 sm:pr-5 sm:py-3 shadow-2xl hover:bg-brand-hover hover:scale-105 active:scale-95 transition-all border border-brand-accent/30 rounded-full sm:rounded-none"
         title="Buka Chat Anak Intern"
+        aria-label="Buka Chat Anak Intern"
       >
-        <div className="relative">
+        <div className="relative shrink-0">
           <MessagesSquare size={19} className="text-white" />
           <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-brand-primary animate-pulse" />
         </div>
-        <div className="flex flex-col text-left">
+        <div className="hidden sm:flex flex-col text-left">
           <span className="mono text-[10px] uppercase tracking-[0.2em] font-semibold text-white leading-none">
             Chat Intern
           </span>
@@ -41,4 +42,3 @@ export default function ChatFloatingButton({ role }: { role?: string }) {
     </motion.div>
   );
 }
-

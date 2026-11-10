@@ -39,13 +39,13 @@ export default function MentionPopup({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 8, scale: 0.98 }}
         transition={{ duration: 0.12 }}
-        className="absolute bottom-full mb-2 left-0 right-0 sm:right-auto sm:w-80 bg-paper border border-brand-primary/30 shadow-2xl z-50 overflow-hidden"
+        className="absolute bottom-full mb-2.5 left-2 right-2 sm:left-4 sm:right-auto sm:w-80 max-w-[calc(100vw-2rem)] bg-paper border border-brand-primary/30 shadow-2xl z-50 overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-3 py-2 bg-brand-primary/[0.04] border-b border-brand-primary/20">
           <div className="flex items-center gap-1.5 text-brand-primary">
             <AtSign size={13} />
-            <span className="mono text-[10px] uppercase tracking-[0.15em] font-medium">
+            <span className="mono text-[10px] uppercase tracking-[0.15em] font-semibold">
               Tag Anak Intern
             </span>
           </div>
@@ -69,10 +69,14 @@ export default function MentionPopup({
                     e.preventDefault(); // cegah textarea blur
                     onSelect(intern);
                   }}
-                  className={`w-full text-left px-3 py-2.5 flex items-center gap-3 transition-colors ${
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    onSelect(intern);
+                  }}
+                  className={`w-full text-left px-3 py-2.5 flex items-center gap-2.5 transition-colors ${
                     isSelected
                       ? "bg-brand-primary text-white"
-                      : "hover:bg-brand-primary/10 text-ink"
+                      : "hover:bg-brand-primary/10 active:bg-brand-primary/15 text-ink"
                   }`}
                 >
                   {/* Avatar */}
@@ -100,7 +104,7 @@ export default function MentionPopup({
                   {/* Info */}
                   <div className="min-w-0 flex-1">
                     <p
-                      className={`text-xs font-medium truncate ${
+                      className={`text-xs font-medium truncate leading-tight ${
                         isSelected ? "text-white" : "text-ink"
                       }`}
                     >
@@ -118,7 +122,7 @@ export default function MentionPopup({
                   </div>
 
                   <span
-                    className={`mono text-[9px] uppercase tracking-[0.15em] px-1 py-0.5 shrink-0 ${
+                    className={`mono text-[9px] uppercase tracking-[0.15em] px-1.5 py-0.5 shrink-0 ${
                       isSelected
                         ? "bg-white/20 text-white"
                         : "bg-brand-primary/10 text-brand-primary"
@@ -141,11 +145,11 @@ export default function MentionPopup({
 
         {/* Footer tip */}
         <div className="px-3 py-1.5 bg-ink/[0.02] border-t border-ink/10 flex items-center justify-between text-[9px] mono text-ink/40">
-          <span>Gunakan ↑ ↓ lalu Enter</span>
+          <span className="hidden sm:inline">Gunakan ↑ ↓ lalu Enter</span>
+          <span className="sm:hidden">Ketuk nama untuk tag</span>
           <span>Esc untuk batal</span>
         </div>
       </motion.div>
     </AnimatePresence>
   );
 }
-

@@ -47,7 +47,7 @@ export default function EmojiPicker({ onSelect, open, onClose }: Props) {
   const popoverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         onClose();
       }
@@ -55,9 +55,11 @@ export default function EmojiPicker({ onSelect, open, onClose }: Props) {
 
     if (open) {
       document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("touchstart", handleOutsideClick);
     }
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
     };
   }, [open, onClose]);
 
@@ -75,26 +77,28 @@ export default function EmojiPicker({ onSelect, open, onClose }: Props) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           transition={{ duration: 0.15 }}
-          className="absolute bottom-full mb-3 left-0 sm:left-auto right-0 sm:right-auto z-50 w-72 sm:w-80 bg-paper border border-brand-primary/25 shadow-2xl p-3"
+          className="absolute bottom-full mb-2.5 left-2 right-2 sm:left-4 sm:right-auto sm:w-80 max-w-[calc(100vw-2rem)] z-50 bg-paper border border-brand-primary/25 shadow-2xl p-3"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-brand-primary/20">
             <div className="flex items-center gap-1.5">
               <Smile size={14} className="text-brand-primary" />
-              <span className="mono text-[10px] uppercase tracking-[0.15em] text-brand-primary font-medium">Pilih Emot</span>
+              <span className="mono text-[10px] uppercase tracking-[0.15em] text-brand-primary font-semibold">
+                Pilih Emot
+              </span>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="p-1 text-ink/40 hover:text-ink transition-colors"
+              className="p-1 text-ink/40 hover:text-ink transition-colors rounded"
               aria-label="Tutup"
             >
-              <X size={13} />
+              <X size={14} />
             </button>
           </div>
 
           {/* Search */}
-          <div className="relative mb-2.5">
+          <div className="relative mb-2">
             <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink/40" />
             <input
               type="text"
@@ -107,7 +111,7 @@ export default function EmojiPicker({ onSelect, open, onClose }: Props) {
 
           {/* Category Tabs */}
           {!search && (
-            <div className="flex border-b border-ink/10 mb-2 gap-1 overflow-x-auto pb-1">
+            <div className="flex border-b border-ink/10 mb-2 gap-1 overflow-x-auto pb-1 scrollbar-none">
               {EMOJI_CATEGORIES.map((cat, idx) => (
                 <button
                   key={cat.name}
@@ -135,7 +139,7 @@ export default function EmojiPicker({ onSelect, open, onClose }: Props) {
                   onSelect(emoji);
                   onClose();
                 }}
-                className="w-8 h-8 flex items-center justify-center text-lg hover:bg-brand-primary/10 hover:scale-125 transition-transform rounded"
+                className="w-8 h-8 sm:w-8 sm:h-8 flex items-center justify-center text-lg hover:bg-brand-primary/10 active:scale-125 hover:scale-125 transition-transform rounded"
               >
                 {emoji}
               </button>
@@ -146,4 +150,3 @@ export default function EmojiPicker({ onSelect, open, onClose }: Props) {
     </AnimatePresence>
   );
 }
-

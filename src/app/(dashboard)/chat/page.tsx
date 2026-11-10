@@ -99,20 +99,20 @@ export default async function ChatPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Page Header */}
-      <div className="pb-3 border-b border-brand-primary/25">
-        <div className="flex items-center gap-3 mb-1.5 flex-wrap">
-          <span className="mono text-[10px] uppercase tracking-[0.2em] text-brand-primary font-medium">
+      <div className="pb-2.5 sm:pb-3 border-b border-brand-primary/25">
+        <div className="flex items-center gap-2 sm:gap-3 mb-1 flex-wrap">
+          <span className="mono text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-primary font-medium">
             Fitur Utama Intern
           </span>
-          <div className="h-px w-8 bg-brand-primary/30" />
-          <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/50">
+          <div className="h-px w-6 sm:w-8 bg-brand-primary/30" />
+          <span className="mono text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-ink/50">
             {interns.length} Rekan Magang
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl sm:text-3xl font-light tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight">
             Ruang Obrolan <span className="font-serif italic text-brand-primary">Intern</span>
           </h1>
         </div>
