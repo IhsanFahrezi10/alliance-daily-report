@@ -21,7 +21,7 @@ function getAdminClient() {
 }
 
 export const metadata = {
-  title: "Chat Global Anak Intern | Maganghub",
+  title: "Alliance Daily Report - Maganghub",
   description: "Ruang obrolan khusus anak intern Maganghub",
 };
 
