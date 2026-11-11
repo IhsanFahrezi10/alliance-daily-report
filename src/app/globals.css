@@ -125,27 +125,183 @@ body {
    MIDNIGHT — Premium dark tech, glowing accents
    ============================================================ */
 .theme-midnight {
-  --color-brand-primary: #7c3aed;
-  --color-brand-accent: #a78bfa;
-  --color-brand-deep: #4c1d95;
-  --color-brand-hover: #6d28d9;
-  --color-paper: #0d0d1a;
-  --theme-card-shadow: 0 0 0 1px rgba(124,58,237,0.2), 0 4px 24px rgba(124,58,237,0.1);
-  background-image: radial-gradient(rgba(124, 58, 237, 0.06) 1px, transparent 1px);
+  color-scheme: dark;
+  --color-brand-primary: #a78bfa;
+  --color-brand-accent: #c4b5fd;
+  --color-brand-deep: #7c3aed;
+  --color-brand-hover: #8b5cf6;
+  --color-paper: #0b0b16;
+  --color-ink: #f3f0ff;
+  --color-ink-muted: #9d9bb8;
+  --theme-card-shadow: 0 0 0 1px rgba(167, 139, 250, 0.25), 0 4px 24px rgba(124, 58, 237, 0.18);
+  background-image: radial-gradient(rgba(167, 139, 250, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
-  color: #e8e0ff;
+  color: #f3f0ff;
 }
 
-/* Midnight: glowing card borders */
-.theme-midnight .bg-white\/40 {
-  background-color: rgba(124, 58, 237, 0.06) !important;
+/* Backgrounds & Cards */
+.theme-midnight .bg-paper {
+  background-color: #0b0b16 !important;
+}
+
+.theme-midnight .bg-white,
+.theme-midnight .bg-white\/40,
+.theme-midnight .bg-white\/30 {
+  background-color: rgba(124, 58, 237, 0.08) !important;
   box-shadow: var(--theme-card-shadow) !important;
-  border-color: rgba(124,58,237,0.25) !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
 }
 
-/* Midnight sidebar */
+/* Text Contrast */
 .theme-midnight .text-ink {
-  color: #e8e0ff;
+  color: #f3f0ff !important;
+}
+
+.theme-midnight .text-ink-muted {
+  color: #a5a3c2 !important;
+}
+
+.theme-midnight .text-ink\/70 {
+  color: rgba(243, 240, 255, 0.75) !important;
+}
+.theme-midnight .text-ink\/60 {
+  color: rgba(243, 240, 255, 0.65) !important;
+}
+.theme-midnight .text-ink\/50 {
+  color: rgba(243, 240, 255, 0.55) !important;
+}
+.theme-midnight .text-ink\/40 {
+  color: rgba(243, 240, 255, 0.45) !important;
+}
+.theme-midnight .text-ink\/35 {
+  color: rgba(243, 240, 255, 0.4) !important;
+}
+.theme-midnight .text-ink\/30 {
+  color: rgba(243, 240, 255, 0.35) !important;
+}
+
+/* Borders & Table Grid Lines */
+.theme-midnight .border-ink\/10 {
+  border-color: rgba(167, 139, 250, 0.15) !important;
+}
+.theme-midnight .border-ink\/15 {
+  border-color: rgba(167, 139, 250, 0.2) !important;
+}
+.theme-midnight .border-ink\/20,
+.theme-midnight .border-ink\/25 {
+  border-color: rgba(167, 139, 250, 0.28) !important;
+}
+.theme-midnight .border-ink\/30 {
+  border-color: rgba(167, 139, 250, 0.35) !important;
+}
+
+/* Dividers */
+.theme-midnight .divide-ink\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(167, 139, 250, 0.15) !important;
+}
+.theme-midnight .divide-ink\/15 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(167, 139, 250, 0.22) !important;
+}
+
+/* Hovers */
+.theme-midnight .bg-ink\/\[0\.02\] {
+  background-color: rgba(167, 139, 250, 0.04) !important;
+}
+.theme-midnight .bg-ink\/\[0\.03\],
+.theme-midnight .hover\:bg-ink\/\[0\.03\]:hover {
+  background-color: rgba(167, 139, 250, 0.06) !important;
+}
+.theme-midnight .bg-ink\/\[0\.04\],
+.theme-midnight .hover\:bg-ink\/\[0\.04\]:hover {
+  background-color: rgba(167, 139, 250, 0.08) !important;
+}
+.theme-midnight .bg-ink\/\[0\.05\],
+.theme-midnight .hover\:bg-ink\/\[0\.05\]:hover {
+  background-color: rgba(167, 139, 250, 0.1) !important;
+}
+.theme-midnight .bg-ink\/\[0\.06\],
+.theme-midnight .hover\:bg-ink\/\[0\.06\]:hover {
+  background-color: rgba(167, 139, 250, 0.12) !important;
+}
+
+/* Form Controls */
+.theme-midnight input,
+.theme-midnight textarea,
+.theme-midnight select {
+  background-color: rgba(124, 58, 237, 0.08) !important;
+  color: #f3f0ff !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
+}
+.theme-midnight input::placeholder,
+.theme-midnight textarea::placeholder {
+  color: rgba(243, 240, 255, 0.35) !important;
+}
+.theme-midnight option {
+  background-color: #120e24 !important;
+  color: #f3f0ff !important;
+}
+
+/* Status Cards & Pills in Midnight */
+.theme-midnight .bg-green-50,
+.theme-midnight .bg-green-50\/50,
+.theme-midnight .bg-green-50\/60,
+.theme-midnight .bg-green-50\/30 {
+  background-color: rgba(34, 197, 94, 0.14) !important;
+}
+.theme-midnight .border-green-200 {
+  border-color: rgba(34, 197, 94, 0.35) !important;
+}
+.theme-midnight .text-green-700,
+.theme-midnight .text-green-800,
+.theme-midnight .text-green-800\/70,
+.theme-midnight .text-green-800\/80 {
+  color: #86efac !important;
+}
+
+.theme-midnight .bg-orange-50,
+.theme-midnight .bg-orange-50\/50,
+.theme-midnight .bg-orange-50\/60 {
+  background-color: rgba(249, 115, 22, 0.14) !important;
+}
+.theme-midnight .border-orange-200 {
+  border-color: rgba(249, 115, 22, 0.35) !important;
+}
+.theme-midnight .text-orange-600,
+.theme-midnight .text-orange-700,
+.theme-midnight .text-orange-800,
+.theme-midnight .text-orange-800\/70,
+.theme-midnight .text-orange-800\/80 {
+  color: #fdba74 !important;
+}
+
+.theme-midnight .bg-red-50,
+.theme-midnight .bg-red-50\/50 {
+  background-color: rgba(239, 68, 68, 0.14) !important;
+}
+.theme-midnight .border-red-200,
+.theme-midnight .border-red-300 {
+  border-color: rgba(239, 68, 68, 0.35) !important;
+}
+.theme-midnight .text-red-400,
+.theme-midnight .text-red-500,
+.theme-midnight .text-red-500\/70,
+.theme-midnight .text-red-600,
+.theme-midnight .text-red-700 {
+  color: #fca5a5 !important;
+}
+
+/* Chat bubble contrast */
+.theme-midnight .bg-white\/70,
+.theme-midnight .bg-white\/80 {
+  background-color: rgba(124, 58, 237, 0.12) !important;
+}
+
+/* Scrollbar */
+.theme-midnight ::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.25);
+}
+.theme-midnight ::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.45);
 }
 
 /* ============================================================

@@ -60,8 +60,8 @@ export default function HrDashboard({
     is_reviewed: boolean;
   }>;
 }) {
-  const { mode } = useTheme();
-  const isDark = mode === "dark";
+  const { mode, theme } = useTheme();
+  const isDark = mode === "dark" || theme === "midnight";
 
   // Chart colors — adaptive
   const chartColors = {
