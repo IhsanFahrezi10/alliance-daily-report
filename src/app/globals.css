@@ -64,85 +64,139 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* ============ THEME OVERRIDES ============ */
-
-.theme-blue {
-  --color-brand-primary: #1b4f8a;
-  --color-brand-accent: #00aeef;
-  --color-brand-deep: #1f3a5f;
-  --color-brand-hover: #0f3d70;
-}
-
-.theme-green {
-  --color-brand-primary: #1b7a4f;
-  --color-brand-accent: #10b981;
-  --color-brand-deep: #165a3a;
-  --color-brand-hover: #145c39;
-}
-
-.theme-purple {
-  --color-brand-primary: #6b3d91;
-  --color-brand-accent: #a855f7;
-  --color-brand-deep: #4a2b6b;
-  --color-brand-hover: #552f75;
-}
-
-.theme-orange {
-  --color-brand-primary: #c85c0a;
-  --color-brand-accent: #f97316;
-  --color-brand-deep: #8b4008;
-  --color-brand-hover: #a04a08;
-}
-
-.theme-red {
-  --color-brand-primary: #a03030;
-  --color-brand-accent: #ef4444;
-  --color-brand-deep: #7a2020;
-  --color-brand-hover: #852828;
-}
 /* ============ THEME COLORS + PATTERNS ============ */
+/* Legacy aliases for backward compatibility */
+.theme-blue   { --color-brand-primary: #1b4f8a; --color-brand-accent: #00aeef; --color-brand-deep: #1f3a5f; --color-brand-hover: #0f3d70; }
+.theme-green  { --color-brand-primary: #1b7a4f; --color-brand-accent: #10b981; --color-brand-deep: #165a3a; --color-brand-hover: #145c39; }
+.theme-purple { --color-brand-primary: #6b3d91; --color-brand-accent: #a855f7; --color-brand-deep: #4a2b6b; --color-brand-hover: #552f75; }
+.theme-orange { --color-brand-primary: #c85c0a; --color-brand-accent: #f97316; --color-brand-deep: #8b4008; --color-brand-hover: #a04a08; }
+.theme-red    { --color-brand-primary: #a03030; --color-brand-accent: #ef4444; --color-brand-deep: #7a2020; --color-brand-hover: #852828; }
 
-.theme-blue {
+/* ============================================================
+   CLASSIC — Profesional, blueprint, clean grid
+   ============================================================ */
+.theme-classic {
   --color-brand-primary: #1b4f8a;
   --color-brand-accent: #00aeef;
   --color-brand-deep: #1f3a5f;
   --color-brand-hover: #0f3d70;
-  background-image: linear-gradient(rgba(27, 79, 138, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(27, 79, 138, 0.025) 1px, transparent 1px);
+  --color-paper: #f0f4fa;
+  --theme-card-shadow: 0 1px 3px rgba(27,79,138,0.08), 0 0 0 1px rgba(27,79,138,0.08);
+  --theme-border-radius: 2px;
+  background-image:
+    linear-gradient(rgba(27, 79, 138, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 79, 138, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
-.theme-green {
-  --color-brand-primary: #1b7a4f;
-  --color-brand-accent: #10b981;
-  --color-brand-deep: #165a3a;
-  --color-brand-hover: #145c39;
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 24px, rgba(27, 122, 79, 0.025) 24px, rgba(27, 122, 79, 0.025) 25px);
+/* Classic: sharp edges & blueprint feel */
+.theme-classic .bg-white\/40,
+.theme-classic [class*="border-brand-"] {
+  border-radius: 2px !important;
+}
+.theme-classic .bg-white\/40 {
+  box-shadow: var(--theme-card-shadow);
 }
 
-.theme-purple {
-  --color-brand-primary: #6b3d91;
-  --color-brand-accent: #a855f7;
-  --color-brand-deep: #4a2b6b;
-  --color-brand-hover: #552f75;
-  background-image: radial-gradient(rgba(107, 61, 145, 0.04) 1px, transparent 1px);
-  background-size: 22px 22px;
+/* ============================================================
+   FOREST — Natural, earthy, organic
+   ============================================================ */
+.theme-forest {
+  --color-brand-primary: #2d6a4f;
+  --color-brand-accent: #52b788;
+  --color-brand-deep: #1b4332;
+  --color-brand-hover: #40916c;
+  --color-paper: #f0f7f4;
+  --theme-card-shadow: 0 2px 8px rgba(45,106,79,0.1), 0 0 0 1px rgba(45,106,79,0.1);
+  --theme-border-radius: 12px;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(45,106,79,0.03) 28px, rgba(45,106,79,0.03) 29px),
+    repeating-linear-gradient(-45deg, transparent, transparent 28px, rgba(82,183,136,0.02) 28px, rgba(82,183,136,0.02) 29px);
 }
 
-.theme-orange {
-  --color-brand-primary: #c85c0a;
-  --color-brand-accent: #f97316;
-  --color-brand-deep: #8b4008;
-  --color-brand-hover: #a04a08;
-  background-image: radial-gradient(circle, rgba(200, 92, 10, 0.04) 1.5px, transparent 1.5px);
-  background-size: 26px 26px;
+/* Forest: rounded organic edges */
+.theme-forest .bg-white\/40 {
+  border-radius: 14px !important;
+  box-shadow: var(--theme-card-shadow);
+  border-color: rgba(45,106,79,0.15) !important;
 }
 
-.theme-red {
-  --color-brand-primary: #a03030;
-  --color-brand-accent: #ef4444;
-  --color-brand-deep: #7a2020;
-  --color-brand-hover: #852828;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(160, 48, 48, 0.03) 30px, rgba(160, 48, 48, 0.03) 31px);
+/* ============================================================
+   MIDNIGHT — Premium dark tech, glowing accents
+   ============================================================ */
+.theme-midnight {
+  --color-brand-primary: #7c3aed;
+  --color-brand-accent: #a78bfa;
+  --color-brand-deep: #4c1d95;
+  --color-brand-hover: #6d28d9;
+  --color-paper: #0d0d1a;
+  --theme-card-shadow: 0 0 0 1px rgba(124,58,237,0.2), 0 4px 24px rgba(124,58,237,0.1);
+  background-image: radial-gradient(rgba(124, 58, 237, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: #e8e0ff;
+}
+
+/* Midnight: glowing card borders */
+.theme-midnight .bg-white\/40 {
+  background-color: rgba(124, 58, 237, 0.06) !important;
+  box-shadow: var(--theme-card-shadow) !important;
+  border-color: rgba(124,58,237,0.25) !important;
+}
+
+/* Midnight sidebar */
+.theme-midnight .text-ink {
+  color: #e8e0ff;
+}
+
+/* ============================================================
+   SUNSET — Warm, energetic, golden hour
+   ============================================================ */
+.theme-sunset {
+  --color-brand-primary: #c2410c;
+  --color-brand-accent: #fb923c;
+  --color-brand-deep: #9a3412;
+  --color-brand-hover: #ea580c;
+  --color-paper: #fff8f1;
+  --theme-card-shadow: 0 2px 12px rgba(194,65,12,0.08), 0 0 0 1px rgba(194,65,12,0.08);
+  background-image:
+    radial-gradient(ellipse at 80% 0%, rgba(251,146,60,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 100%, rgba(234,179,8,0.06) 0%, transparent 50%),
+    radial-gradient(circle, rgba(194,65,12,0.025) 1.5px, transparent 1.5px);
+  background-size: 100% 100%, 100% 100%, 28px 28px;
+}
+
+/* Sunset: warm card glow */
+.theme-sunset .bg-white\/40 {
+  box-shadow: var(--theme-card-shadow);
+  border-color: rgba(194,65,12,0.12) !important;
+}
+
+/* ============================================================
+   SAKURA — Soft feminine, petal dreams
+   ============================================================ */
+.theme-sakura {
+  --color-brand-primary: #db2777;
+  --color-brand-accent: #f472b6;
+  --color-brand-deep: #9d174d;
+  --color-brand-hover: #be185d;
+  --color-paper: #fff0f7;
+  --theme-card-shadow: 0 2px 12px rgba(219,39,119,0.08), 0 0 0 1px rgba(219,39,119,0.08);
+  background-image:
+    radial-gradient(circle, rgba(219,39,119,0.05) 1px, transparent 1px),
+    radial-gradient(circle, rgba(244,114,182,0.04) 1.5px, transparent 1.5px);
+  background-size:
+    24px 24px,
+    48px 48px;
+  background-position:
+    0 0,
+    12px 12px;
+}
+
+/* Sakura: soft rounded cards */
+.theme-sakura .bg-white\/40 {
+  border-radius: 16px !important;
+  box-shadow: var(--theme-card-shadow);
+  border-color: rgba(219,39,119,0.12) !important;
 }
 
 /* ============ SMOOTH THEME TRANSITION ============ */
@@ -571,79 +625,115 @@ html.dark body {
 }
 
 /* === THEME ACCENTS + PATTERNS (Dark Mode) === */
-.dark.theme-blue {
+
+/* Legacy dark themes */
+.dark.theme-blue   { --color-brand-primary: #4a7bc8; --color-brand-accent: #4dcbff; --color-brand-hover: #5c8ad4; --color-brand-deep: #5c8ad4; }
+.dark.theme-green  { --color-brand-primary: #4aad7f; --color-brand-accent: #34d399; --color-brand-hover: #5fbe92; --color-brand-deep: #5fbe92; }
+.dark.theme-purple { --color-brand-primary: #a075c8; --color-brand-accent: #c084fc; --color-brand-hover: #b185d4; --color-brand-deep: #b185d4; }
+.dark.theme-orange { --color-brand-primary: #e07a30; --color-brand-accent: #fb923c; --color-brand-hover: #e88f4d; --color-brand-deep: #e88f4d; }
+.dark.theme-red    { --color-brand-primary: #d15454; --color-brand-accent: #f87171; --color-brand-hover: #d96b6b; --color-brand-deep: #d96b6b; }
+
+/* === CLASSIC dark === */
+.dark.theme-classic {
   --color-brand-primary: #4a7bc8;
   --color-brand-accent: #4dcbff;
   --color-brand-hover: #5c8ad4;
   --color-brand-deep: #5c8ad4;
-  background-image: linear-gradient(rgba(74, 123, 200, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(74, 123, 200, 0.04) 1px, transparent 1px);
+  --color-paper: #0a0f1a;
+  background-image:
+    linear-gradient(rgba(74, 123, 200, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 123, 200, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
-
-.dark.theme-green {
-  --color-brand-primary: #4aad7f;
-  --color-brand-accent: #34d399;
-  --color-brand-hover: #5fbe92;
-  --color-brand-deep: #5fbe92;
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 24px, rgba(74, 173, 127, 0.04) 24px, rgba(74, 173, 127, 0.04) 25px);
+.dark.theme-classic .bg-white\/40 {
+  box-shadow: 0 1px 3px rgba(74,123,200,0.1), 0 0 0 1px rgba(74,123,200,0.12);
 }
 
-.dark.theme-purple {
-  --color-brand-primary: #a075c8;
-  --color-brand-accent: #c084fc;
-  --color-brand-hover: #b185d4;
-  --color-brand-deep: #b185d4;
-  background-image: radial-gradient(rgba(160, 117, 200, 0.06) 1px, transparent 1px);
-  background-size: 22px 22px;
+/* === FOREST dark === */
+.dark.theme-forest {
+  --color-brand-primary: #52b788;
+  --color-brand-accent: #74c69d;
+  --color-brand-hover: #40916c;
+  --color-brand-deep: #2d6a4f;
+  --color-paper: #0a1510;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(82,183,136,0.05) 28px, rgba(82,183,136,0.05) 29px),
+    repeating-linear-gradient(-45deg, transparent, transparent 28px, rgba(116,198,157,0.03) 28px, rgba(116,198,157,0.03) 29px);
+}
+.dark.theme-forest .bg-white\/40 {
+  background-color: rgba(82,183,136,0.06) !important;
+  border-color: rgba(82,183,136,0.2) !important;
 }
 
-.dark.theme-orange {
-  --color-brand-primary: #e07a30;
-  --color-brand-accent: #fb923c;
-  --color-brand-hover: #e88f4d;
-  --color-brand-deep: #e88f4d;
-  background-image: radial-gradient(circle, rgba(224, 122, 48, 0.06) 1.5px, transparent 1.5px);
-  background-size: 26px 26px;
+/* === MIDNIGHT dark (richer glows in dark) === */
+.dark.theme-midnight {
+  --color-brand-primary: #a78bfa;
+  --color-brand-accent: #c4b5fd;
+  --color-brand-hover: #8b5cf6;
+  --color-brand-deep: #7c3aed;
+  --color-paper: #07070f;
+  background-image: radial-gradient(rgba(167, 139, 250, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.dark.theme-midnight .bg-white\/40 {
+  background-color: rgba(124,58,237,0.08) !important;
+  box-shadow: 0 0 0 1px rgba(167,139,250,0.3), 0 4px 24px rgba(124,58,237,0.15) !important;
+  border-color: rgba(167,139,250,0.3) !important;
 }
 
-.dark.theme-red {
-  --color-brand-primary: #d15454;
-  --color-brand-accent: #f87171;
-  --color-brand-hover: #d96b6b;
-  --color-brand-deep: #d96b6b;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(209, 84, 84, 0.05) 30px, rgba(209, 84, 84, 0.05) 31px);
+/* === SUNSET dark === */
+.dark.theme-sunset {
+  --color-brand-primary: #fb923c;
+  --color-brand-accent: #fbbf24;
+  --color-brand-hover: #f97316;
+  --color-brand-deep: #ea580c;
+  --color-paper: #130a00;
+  background-image:
+    radial-gradient(ellipse at 80% 0%, rgba(251,146,60,0.1) 0%, transparent 50%),
+    radial-gradient(circle, rgba(251,146,60,0.04) 1.5px, transparent 1.5px);
+  background-size: 100% 100%, 28px 28px;
+}
+.dark.theme-sunset .bg-white\/40 {
+  background-color: rgba(251,146,60,0.06) !important;
+  border-color: rgba(251,146,60,0.2) !important;
+  box-shadow: 0 2px 12px rgba(251,146,60,0.08), 0 0 0 1px rgba(251,146,60,0.15) !important;
 }
 
-/* ============================================
-   PINK THEME — Light & Dark
-   ============================================ */
+/* === SAKURA light & dark === */
+.theme-sakura {
+  /* Already defined above in light section */
+}
 
+.dark.theme-sakura {
+  --color-brand-primary: #f472b6;
+  --color-brand-accent: #f9a8d4;
+  --color-brand-hover: #ec4899;
+  --color-brand-deep: #db2777;
+  --color-paper: #130009;
+  background-image:
+    radial-gradient(circle, rgba(244,114,182,0.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(249,168,212,0.05) 1.5px, transparent 1.5px);
+  background-size: 24px 24px, 48px 48px;
+  background-position: 0 0, 12px 12px;
+}
+.dark.theme-sakura .bg-white\/40 {
+  background-color: rgba(244,114,182,0.06) !important;
+  border-color: rgba(244,114,182,0.2) !important;
+  box-shadow: 0 2px 12px rgba(219,39,119,0.1), 0 0 0 1px rgba(244,114,182,0.2) !important;
+}
+
+/* Legacy pink — backward compat */
 .theme-pink {
   --color-brand-primary: #d946a0;
   --color-brand-accent: #f472b6;
   --color-brand-deep: #9d1c6f;
   --color-brand-hover: #be2d87;
-  background-image: radial-gradient(circle, rgba(217, 70, 160, 0.05) 1px, transparent 1px), radial-gradient(circle, rgba(244, 114, 182, 0.04) 1.5px, transparent 1.5px);
-  background-size:
-    24px 24px,
-    48px 48px;
-  background-position:
-    0 0,
-    12px 12px;
 }
-
 .dark.theme-pink {
   --color-brand-primary: #ec4899;
   --color-brand-accent: #f9a8d4;
   --color-brand-hover: #db2777;
   --color-brand-deep: #be2d87;
-  background-image: radial-gradient(circle, rgba(236, 72, 153, 0.08) 1px, transparent 1px), radial-gradient(circle, rgba(249, 168, 212, 0.05) 1.5px, transparent 1.5px);
-  background-size:
-    24px 24px,
-    48px 48px;
-  background-position:
-    0 0,
-    12px 12px;
 }
 /* ============ NOTIFICATION BELL ANIMATION ============ */
 @keyframes bell-shake {

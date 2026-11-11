@@ -9,12 +9,51 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/components/theme-provider";
 
 const THEMES = [
-  { value: "blue", label: "Biru", color: "#1b4f8a" },
-  { value: "green", label: "Hijau", color: "#1b7a4f" },
-  { value: "purple", label: "Ungu", color: "#6b3d91" },
-  { value: "orange", label: "Oranye", color: "#c85c0a" },
-  { value: "red", label: "Merah", color: "#a03030" },
-  { value: "pink", label: "Pink", color: "#d946a0" },
+  {
+    value: "classic",
+    label: "Classic",
+    color: "#1b4f8a",
+    accent: "#00aeef",
+    emoji: "📐",
+    desc: "Profesional & bersih",
+    pattern: "grid",
+  },
+  {
+    value: "forest",
+    label: "Forest",
+    color: "#2d6a4f",
+    accent: "#52b788",
+    emoji: "🌿",
+    desc: "Natural & segar",
+    pattern: "diagonal",
+  },
+  {
+    value: "midnight",
+    label: "Midnight",
+    color: "#7c3aed",
+    accent: "#a78bfa",
+    emoji: "🌙",
+    desc: "Elegan & premium",
+    pattern: "dots",
+  },
+  {
+    value: "sunset",
+    label: "Sunset",
+    color: "#c2410c",
+    accent: "#fb923c",
+    emoji: "🌅",
+    desc: "Hangat & energik",
+    pattern: "radial",
+  },
+  {
+    value: "sakura",
+    label: "Sakura",
+    color: "#db2777",
+    accent: "#f472b6",
+    emoji: "🌸",
+    desc: "Lembut & feminin",
+    pattern: "petal",
+  },
 ];
 
 type Ripple = { id: number; x: number; y: number; color: string };
@@ -26,6 +65,19 @@ export default function ThemePicker({ current }: { current: string }) {
   const [loading, setLoading] = useState<string | null>(null);
   const [ripples, setRipples] = useState<Ripple[]>([]);
 
+  // Normalize legacy theme names
+  const normalizedCurrent = (() => {
+    const map: Record<string, string> = {
+      blue: "classic",
+      green: "forest",
+      purple: "midnight",
+      orange: "sunset",
+      red: "sunset",
+      pink: "sakura",
+    };
+    return map[current] ?? current;
+  })();
+
   const addRipple = (color: string, e: React.MouseEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const id = Date.now();
@@ -36,7 +88,7 @@ export default function ThemePicker({ current }: { current: string }) {
   };
 
   const handleSelect = async (value: string, color: string, e: React.MouseEvent) => {
-    if (value === current) return;
+    if (value === normalizedCurrent) return;
     addRipple(color, e);
     setLoading(value);
 
@@ -58,28 +110,29 @@ export default function ThemePicker({ current }: { current: string }) {
       return;
     }
 
-    toast.success("Tema berhasil diubah");
+    toast.success(`Tema ${value} aktif!`);
     router.refresh();
   };
 
-  const savedColor = THEMES.find((t) => t.value === current)?.color || "#1b4f8a";
-  const savedLabel = THEMES.find((t) => t.value === current)?.label || "Biru";
+  const activeTheme = previewTheme
+    ? THEMES.find((t) => t.value === previewTheme)
+    : THEMES.find((t) => t.value === normalizedCurrent);
 
   return (
     <div>
       <div className="flex items-center gap-3 mb-5">
-        <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 font-medium">Tema Warna</span>
+        <span className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 font-medium">Pilih Tema</span>
         <div className="flex-1 h-px bg-brand-primary/30" />
       </div>
 
       <div className="border border-brand-primary/25 bg-white/40 p-6">
-        <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-1">Pilih Aksen Warna</p>
-        <p className="text-xs text-ink-muted mb-4">Hover untuk preview · Klik untuk simpan</p>
+        <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 mb-1">5 Tema Tersedia</p>
+        <p className="text-xs text-ink-muted mb-5">Hover untuk preview · Klik untuk simpan</p>
 
-        {/* Swatch grid — 6 items */}
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+        {/* Theme cards grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
           {THEMES.map((t) => {
-            const isSaved = current === t.value;
+            const isSaved = normalizedCurrent === t.value;
             const isPreviewing = previewTheme === t.value;
             const processing = loading === t.value;
             const swatchRipples = ripples.filter((r) => r.color === t.color);
@@ -94,13 +147,18 @@ export default function ThemePicker({ current }: { current: string }) {
                 }}
                 onMouseLeave={() => setPreviewTheme(null)}
                 disabled={!!loading}
-                className={`relative aspect-square overflow-hidden flex items-center justify-center transition-all ${
-                  isSaved ? "ring-2 ring-offset-2 ring-ink" : isPreviewing ? "ring-2 ring-offset-2 ring-ink/50" : "hover:ring-2 hover:ring-offset-2 hover:ring-ink/30"
+                className={`relative overflow-hidden flex flex-col items-center gap-2 p-4 transition-all text-white ${
+                  isSaved
+                    ? "ring-2 ring-offset-2 ring-ink scale-[1.02]"
+                    : isPreviewing
+                      ? "ring-2 ring-offset-1 ring-ink/60 scale-[1.01]"
+                      : "hover:ring-2 hover:ring-offset-1 hover:ring-ink/30 hover:scale-[1.01]"
                 } ${processing ? "opacity-60" : ""}`}
                 style={{ backgroundColor: t.color }}
                 title={`${t.label}${isSaved ? " (aktif)" : ""}`}
                 aria-label={t.label}
               >
+                {/* Ripple effect */}
                 <AnimatePresence>
                   {swatchRipples.map((r) => (
                     <motion.span
@@ -121,16 +179,50 @@ export default function ThemePicker({ current }: { current: string }) {
                   ))}
                 </AnimatePresence>
 
-                <span className="relative z-10">{processing ? <Loader2 size={16} className="text-white animate-spin" /> : isSaved ? <Check size={16} className="text-white" /> : null}</span>
+                {/* Accent stripe */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-1 opacity-70"
+                  style={{ backgroundColor: t.accent }}
+                />
+
+                {/* Content */}
+                <span className="relative z-10 text-2xl leading-none mt-1">
+                  {processing ? <Loader2 size={20} className="animate-spin" /> : t.emoji}
+                </span>
+                <span className="relative z-10 text-[11px] font-semibold tracking-wide">{t.label}</span>
+                <span className="relative z-10 text-[9px] opacity-80 text-center leading-tight">{t.desc}</span>
+
+                {/* Active checkmark */}
+                {isSaved && !processing && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute top-2 right-2 w-5 h-5 bg-white rounded-full flex items-center justify-center"
+                  >
+                    <Check size={11} style={{ color: t.color }} />
+                  </motion.div>
+                )}
               </button>
             );
           })}
         </div>
 
-        <div className="mt-5 flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: savedColor }} />
-          <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60">Aktif: {savedLabel}</p>
-        </div>
+        {/* Active theme info */}
+        {activeTheme && (
+          <motion.div
+            key={activeTheme.value}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-5 flex items-center gap-3"
+          >
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: activeTheme.color }} />
+              <p className="mono text-[10px] uppercase tracking-[0.15em] text-ink/60 truncate">
+                {previewTheme ? "Preview" : "Aktif"}: {activeTheme.emoji} {activeTheme.label} — {activeTheme.desc}
+              </p>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
